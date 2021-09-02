@@ -1,0 +1,39 @@
+.pageQuickLinks{
+    padding: 10px;
+    display:flex;
+    border:1px solid #CCC;
+    border-radius: 10px;
+}
+.pageQuickLinksHeader{
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    color:#303030;
+}
+.quicklinkItems{
+    display: flex;
+    flex:1;
+    min-height:32px;
+    padding: 10px 20px;
+    margin: 5px 10px;
+    background-color: #f9dee0;
+    color:#333;
+    border:1px solid #CCC;
+    align-items: center;
+    text-transform: uppercase;
+    border-radius: 10px;
+    box-shadow: 0px 1px 14px 0px rgba(0,0,0,0.55);
+    -webkit-box-shadow: 0px 1px 14px 0px rgba(0,0,0,0.55);
+    -moz-box-shadow: 0px 1px 14px 0px rgba(0,0,0,0.55);
+}
+.quicklinkItems a{
+    text-decoration: none;
+    color:#333;
+    text-align: center;
+    font-weight: 900;
+}
+
+.quicklinkItems a:hover{
+    text-decoration: wavy;
+    color:#e50914;
+}

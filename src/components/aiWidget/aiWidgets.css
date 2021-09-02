@@ -1,0 +1,64 @@
+.aiWidgets{
+    flex:5;
+    padding: 20px;
+    box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    color:#333;
+}
+
+.aiWidgetsTitle{
+    font-size: 20px;
+}
+
+.aiWidgetsTable .aiWidgetsTh{
+    font-size: 14px;
+    font-weight: normal;
+    text-align: left;
+}
+
+.aiWidgetsTable  .aiWidgetsTd{
+    font-size: 12px;
+    text-align: left;
+}
+.currencyRight{
+    text-align: right;
+}
+.viewDetails{
+    display: flex;
+}
+.aiWidgetsIcon{
+    margin-right: 10px;
+}
+.statusApproved,
+.statusPending,
+.statusRejected,
+.statusPartially-Funded,
+.statusFully-Funded{
+    padding: 5px 2px;
+    
+}
+.statusApproved{
+    color: greenyellow;
+}
+.statusPending{
+    color: orange;
+}
+.statusRejected{
+    color: Red;
+}
+.statusPartially-Funded,
+.statusFully-Funded{
+    color: Green;
+}
+.aiWidgetsIcon{
+    width:20px !important;
+    height: 20px !important;
+}
+
+.colLeft{
+    flex:1;
+}
+.colRight{
+    flex:1;
+}

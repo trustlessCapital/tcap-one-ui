@@ -1,0 +1,12 @@
+.smWidgets{
+    padding: 20px;
+    margin-right: 20px;
+    box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    color:#666;
+    display:none;
+}
+.smWidgetsTitle{
+    font-size: 18px;
+}

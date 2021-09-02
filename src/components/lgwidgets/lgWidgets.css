@@ -1,0 +1,57 @@
+.lgWidgets{
+    flex:5;
+    padding: 20px;
+    box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    color:#333;
+}
+
+.lgWidgetsTitle{
+    font-size: 20px;
+}
+
+.lgWidgetsTable .lgWidgetsTh{
+    font-size: 16px;
+    font-weight: normal;
+    text-align: left;
+}
+
+.lgWidgetsTable  .lgWidgetsTd{
+    font-size: 14px;
+    text-align: left;
+}
+.currencyRight{
+    text-align: right;
+}
+.viewDetails{
+    display: flex;
+}
+.lgWidgetsIcon{
+    margin-right: 10px;
+}
+.statusApproved,
+.statusPending,
+.statusRejected,
+.statusPartially-Funded,
+.statusFully-Funded{
+    padding: 5px 2px;
+    
+}
+.statusApproved{
+    color: greenyellow;
+}
+.statusPending{
+    color: orange;
+}
+.statusRejected{
+    color: Red;
+}
+.statusPartially-Funded,
+.statusFully-Funded{
+    color: Green;
+}
+.lgWidgetsIcon{
+    width:20px !important;
+    height: 20px !important;
+}
