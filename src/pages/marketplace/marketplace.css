@@ -41,3 +41,9 @@
     border:1px solid #CCC;
     border-radius: 10px ;
 }
+.investBtnLink{
+    color: white;
+}
+.disabled{
+    background-color: grey;
+}
