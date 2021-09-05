@@ -9,6 +9,7 @@ import Marketplace from "./pages/marketplace/Marketplace";
 import MsmeApprove from "./pages/msmeApprove/MsmeApprove";
 import AnchorApprove from "./pages/anchorAprrove/AnchorApprove";
 import MyInvestments from "./pages/myInvestments/MyInvestments";
+import Authentication from "./pages/Authentication/Authentication";
 //import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 //import { Home } from "@material-ui/icons";
 
@@ -24,6 +25,9 @@ const App = () => {
             <Switch>
               <Route exact path="/">
                 <Home />
+              </Route>
+              <Route exact path="/auth">
+                <Authentication />
               </Route>
               <Route path="/addinvoices">
                 <AddInvoice />
