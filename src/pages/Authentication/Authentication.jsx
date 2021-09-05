@@ -62,13 +62,8 @@ export default function Authentication() {
     // formData.append("phoneNumber", "+911234567890");
     const response = await fetch("http://18.118.12.136:7001/api/user/signup", {
       method: "post",
-      mode: "no-cors",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
-        "Access-Control-Allow-Headers":
-          "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With",
       },
       body: JSON.stringify(formData),
     });
