@@ -60,7 +60,7 @@ export default function Authentication() {
     };
     // formData.append("email", "test@trustless.capital");
     // formData.append("phoneNumber", "+911234567890");
-    const response = await fetch("http://18.118.12.136/api/user/signup", {
+    const response = await fetch("http://18.118.12.136:7001/api/user/signup", {
       method: "post",
       mode: "no-cors",
       headers: {
@@ -79,17 +79,20 @@ export default function Authentication() {
     let formData = new FormData();
     formData.append("email", "test@trustless.capital");
     formData.append("phoneNumber", "+911234567890");
-    const response = await fetch("http://18.118.12.136/api/user/verifyOTP", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: "test@trustless.capital",
-        phoneNumber: "+911234567890",
-        otp: "2232",
-      }),
-    });
+    const response = await fetch(
+      "http://18.118.12.136:7001/api/user/verifyOTP",
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "test@trustless.capital",
+          phoneNumber: "+911234567890",
+          otp: "2232",
+        }),
+      }
+    );
     console.log(response);
   };
   return (
