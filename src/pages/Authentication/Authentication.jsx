@@ -14,6 +14,8 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useState } from "react";
+import { useRef } from "react";
+import { useHistory } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -49,14 +51,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Authentication() {
+  let history = useHistory();
   const classes = useStyles();
   const [phone, setPhone] = useState("");
   const [verifyOtpButton, setVerifyOtpButton] = useState(false);
+  const otpRef = useRef();
 
   const getVerificationOtp = async () => {
     let formData = {
-      email: "test@trustless.capital",
-      phoneNumber: "+911234567890",
+      email: "parth@trustless.capital",
+      phoneNumber: "+918962562924",
     };
     // formData.append("email", "test@trustless.capital");
     // formData.append("phoneNumber", "+911234567890");
@@ -66,26 +70,42 @@ export default function Authentication() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
-    });
+    })
+      .then((response) => {
+        console.log("signup success response:" + response);
+        fetch("http://18.118.12.136/api/user/resendOTP", {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+      })
+      .catch((error) => {
+        console.log("signup failed response" + error);
+      });
     console.log(response);
     setVerifyOtpButton(true);
   };
   const verifyOTP = async () => {
     let formData = new FormData();
-    formData.append("email", "test@trustless.capital");
-    formData.append("phoneNumber", "+911234567890");
-    const response = await fetch("http://18.118.12.136/api/user/verifyOTP", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: "test@trustless.capital",
-        phoneNumber: "+911234567890",
-        otp: "2232",
-      }),
+    const response = await fetch(
+      "http://18.118.12.136/api/company/signup/verifyOTP",
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "parth@trustless.capital",
+          otp: otpRef.current.value,
+        }),
+      }
+    ).catch((error) => {
+      console.log("verifyotp failed response" + error);
     });
-    console.log(response);
+    console.log("verifyotp success response" + response);
+    history.push("/");
   };
   return (
     <Container component="main" maxWidth="xs">
@@ -127,6 +147,7 @@ export default function Authentication() {
               label="OTP"
               type="number"
               id="otp"
+              ref={otpRef}
             />
           )}
           {/* <FormControlLabel
