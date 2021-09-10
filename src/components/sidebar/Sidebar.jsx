@@ -6,6 +6,8 @@ import { Link, useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 export default function Sidebar(props) {
+    const {type} = props.token;
+    console.log(type);
   const history = useHistory();
   const [view, setView] = useState(history.location.pathname);
   console.log(history);

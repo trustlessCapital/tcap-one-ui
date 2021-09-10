@@ -8,7 +8,8 @@ import {
   Description,
 } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
-export default function Topbar() {
+export default function Topbar(props) {
+  const { type , userName} = props.token;
   const history = useHistory();
   const [view, setView] = useState(history.location.pathname);
   console.log(history);
@@ -56,7 +57,7 @@ export default function Topbar() {
                 ))}
               {view == "/marketplace" && (
                 <div className="loggedAs">
-                  Investor: 3SB2iUCf9YPJJHAxBeVNn1rLwB4WnAasPmaQE31Grx7W
+                  {`${type}: ${userName}`}
                 </div>
               )}
             </div>
