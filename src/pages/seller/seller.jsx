@@ -73,14 +73,14 @@ export default function Seller() {
       </Grid>
       </Grid>
       <Button variant="contained">
-        <Link to="/onboardentity">Onboard Buyer/Seller</Link>
+        <Link to="/onboardentity">Add Buyer</Link>
       </Button>
       <Button variant="contained">
         <Link to="/addinvoices">Upload Invoices</Link>
       </Button>
-      <Button variant="contained">
+      {/* <Button variant="contained">
         <Link to="/viewinvoices">View Invoices</Link>
-      </Button>
+      </Button> */}
       {/* <Grid container xs={12}>
         <Grid item xs={10}>
           <FormControlLabel
@@ -158,7 +158,7 @@ export default function Seller() {
               id="entity-list"
             >
               <Typography className={classes.heading}>
-                BUYERS/SELLERS
+                BUYERS
               </Typography>
             </AccordionSummary>
             <AccordionDetails>

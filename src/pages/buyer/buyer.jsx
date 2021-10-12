@@ -73,7 +73,7 @@ export default function Buyer() {
       </Grid>
       </Grid>
       <Button variant="contained">
-        <Link to="/onboardentity">Onboard Buyer/Seller</Link>
+        <Link to="/onboardentity">Add Seller</Link>
       </Button>
       <Button variant="contained">
         <Link to="/addinvoices">Upload Invoices</Link>
@@ -158,7 +158,7 @@ export default function Buyer() {
               id="entity-list"
             >
               <Typography className={classes.heading}>
-                BUYERS/SELLERS
+                SELLERS
               </Typography>
             </AccordionSummary>
             <AccordionDetails>

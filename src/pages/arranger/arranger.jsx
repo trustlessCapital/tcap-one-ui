@@ -64,16 +64,16 @@ export default function Arranger() {
 
   return (
     <div className="addInvPage">
-      <h3 className="addInvPageTitle">Admin</h3>
+      <h3 className="addInvPageTitle">Arranger</h3>
       <Button variant="contained">
         <Link to="/onboardentity">Onboard Buyer/Seller</Link>
       </Button>
       <Button variant="contained">
         <Link to="/addinvoices">Upload Invoices</Link>
       </Button>
-      <Button variant="contained">
+      {/* <Button variant="contained">
         <Link to="/viewinvoices">View Invoices</Link>
-      </Button>
+      </Button> */}
       {/* <Grid container xs={12}>
         <Grid item xs={10}>
           <FormControlLabel
