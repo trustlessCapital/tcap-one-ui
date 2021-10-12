@@ -65,7 +65,14 @@ export default function Investor() {
   return (
     <div className="addInvPage">
       <h3 className="addInvPageTitle">Investor</h3>
-      <Button variant="contained">
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+      <Typography>Please complete you KYC  <Button variant="contained">
+        <Link to="#">Complete KYC</Link>
+      </Button></Typography>
+      </Grid>
+      </Grid>
+      {/* <Button variant="contained">
         <Link to="/onboardentity">Onboard Buyer/Seller</Link>
       </Button>
       <Button variant="contained">
@@ -73,7 +80,7 @@ export default function Investor() {
       </Button>
       <Button variant="contained">
         <Link to="/viewinvoices">View Invoices</Link>
-      </Button>
+      </Button> */}
       {/* <Grid container xs={12}>
         <Grid item xs={10}>
           <FormControlLabel
@@ -130,7 +137,7 @@ export default function Investor() {
               aria-controls="entity-details"
               id="entity-details"
             >
-              <Typography className={classes.heading}>INVOICES</Typography>
+              <Typography className={classes.heading}>INVESTMENT HISTORY</Typography>
               {/* <Button variant="contained"><Link to="/onboardentity">ADD NEW</Link></Button> */}
               {/* <Button variant="contained"> LOOKUP</Button> */}
             </AccordionSummary>
@@ -151,7 +158,7 @@ export default function Investor() {
               id="entity-list"
             >
               <Typography className={classes.heading}>
-                BUYERS/SELLERS
+                DEALS
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
