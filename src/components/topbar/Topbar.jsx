@@ -157,7 +157,7 @@ export default function Topbar(props) {
   <MenuItem onClick={handleClose}> <Link to="/addInvoices">Upload New Invoice</Link></MenuItem>
   <MenuItem onClick={handleClose}> <Link to="/entitylist">Entity List</Link></MenuItem>
 </Menu> */}
-                <Button color="inherit">Logout</Button>
+                <Button color="inherit" ><Link to="/">Logout</Link></Button>
               </Toolbar>
             </AppBar>
           </div>
