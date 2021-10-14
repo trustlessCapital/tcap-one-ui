@@ -29,6 +29,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import { companyApiProvider } from 'services/api/company/companyService';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,6 +62,7 @@ export default function OnboardNewEntity() {
   // userData;
   const classes = useStyles();
   const [entity, setEntity] = useState('');
+  const [stepCount,setStepCount] = useState(1);
 
   const handleChange = (event) => {
     setEntity(event.target.value);
@@ -162,6 +164,14 @@ export default function OnboardNewEntity() {
   const onChangeDueDt = (e) => {
     setState({ ...state, duedt: e.target.value });
   };
+  const submitCompanyDetails = (e) =>{
+    companyApiProvider.submitCompany(state).then((response)=>{
+     if(response.status == 200) 
+     setStepCount(2);
+     else
+     alert('something wrong with the api');
+    })
+  }
   const onChangeLimitexp = (e) => {
     setState({ ...state, limitexp: e.target.value });
   };
@@ -298,7 +308,7 @@ export default function OnboardNewEntity() {
           </DialogActions>
         </Dialog>
         <div className={classes.root}>
-          <Accordion>
+          {stepCount<2 && <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="company-details"
@@ -545,6 +555,7 @@ export default function OnboardNewEntity() {
                             className="saveInvBtn"
                             type="submit"
                             value="Submit"
+                            onClick= {submitCompanyDetails}
                           />
                         </div>
                       </Grid>
@@ -553,8 +564,8 @@ export default function OnboardNewEntity() {
                 </Grid>
               </Grid>
             </AccordionDetails>
-          </Accordion>
-          <Accordion>
+          </Accordion>}
+          {stepCount<3 && stepCount>1 && <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="documents"
@@ -633,8 +644,8 @@ export default function OnboardNewEntity() {
                 </Grid>
               </Grid>
             </AccordionDetails>
-          </Accordion>
-          <Accordion color="primary">
+          </Accordion>}
+          {stepCount>2 && <Accordion color="primary">
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="entity-details"
@@ -715,7 +726,7 @@ export default function OnboardNewEntity() {
                 </Grid>
               </div>
             </AccordionDetails>
-          </Accordion>
+          </Accordion>}
         </div>
 
         {/* <h3 className="addInvSectionTitle">Approval Section</h3>
