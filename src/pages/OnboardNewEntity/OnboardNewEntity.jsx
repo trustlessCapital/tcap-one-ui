@@ -29,6 +29,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import { companyApiProvider } from 'services/api/company/companyService';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,19 +62,26 @@ export default function OnboardNewEntity() {
   // userData;
   const classes = useStyles();
   const [entity, setEntity] = useState('');
+  const [stepCount,setStepCount] = useState(1);
 
   const handleChange = (event) => {
     setEntity(event.target.value);
   };
 
   let initObj = {
+    email:'',
     approvalInvoice: [],
     vid: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    cname: '',
+    organisationName: '',
+    companyId:'',
     status: '',
-    companytype: '',
+    type: '',
     address: '',
+    city:'',
+    state:'',
+    country:'',
     website: '',
+    adminName:'',
     ptype: '',
     invct: '',
     duedt: '',
@@ -102,8 +110,14 @@ export default function OnboardNewEntity() {
   // onChangeTid(e) {
   //   this.setState({ tid: e.target.value });
   // }
-  const onChangeCname = (e) => {
-    setState({ ...state, cname: e.target.value });
+  const onChangeOrganisationName = (e) => {
+    setState({ ...state, organisationName: e.target.value });
+  };
+  const onChangeCompanyId = (e) => {
+    setState({ ...state, companyId: e.target.value });
+  };
+  const onChangeEmail = (e) => {
+    setState({ ...state, email: e.target.value });
   };
   const onChangeApproveName = (e) => {
     setState({ ...state, approveName: e.target.value });
@@ -141,20 +155,29 @@ export default function OnboardNewEntity() {
   const onChangeReltcap = (e) => {
     setState({ ...state, reltcap: e.target.value });
   };
-  const onChangePnum = (e) => {
-    setState({ ...state, pnum: e.target.value });
+  const onChangePhoneNumber = (e) => {
+    setState({ ...state, phoneNumber: e.target.value });
   };
-  const onChangeCompanyType = (e) => {
-    setState({ ...state, companytype: e.target.value });
+  const onChangeType = (e) => {
+    setState({ ...state, type: e.target.value });
   };
   const onChangeAddress = (e) => {
     setState({ ...state, address: e.target.value });
   };
+  const onChangeCity = (e) => {
+    setState({ ...state, city: e.target.value });
+  };
+  const onChangeState = (e) => {
+    setState({ ...state, state: e.target.value });
+  };
+  const onChangeCountry = (e) => {
+    setState({ ...state, country: e.target.value });
+  };
   const onChangeWebsite = (e) => {
     setState({ ...state, website: e.target.value });
   };
-  const onChangePtype = (e) => {
-    setState({ ...state, ptype: e.target.value });
+  const onChangeAdminName = (e) => {
+    setState({ ...state, adminName: e.target.value });
   };
   const onChangeIncDt = (e) => {
     setState({ ...state, invct: e.target.value });
@@ -162,6 +185,14 @@ export default function OnboardNewEntity() {
   const onChangeDueDt = (e) => {
     setState({ ...state, duedt: e.target.value });
   };
+  const submitCompanyDetails = (e) =>{
+    companyApiProvider.submitCompany(state).then((response)=>{
+     if(response.status == 200 || response.status == 201 || response.status == 'active') 
+     setStepCount(2);
+     else
+     alert('Please try after sometime. In case issue persists, please contact hello@trustless.capital');
+    })
+  }
   const onChangeLimitexp = (e) => {
     setState({ ...state, limitexp: e.target.value });
   };
@@ -202,11 +233,16 @@ export default function OnboardNewEntity() {
     } else {
       var joined = state.approvalInvoice.concat({
         vid: state.vid,
-        cname: state.cname,
+        organisationName: state.organisationName,
+        companyId:state.companyId,
         status: state.status,
-        companytype: state.companytype,
+        type: state.type,
         address: state.address,
+        city: state.city,
+        state: state.state,
+        country: state.country,
         website: state.website,
+        adminName:state.adminName,
         ptype: state.ptype,
         invct: state.invct,
         duedt: state.duedt,
@@ -219,11 +255,16 @@ export default function OnboardNewEntity() {
       setState({
         approvalInvoice: joined,
         vid: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-        cname: '',
+        organisationName: '',
+        companyId:'',
         status: '',
-        companytype: '',
+        type: '',
         address: '',
+        city:'',
+        state:'',
+        country:'',
         website: '',
+        adminName:'',
         ptype: '',
         invct: '',
         duedt: '',
@@ -298,7 +339,7 @@ export default function OnboardNewEntity() {
           </DialogActions>
         </Dialog>
         <div className={classes.root}>
-          <Accordion>
+          {stepCount<2 && <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="company-details"
@@ -330,14 +371,39 @@ export default function OnboardNewEntity() {
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Company Name</label>
+                          <label>Email ID <sup>*</sup></label>
+                          <input
+                            type="email"
+                            name="email"
+                            className="addInvInput"
+                            value={state.email}
+                            onChange={onChangeEmail}
+                          />
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <div className="addInvItem">
+                          <label>Organization Name <sup>*</sup></label>
                           <input
                             type="text"
-                            name="cname"
+                            name="organisationname"
                             className="addInvInput"
-                            onChange={onChangeCname}
+                            onChange={onChangeOrganisationName}
                             required
-                            value={state.cname}
+                            value={state.organisationName}
+                          />
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <div className="addInvItem">
+                          <label>Company ID <sup>*</sup></label>
+                          <input
+                            type="text"
+                            name="companyid"
+                            className="addInvInput"
+                            onChange={onChangeCompanyId}
+                            required
+                            value={state.companyId}
                           />
                         </div>
                       </Grid>
@@ -361,20 +427,22 @@ export default function OnboardNewEntity() {
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Type of Company</label>
+                          <label>Type of Company <sup>*</sup></label>
                           <select
                             className="addInvInput"
-                            name="companytype"
-                            onChange={onChangeCompanyType}
+                            name="type"
+                            onChange={onChangeType}
                             required
-                            value={state.companytype}
+                            value={state.type}
                           >
                             <option value="">--Select--</option>
-                            <option value="company">Company</option>
-                            <option value="LLP">Partnership Firm/LLP</option>
+                            <option value="public">Public</option>
+                            <option value="Partnership">Partnership Firm/LLP</option>
+                            <option value="One Person Company">One Person Company</option>
+                            <option value="Sole Proprietorship">Sole Proprietorship</option>
                             <option value="private">Private Ltd</option>
-                            <option value="society">Society</option>
-                            <option value="trust">Trust</option>
+                            <option value="Limited Liability Partnership">LLP</option>
+                            <option value="Non Profit Organization">Non Profit Organization</option>
                           </select>
                         </div>
                       </Grid>
@@ -410,7 +478,7 @@ export default function OnboardNewEntity() {
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Address</label>
+                          <label>Address<sup>*</sup></label>
                           <textarea
                             type="text"
                             className="addInvInput"
@@ -418,6 +486,45 @@ export default function OnboardNewEntity() {
                             onChange={onChangeAddress}
                             required
                             value={state.address}
+                          />
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <div className="addInvItem">
+                          <label>City<sup>*</sup></label>
+                          <textarea
+                            type="text"
+                            className="addInvInput"
+                            name="city"
+                            onChange={onChangeCity}
+                            required
+                            value={state.city}
+                          />
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <div className="addInvItem">
+                          <label>State<sup>*</sup></label>
+                          <textarea
+                            type="text"
+                            className="addInvInput"
+                            name="state"
+                            onChange={onChangeState}
+                            required
+                            value={state.state}
+                          />
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <div className="addInvItem">
+                          <label>Country<sup>*</sup></label>
+                          <textarea
+                            type="text"
+                            className="addInvInput"
+                            name="country"
+                            onChange={onChangeCountry}
+                            required
+                            value={state.country}
                           />
                         </div>
                       </Grid>
@@ -436,14 +543,27 @@ export default function OnboardNewEntity() {
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Phone number:</label>
+                          <label>Admin Name<sup>*</sup></label>
+                          <input
+                            type="text"
+                            className="addInvInput"
+                            name="adminname"
+                            onChange={onChangeAdminName}
+                            required
+                            value={state.adminName}
+                          />
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <div className="addInvItem">
+                          <label>Phone number:<sup>*</sup></label>
                           <input
                             type="number"
                             className="addInvInput"
-                            name="pnum"
-                            onChange={onChangePnum}
+                            name="phoneNumber"
+                            onChange={onChangePhoneNumber}
                             required
-                            value={state.pnum}
+                            value={state.phoneNumber}
                           />
                         </div>
                       </Grid>
@@ -545,6 +665,7 @@ export default function OnboardNewEntity() {
                             className="saveInvBtn"
                             type="submit"
                             value="Submit"
+                            onClick= {submitCompanyDetails}
                           />
                         </div>
                       </Grid>
@@ -553,8 +674,8 @@ export default function OnboardNewEntity() {
                 </Grid>
               </Grid>
             </AccordionDetails>
-          </Accordion>
-          <Accordion>
+          </Accordion>}
+          {stepCount<3 && stepCount>1 && <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="documents"
@@ -633,8 +754,8 @@ export default function OnboardNewEntity() {
                 </Grid>
               </Grid>
             </AccordionDetails>
-          </Accordion>
-          <Accordion color="primary">
+          </Accordion>}
+          {stepCount>2 && <Accordion color="primary">
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="entity-details"
@@ -715,7 +836,7 @@ export default function OnboardNewEntity() {
                 </Grid>
               </div>
             </AccordionDetails>
-          </Accordion>
+          </Accordion>}
         </div>
 
         {/* <h3 className="addInvSectionTitle">Approval Section</h3>
