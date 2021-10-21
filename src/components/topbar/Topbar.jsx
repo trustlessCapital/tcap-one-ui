@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import './topbar.css';
+import React, { useState, useEffect } from "react";
+import "./topbar.css";
 import {
   Notifications,
   Build,
   Help,
   AccountCircle,
   Description,
-} from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+} from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
 
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,14 +46,23 @@ export default function Topbar(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const logout = (event) => {
+    delete window.localStorage.utoken;
+    delete window.localStorage.userData;
+
+    props.logout();
+  };
+
   useEffect(() => {
     return history.listen((location) => {
       setView(location.pathname);
     });
   }, [history]);
+
   return (
     <>
-      {view !== '/auth' ? (
+      {view !== "/auth" ? (
         <div className="topbar">
           <div className="topbarWrapper">
             {/* <div className="topLeft">
@@ -122,28 +131,36 @@ export default function Topbar(props) {
                   aria-haspopup="true"
                   onClick={handleClick}
                 >
-                  <Link to="/onboardentity"  style={{ textDecoration: 'none' }}>Onboard new Entity</Link>
+                  <Link to="/onboardentity" style={{ textDecoration: "none" }}>
+                    Onboard new Entity
+                  </Link>
                 </Button>
                 <Button
                   aria-controls="simple-menu"
                   aria-haspopup="true"
                   onClick={handleClick}
                 >
-                  <Link to="/varelationship"  style={{ textDecoration: 'none' }}>Vendor Anchor Relationship</Link>
+                  <Link to="/varelationship" style={{ textDecoration: "none" }}>
+                    Vendor Anchor Relationship
+                  </Link>
                 </Button>
                 <Button
                   aria-controls="simple-menu"
                   aria-haspopup="true"
                   onClick={handleClick}
                 >
-                  <Link to="/addInvoices"  style={{ textDecoration: 'none' }}>Upload New Invoice</Link>
+                  <Link to="/addInvoices" style={{ textDecoration: "none" }}>
+                    Upload New Invoice
+                  </Link>
                 </Button>
                 <Button
                   aria-controls="simple-menu"
                   aria-haspopup="true"
                   onClick={handleClick}
                 >
-                  <Link to="/entitylist"  style={{ textDecoration: 'none' }}>Entity List</Link>
+                  <Link to="/entitylist" style={{ textDecoration: "none" }}>
+                    Entity List
+                  </Link>
                 </Button>
                 {/* <Menu
   id="simple-menu"
@@ -157,7 +174,11 @@ export default function Topbar(props) {
   <MenuItem onClick={handleClose}> <Link to="/addInvoices">Upload New Invoice</Link></MenuItem>
   <MenuItem onClick={handleClose}> <Link to="/entitylist">Entity List</Link></MenuItem>
 </Menu> */}
-                <Button color="inherit" ><Link to="/">Logout</Link></Button>
+                <Button color="inherit">
+                  <Link to="/" onClick={logout}>
+                    Logout
+                  </Link>
+                </Button>
               </Toolbar>
             </AppBar>
           </div>
