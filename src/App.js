@@ -5,7 +5,6 @@ import { createTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import "./app.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import AddInvoice from "./pages/addInvoice/AddInvoice";
 import OnboardNewEntity from "./pages/OnboardNewEntity/OnboardNewEntity";
 import EntityList from "./components/EntityList/entityList";
@@ -16,7 +15,8 @@ import MyInvestments from "./pages/myInvestments/MyInvestments";
 import Authentication from "./pages/Authentication/Authentication";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Admin from "./pages/admin/admin";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import VARelationship from "pages/VendorAnchorRelationship/VARelationship";
 import Buyer from "pages/buyer/buyer";
 import Seller from "pages/seller/seller";
@@ -39,9 +39,27 @@ const theme = createTheme({
 });
 
 const App = () => {
-  const uToken = window.localStorage.utoken;
-  const [token, setToken] = useState(uToken || null);
-  if (!token) {
+  const [token, setToken] = useState(null);
+
+  const history = useHistory();
+  console.log("history", history);
+
+  useEffect(() => {
+    let userData = localStorage.getItem("userData");
+
+    if (userData && userData.trim().length) {
+      userData = JSON.parse(userData);
+      if (userData.hasOwnProperty("jwt_token")) {
+        setToken({
+          user: userData.email,
+          type: userData.userType,
+          utoken: userData.jwt_token,
+        });
+      }
+    }
+  }, []);
+
+  if (window.location.pathname !== "/signup" && !token) {
     return <Authentication setToken={setToken} />;
   }
 
@@ -52,7 +70,7 @@ const App = () => {
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <Topbar token={token} logout={logout} />
+        {token && <Topbar token={token} logout={logout} />}
         <div className="container">
           {/* <Sidebar token={token}/> */}
           <div className="pageContents">
@@ -102,7 +120,7 @@ const App = () => {
                   <Investor />
                 </Route>
                 <Route path="/signup">
-                  <Signup />
+                  <Signup setToken={setToken} />
                 </Route>
               </Switch>
             </div>

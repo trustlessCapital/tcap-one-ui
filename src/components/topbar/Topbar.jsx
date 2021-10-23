@@ -48,8 +48,8 @@ export default function Topbar(props) {
   };
 
   const logout = (event) => {
-    delete window.localStorage.utoken;
-    delete window.localStorage.userData;
+    localStorage.removeItem("userData");
+    localStorage.removeItem("utoken");
 
     props.logout();
   };

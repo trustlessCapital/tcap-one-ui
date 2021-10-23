@@ -50,8 +50,21 @@ const verifyOTP = (otpData) => {
     .catch(handleError);
 };
 
+const signup = (signupData) => {
+  return fetch(`${BASE_URL}/user/signup`, {
+    ...requestOptions,
+    headers: {
+      ...headers,
+    },
+    body: JSON.stringify(signupData),
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 export const userApiProvider = {
   signUp,
   login,
   verifyOTP,
+  signup,
 };
