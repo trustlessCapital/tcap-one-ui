@@ -1,13 +1,13 @@
-const getverificationOtpStub = {
+export const getverificationOtpStub = {
     email: 'parth@trustless.capital',
     phoneNumber: '+918962562924',
   };
 
-  const verifyOtpStub = {
+  export const verifyOtpStub = {
     email: 'parth@trustless.capital',
     otp: '2203',
   }
-  const companyStub = {
+  export const companyStub = {
     email: 'hello@trustless.com',
     phoneNumber: '+918600936299',
     country: 'IND',
@@ -19,9 +19,4 @@ const getverificationOtpStub = {
     organisationName: 'TELANGANA ORG',
     type: 'vendor',
   };
-
-  export const stub = {
-    getverificationOtpStub,
-    verifyOtpStub,
-    companyStub
-  }
+  export const dialogDemoData = {dialogText:'text',dialogTitle:'title',yesButtonText:'YES',noButtonText:'NO',info:true}

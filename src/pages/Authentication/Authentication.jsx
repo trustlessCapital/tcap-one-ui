@@ -71,7 +71,7 @@ export default function Authentication({ setToken }) {
       phoneNumber: `+${phone}`,
     };
     const response = await userApiProvider.login(formData);
-    const loginData = await response.json();
+    const loginData = await response;
     console.log("signup response", loginData);
     setVerifyOtpButton(true);
   };
@@ -84,7 +84,7 @@ export default function Authentication({ setToken }) {
     };
 
     const response = await userApiProvider.verifyOTP(formData);
-    const userData = await response.json();
+    const userData = await response;
     console.log("verifyOTP response", userData);
     window.localStorage.setItem("utoken", userData.jwt_token);
     window.localStorage.setItem("userData", JSON.stringify(userData));

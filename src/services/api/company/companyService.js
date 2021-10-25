@@ -4,27 +4,14 @@ import { handleResponse, handleError } from "services/api/utlities/response";
 
 // Define your api url from any source.
 // Pulling from your .env file when on the server or from localhost when locally
-const BASE_URL =
-  "https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/v1";
-const clientToken =
-  window.localStorage.getItem("utoken") ||
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMwMTUwYzNmLTQ1MWMtNDUzMC1hMjQ4LWUxNGQwNTdkMzBjOCIsImVtYWlsIjoicGFydGhkYWxhbDA2QGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiKzkxNzAzMDIwNzg5NyIsInN0YXR1cyI6ImFjdGl2ZSIsImlzUGhvbmVWZXJpZmllZCI6ZmFsc2UsImlzRW1haWxWZXJpZmllZCI6ZmFsc2UsImlzTW5lbW9uaWNDcmVhdGVkIjpmYWxzZSwiaXNBY2NvdW50VW5sb2NrZWQiOmZhbHNlLCJsYXN0TG9naW5BdCI6IjIwMjEtMTAtMTVUMTU6NTQ6MzcuMDAwWiIsIndhbGxldEFkZHJlc3MiOm51bGwsInByaXZhdGVLZXlBZGRyZXNzIjpudWxsLCJmdXR1cmVBZGRyZXNzIjpudWxsLCJjcmVhdGVkQXQiOiIyMDIxLTEwLTE1VDE1OjU0OjM2Ljg0MVoiLCJ1cGRhdGVkQXQiOiIyMDIxLTEwLTE1VDE1OjU0OjM2Ljg0MVoiLCJ1c2VyVHlwZSI6ImludmVzdG9yIiwiaWF0IjoxNjM0MzEzMzQ2fQ.h4Azss3pMNgPFY6xa_h4IH8ZkwjbiuDItH6KZq-_2co";
+const BASE_URL = process.env.REACT_APP_BASE_URL; //based on env
+console.log(BASE_URL);
+const clientToken = window.localStorage.getItem('utoken') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMwMTUwYzNmLTQ1MWMtNDUzMC1hMjQ4LWUxNGQwNTdkMzBjOCIsImVtYWlsIjoicGFydGhkYWxhbDA2QGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiKzkxNzAzMDIwNzg5NyIsInN0YXR1cyI6ImFjdGl2ZSIsImlzUGhvbmVWZXJpZmllZCI6ZmFsc2UsImlzRW1haWxWZXJpZmllZCI6dHJ1ZSwiaXNNbmVtb25pY0NyZWF0ZWQiOmZhbHNlLCJpc0FjY291bnRVbmxvY2tlZCI6ZmFsc2UsImxhc3RMb2dpbkF0IjoiMjAyMS0xMC0xNVQxNTo1NDozNy4wMDBaIiwid2FsbGV0QWRkcmVzcyI6bnVsbCwicHJpdmF0ZUtleUFkZHJlc3MiOm51bGwsImZ1dHVyZUFkZHJlc3MiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMTVUMTU6NTQ6MzYuODQxWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMTVUMTY6Mzc6NTEuMDAwWiIsInVzZXJUeXBlIjoiaW52ZXN0b3IiLCJpYXQiOjE2MzQ4ODYyMjl9.A-6AdTd6IgZcZom0i2PuoBxIjBBVt5_eNsq8Zc4CNcE';
 const headers = {
-  "Content-Type": "application/json",
-  Authorization: "Bearer " + clientToken,
-};
-const democompanydata = {
-  email: "lingraj@trustless.capital",
-  phoneNumber: "+917783086364",
-  address: "B-105, Wakad Center, bhumkar chowk",
-  city: "Pune",
-  state: "Maharashtra",
-  country: "IND",
-  adminName: "IND",
-  companyId: "PAN/CIN",
-  organisationName: "Trustless Pvt Ltd",
-  type: "private",
-};
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer ' + clientToken,
+}
+
 var requestOptions = {
   method: "POST",
   redirect: "follow",
@@ -32,7 +19,7 @@ var requestOptions = {
 
 /** @param {object} signupData */
 const signUp = (signupData) => {
-  return fetch(`${BASE_URL}/signup`, {
+  return fetch(`${BASE_URL}/v1/signup`, {
     ...requestOptions,
     headers: {
       ...headers,
@@ -45,7 +32,7 @@ const signUp = (signupData) => {
 
 /** @param {object} signupData */
 const resendOTP = (signupData) => {
-  return fetch(`${BASE_URL}/signup/resendOTP`, {
+  return fetch(`${BASE_URL}/v1/signup/resendOTP`, {
     ...requestOptions,
     headers: {
       ...headers,
@@ -58,7 +45,7 @@ const resendOTP = (signupData) => {
 
 /** @param {object} having  */
 const verifyOTP = (signupData) => {
-  return fetch(`${BASE_URL}/signup/verifyOTP`, {
+  return fetch(`${BASE_URL}/v1/signup/verifyOTP`, {
     ...requestOptions,
     headers: {
       ...headers,
@@ -68,20 +55,18 @@ const verifyOTP = (signupData) => {
     .then(handleResponse)
     .catch(handleError);
 };
-
-const submitCompany = (companyData) => {
+const submitCompany = (companyData) => { 
   companyData.phoneNumber = `+${companyData.phoneNumber}`;
-  //eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/v1/company
-  https: return fetch(`${BASE_URL}/company`, {
-    ...requestOptions,
-    headers: {
-      ...headers,
-    },
-    body: JSON.stringify(companyData),
-  })
-    .then(handleResponse)
+  return fetch(`${BASE_URL}/v1/company`, {
+     ...requestOptions,
+      headers: {
+        ...headers
+      },
+      body: JSON.stringify(companyData),
+    }).then(handleResponse)
     .catch(handleError);
-};
+  }; 
+
 
 export const companyApiProvider = {
   signUp,
