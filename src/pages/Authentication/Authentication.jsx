@@ -17,14 +17,13 @@ import { useState } from "react";
 import { useRef } from "react";
 import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
-import { companyApiProvider } from "services/api/company/companyService";
 import { userApiProvider } from "services/api/user/userService";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
+      <Link color="inherit" href="https://www.trustless.capital/">
         TCAP
       </Link>{" "}
       {new Date().getFullYear()}
@@ -89,7 +88,11 @@ export default function Authentication({ setToken }) {
     console.log("verifyOTP response", userData);
     window.localStorage.setItem("utoken", userData.jwt_token);
     window.localStorage.setItem("userData", JSON.stringify(userData));
-    setToken({ user: userData.email, type: userData.userType });
+    setToken({
+      user: userData.email,
+      type: userData.userType,
+      utoken: userData.jwt_token,
+    });
   };
 
   return (
