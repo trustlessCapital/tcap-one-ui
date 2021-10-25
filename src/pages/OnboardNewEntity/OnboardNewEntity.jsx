@@ -17,6 +17,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { companyApiProvider } from 'services/api/company/companyService';
@@ -104,6 +105,7 @@ export default function OnboardNewEntity() {
     otherFiles:''
   };
   const [state, setState] = useState(initObj);
+  const [loading,setLoading] = useState(false);
   // Form Events
   // onChangeTid(e) {
   //   this.setState({ tid: e.target.value });
@@ -181,6 +183,7 @@ export default function OnboardNewEntity() {
     setState({ ...state, duedt: e.target.value });
   };
   const submitCompanyDetails = (e) => {
+    setLoading(true);
     companyApiProvider.submitCompany(state).then((response) => {
       if (response.status == 201 || response.status == 'active') {
         setCompanyCreateSuccessResponse(response);
@@ -195,9 +198,11 @@ export default function OnboardNewEntity() {
         setDialogOpen(true);
       }
     });
+    setLoading(false);
   };
   const submitDocuments = async (e) =>{
       // Create an object of formData
+      setLoading(true)
       const documentsList = [{name:'cibilFile',type:'CIBILKYC',description:'Director CIBIL KYC'},{name:'panCardFile',type:'PAN',description:'PAN card'},{name:'statementFile',type:'OTH',description:'Others'},{name:'loanDecFile',type:'LC',description:'Loan declaration'},{name:'otherFiles',type:'OTH',description:'Others'}] ;
       for(let i = 0;i<documentsList.length;i++){
         if(state[documentsList[i].name]!='' && documentsList[i].name!='otherFiles'){
@@ -248,6 +253,7 @@ export default function OnboardNewEntity() {
     }
     }
     setStepCount(3);
+    setLoading(false);
   }
   const onChangeLimitexp = (e) => {
     setState({ ...state, limitexp: e.target.value });
@@ -283,9 +289,9 @@ export default function OnboardNewEntity() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    setDialogData({...dialogData, dialogTitle:'Submit',dialogText:'Are you sure you want to send for approval?',info:false})
-    setDialogOpen(true);
-    console.log(e.target.value);
+    // setDialogData({...dialogData, dialogTitle:'Submit',dialogText:'Are you sure you want to send for approval?',info:false})
+    // setDialogOpen(true);
+    // console.log(e.target.value);
   };
   const onHandleDialogClose = (e) => {
     if (e.target.firstChild.data == dialogData.noButtonText || e.target.firstChild.data == 'OK') {
@@ -344,6 +350,9 @@ export default function OnboardNewEntity() {
 
   return (
     <div className="addInvPage">
+      {loading && <div className="overlay" >
+      <CircularProgress />
+      </div>}
       <h3 className="addInvPageTitle">Onboard New Entity</h3>
       {/* <Button>
           <Link to="/marketplace">Market Place</Link>
@@ -828,7 +837,7 @@ export default function OnboardNewEntity() {
               </Grid>
             </AccordionDetails>
           </Accordion>}
-          {stepCount>2 && <Accordion color="primary" expanded={stepCount==3}>
+          {stepCount>2 && (companyCreateSuccessResponse.tcapRelation=='anchor' || companyCreateSuccessResponse.tcapRelation=='arranger') && <Accordion color="primary" expanded={stepCount==3}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="entity-details"
@@ -837,7 +846,89 @@ export default function OnboardNewEntity() {
               <Grid container >
                 <Grid item xs={11}>
                   <Typography className={classes.heading}>
-                    Seller RELATIONSHIPS
+                    My BUYERS
+                  </Typography>
+                </Grid>
+                <Grid item xs={1}>
+                  <Button variant="text">
+                    <Link to="/varelationship">ADD NEW</Link>
+                  </Button>
+                </Grid>
+                {/* <Button variant="contained"> LOOKUP</Button> */}
+              </Grid>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div className={classes.root}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}></Grid>
+                  <Grid item xs={12}>
+                    <Paper className={classes.paper}>
+                      {/* <div>
+                        {state.approvalInvoice.length > 0 ? (
+                          <table>
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <thead>Tracking ID:</thead>
+                                </td>
+                                <td>
+                                  <thead>Vendor Name:</thead>
+                                </td>
+                                <td>
+                                  <thead>Product Type:</thead>
+                                </td>
+                                <td>
+                                  <thead>Inv Date:</thead>
+                                </td>
+                                <td>
+                                  <thead>Invoice Amt:</thead>
+                                </td>
+                                <td>
+                                  <thead>Interest Rate:</thead>
+                                </td>
+                                <td>
+                                  <thead>Action</thead>
+                                </td>
+                              </tr>
+
+                              {state.approvalInvoice.length > 0 &&
+                                state.approvalInvoice.map((invoice, index) => {
+                                  return (
+                                    <tr key={index}>
+                                      <td>{invoice.tid}</td>
+                                      <td>{invoice.vname}</td>
+                                      <td>{invoice.ptype}</td>
+                                      <td>{invoice.invdt}</td>
+                                      <td>{invoice.invamt}</td>
+                                      <td>{invoice.irate}</td>
+                                      <td>
+                                        <Button>Approve</Button>
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                            </tbody>
+                          </table>
+                        ) : (
+                          <div>No Relationship Record</div>
+                        )}
+                      </div> */}
+                    </Paper>
+                  </Grid>
+                </Grid>
+              </div>
+            </AccordionDetails>
+          </Accordion>}
+          {stepCount>2 && (companyCreateSuccessResponse.tcapRelation=='vendor' || companyCreateSuccessResponse.tcapRelation=='arranger') && <Accordion color="primary" expanded={stepCount==3}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="entity-details"
+              id="entity-details"
+            >
+              <Grid container >
+                <Grid item xs={11}>
+                  <Typography className={classes.heading}>
+                    MY SELLERS
                   </Typography>
                 </Grid>
                 <Grid item xs={1}>
@@ -962,6 +1053,7 @@ export default function OnboardNewEntity() {
             <div>No Invoices for approval</div> 
           )}*/}
       </div>
+      
     </div>
   );
 }
