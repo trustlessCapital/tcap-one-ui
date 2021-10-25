@@ -7,29 +7,22 @@ import React, { Component, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Publish } from '@material-ui/icons';
 // import { Component, useState } from "react";
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { companyApiProvider } from 'services/api/company/companyService';
+import { documentApiProvider } from 'services/api/document/documentService';
+import DialogWidget from 'components/DialogWideget/DialogWidget';
+import {dialogDemoData} from 'stub/stub' ;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,18 +56,20 @@ export default function OnboardNewEntity() {
   const classes = useStyles();
   const [entity, setEntity] = useState('');
   const [stepCount,setStepCount] = useState(1);
-
+  const [openDialog,setDialogOpen] = useState(false);
+  const [dialogData,setDialogData] = useState(dialogDemoData);
+  const [companyCreateSuccessResponse,setCompanyCreateSuccessResponse] = useState({});
   const handleChange = (event) => {
     setEntity(event.target.value);
   };
 
   let initObj = {
     email:'',
-    approvalInvoice: [],
+    // approvalInvoice: [],
     vid: Math.floor(Math.random() * (999 - 100 + 1) + 100),
     organisationName: '',
     companyId:'',
-    status: '',
+    // status: '',
     type: '',
     address: '',
     city:'',
@@ -90,20 +85,23 @@ export default function OnboardNewEntity() {
     approvallimit: '',
     arrname: '',
     invurl: '',
-    reltcap: '',
+    relationship: '',
     pnum: '',
     grnsrnDate: '',
     availablelimit: '',
-    gstnum: '',
+    gstid: '',
     ewaybilldt: '',
-    cinnum: '',
     ewayapproved: '',
     inccert: '',
-    open: false,
     viewOnly: false,
     approveName: '',
     submitapproval: '',
     approve: '',
+    cibilFile:'',
+    panCardFile:'',
+    loanDecFile:'',
+    statementFile:'',
+    otherFiles:''
   };
   const [state, setState] = useState(initObj);
   // Form Events
@@ -125,9 +123,9 @@ export default function OnboardNewEntity() {
   const onChangeApprove = (e) => {
     setState({ ...state, approve: e.target.value });
   };
-  const onChangeStatus = (e) => {
-    setState({ ...state, status: e.target.value });
-  };
+  // const onChangeStatus = (e) => {
+  //   setState({ ...state, status: e.target.value });
+  // };
   const onChangeSubmitapproval = (e) => {
     setState({ ...state, submitapproval: e.target.value });
   };
@@ -143,17 +141,14 @@ export default function OnboardNewEntity() {
   const onChangeEwayapproved = (e) => {
     setState({ ...state, ewayapproved: e.target.value });
   };
-  const onChangeCinnum = (e) => {
-    setState({ ...state, cinnum: e.target.value });
-  };
-  const onChangeGstnum = (e) => {
-    setState({ ...state, gstnum: e.target.value });
+  const onChangeGstId = (e) => {
+    setState({ ...state, gstid: e.target.value });
   };
   const onChangeGrnSrnDate = (e) => {
     setState({ ...state, grnsrnDate: e.target.value });
   };
-  const onChangeReltcap = (e) => {
-    setState({ ...state, reltcap: e.target.value });
+  const onChangerelationship = (e) => {
+    setState({ ...state, relationship: e.target.value });
   };
   const onChangePhoneNumber = (e) => {
     setState({ ...state, phoneNumber: e.target.value });
@@ -185,13 +180,74 @@ export default function OnboardNewEntity() {
   const onChangeDueDt = (e) => {
     setState({ ...state, duedt: e.target.value });
   };
-  const submitCompanyDetails = (e) =>{
-    companyApiProvider.submitCompany(state).then((response)=>{
-     if(response.status == 200 || response.status == 201 || response.status == 'active') 
-     setStepCount(2);
-     else
-     alert('Please try after sometime. In case issue persists, please contact hello@trustless.capital');
+  const submitCompanyDetails = (e) => {
+    companyApiProvider.submitCompany(state).then((response) => {
+      if (response.status == 201 || response.status == 'active') {
+        setCompanyCreateSuccessResponse(response);
+        setStepCount(2);
+      } else {
+        setDialogData({
+          ...dialogData,
+          dialogTitle: 'OOPS!',
+          dialogText:
+            'Please try after sometime. In case issue persists, please contact hello@trustless.capital',
+        });
+        setDialogOpen(true);
+      }
+    });
+  };
+  const submitDocuments = async (e) =>{
+      // Create an object of formData
+      const documentsList = [{name:'cibilFile',type:'CIBILKYC',description:'Director CIBIL KYC'},{name:'panCardFile',type:'PAN',description:'PAN card'},{name:'statementFile',type:'OTH',description:'Others'},{name:'loanDecFile',type:'LC',description:'Loan declaration'},{name:'otherFiles',type:'OTH',description:'Others'}] ;
+      for(let i = 0;i<documentsList.length;i++){
+        if(state[documentsList[i].name]!='' && documentsList[i].name!='otherFiles'){
+      const documentFormData = new FormData();
+      // Update the formData object
+      documentFormData.append(
+        'document',
+        state[documentsList[i].name],
+        state[documentsList[i].name].name
+      );
+       const uploadSuccess = await documentApiProvider.submitDocuments(documentFormData);
+       const serverUpload = await documentApiProvider.updateDocumentsToServer({
+        //"companyId":companyCreateSuccessResponse.id, // this comes from?
+        "companyId":companyCreateSuccessResponse.id,
+        "userEmail":companyCreateSuccessResponse.email,
+        "contentId":uploadSuccess.contenId,
+        "version":"2",// this comes from?
+        "type":documentsList[i].type,// what are the other fields 
+        "description":documentsList[i].description, // static or getting from some other data?
+        "comments":`its a ${documentsList[i].name}`, // this comes from?
+        "fileName": state[documentsList[i].name].name,
+        "fileKey" : uploadSuccess.fileKey 
     })
+    }
+    if(documentsList[i].name == 'otherFiles' && state[documentsList[i].name]!=''){
+      for(var j=0;j<state[documentsList[i].name].length;j++){
+        const documentFormData = new FormData();
+      // Update the formData object
+      documentFormData.append(
+        'document',
+        state[documentsList[i].name][j],
+        state[documentsList[i].name][j].name
+      );
+       const uploadSuccess = await documentApiProvider.submitDocuments(documentFormData);
+       const serverUpload = await documentApiProvider.updateDocumentsToServer({
+        //"companyId":companyCreateSuccessResponse.id, // this comes from?
+        "companyId":"432fb6f9-7382-4743-a836-a662b0f53c2a",
+        "userEmail":'parthdalal6394@gmail.com',
+        "contentId":uploadSuccess.contenId,
+        "version":"2",// this comes from?
+        "type":documentsList[i].type,// what are the other fields 
+        "description":documentsList[i].description, // static or getting from some other data?
+        "comments":`its a ${documentsList[i].name}`, // this comes from?
+        "fileName": state[documentsList[i].name][j].name,
+        "fileKey" : uploadSuccess.fileKey 
+    })
+      }
+    }
+    }
+    setStepCount(3);
   }
   const onChangeLimitexp = (e) => {
     setState({ ...state, limitexp: e.target.value });
@@ -206,16 +262,20 @@ export default function OnboardNewEntity() {
     setState({ ...state, arrname: e.target.value });
   };
   const onChangeCibilFile = (e) => {
-    setState({ ...state, invurl: e.target.value });
+    setState({ ...state, cibilFile: e.target.files[0] });
   };
   const onChangePancardFile = (e) => {
-    setState({ ...state, invurl: e.target.value });
+    setState({ ...state, panCardFile: e.target.files[0] });
   };
   const onChangeLoandecFile = (e) => {
-    setState({ ...state, invurl: e.target.value });
+    setState({ ...state, loanDecFile: e.target.files[0] });
   };
   const onChangeStatementFile = (e) => {
-    setState({ ...state, invurl: e.target.value });
+    setState({ ...state, statementFile: e.target.files[0] });
+  };
+  
+  const onChangeOtherFiles = (e) => {
+    setState({ ...state, otherFiles: Array.from(e.target.files) });
   };
 
   const handleViewOnly = () => {
@@ -223,19 +283,19 @@ export default function OnboardNewEntity() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert('are you sure you want to send for approval?');
-    setState({ ...state, open: true });
+    setDialogData({...dialogData, dialogTitle:'Submit',dialogText:'Are you sure you want to send for approval?',info:false})
+    setDialogOpen(true);
     console.log(e.target.value);
   };
-  const onHandleClose = (e) => {
-    if (e.target.firstChild.data == 'No') {
-      setState({ ...state, open: false });
+  const onHandleDialogClose = (e) => {
+    if (e.target.firstChild.data == dialogData.noButtonText || e.target.firstChild.data == 'OK') {
+      setDialogOpen(false);
     } else {
       var joined = state.approvalInvoice.concat({
         vid: state.vid,
         organisationName: state.organisationName,
         companyId:state.companyId,
-        status: state.status,
+        // status: state.status,
         type: state.type,
         address: state.address,
         city: state.city,
@@ -257,7 +317,7 @@ export default function OnboardNewEntity() {
         vid: Math.floor(Math.random() * (999 - 100 + 1) + 100),
         organisationName: '',
         companyId:'',
-        status: '',
+        // status: '',
         type: '',
         address: '',
         city:'',
@@ -273,7 +333,6 @@ export default function OnboardNewEntity() {
         approvallimit: '',
         arrname: '',
         invurl: '',
-        open: false,
         viewOnly: false,
       });
     }
@@ -289,7 +348,7 @@ export default function OnboardNewEntity() {
       {/* <Button>
           <Link to="/marketplace">Market Place</Link>
         </Button> */}
-      <Grid container xs={12}>
+      <Grid container >
         <Grid item xs={10}>
           <FormControlLabel
             control={
@@ -317,29 +376,9 @@ export default function OnboardNewEntity() {
         </Grid>
       </Grid>
       <div className="addInvPageWrapper">
-        <Dialog
-          open={state.open}
-          onClose={onHandleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">{'Submit Invoice?'}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Are you sure you want to submit the Entity?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={onHandleClose} color="primary">
-              No
-            </Button>
-            <Button onClick={onHandleClose} color="primary" autoFocus>
-              Yes
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <DialogWidget {...dialogData} open = {openDialog} onHandleDialogClose={onHandleDialogClose} />
         <div className={classes.root}>
-          {stepCount<2 && <Accordion>
+          <Accordion expanded={stepCount==1}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="company-details"
@@ -355,11 +394,11 @@ export default function OnboardNewEntity() {
         <h3 className="addInvSectionTitle">Invoice Details</h3>
         </Grid> */}
                 <Grid item xs={12}>
-                  <form className="addInvForm" onSubmit={handleSubmit} disabled>
+                  <form className="addInvForm" id="basicDetails" onSubmit={handleSubmit} disabled>
                     <Grid container spacing={3}>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Buyer ID</label>
+                          <label>Vendor ID</label>
                           <input
                             type="text"
                             name="vid"
@@ -371,7 +410,7 @@ export default function OnboardNewEntity() {
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Email ID <sup>*</sup></label>
+                          <label>Email ID <sup className="required">*</sup></label>
                           <input
                             type="email"
                             name="email"
@@ -383,7 +422,7 @@ export default function OnboardNewEntity() {
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Organization Name <sup>*</sup></label>
+                          <label>Organization Name <sup className="required">*</sup></label>
                           <input
                             type="text"
                             name="organisationname"
@@ -396,7 +435,7 @@ export default function OnboardNewEntity() {
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Company ID <sup>*</sup></label>
+                          <label>Company ID (PAN/CIN)<sup className="required">*</sup></label>
                           <input
                             type="text"
                             name="companyid"
@@ -407,7 +446,7 @@ export default function OnboardNewEntity() {
                           />
                         </div>
                       </Grid>
-                      <Grid item xs={6}>
+                      {/* <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Status</label>
                           <select
@@ -424,10 +463,10 @@ export default function OnboardNewEntity() {
                             <option value="uapproval">Under approval</option>
                           </select>
                         </div>
-                      </Grid>
+                      </Grid> */}
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Type of Company <sup>*</sup></label>
+                          <label>Type of Company <sup className="required">*</sup></label>
                           <select
                             className="addInvInput"
                             name="type"
@@ -451,19 +490,19 @@ export default function OnboardNewEntity() {
                           <label>Relationship with TCAP</label>
                           <select
                             className="addInvInput"
-                            name="reltcap"
-                            onChange={onChangeReltcap}
+                            name="relationship"
+                            onChange={onChangerelationship}
                             required
-                            value={state.reltcap}
+                            value={state.relationship}
                           >
                             <option value="">--Select--</option>
-                            <option value="Buyer1">Seller</option>
-                            <option value="Buyer2">Buyer</option>
-                            <option value="Buyer3">Seller/Buyer</option>
+                            <option value="anchor">Anchor</option>
+                            <option value="vendor">Vendor</option>
+                            <option value="arranger">Arranger</option>
                           </select>
                         </div>
                       </Grid>
-                      <Grid item xs={6}>
+                      {/* <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Incorporation Certificate</label>
                           <input
@@ -475,10 +514,10 @@ export default function OnboardNewEntity() {
                             value={state.inccert}
                           />
                         </div>
-                      </Grid>
+                      </Grid> */}
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Address<sup>*</sup></label>
+                          <label>Address<sup className="required">*</sup></label>
                           <textarea
                             type="text"
                             className="addInvInput"
@@ -491,8 +530,8 @@ export default function OnboardNewEntity() {
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>City<sup>*</sup></label>
-                          <textarea
+                          <label>City<sup className="required">*</sup></label>
+                          <input
                             type="text"
                             className="addInvInput"
                             name="city"
@@ -504,8 +543,8 @@ export default function OnboardNewEntity() {
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>State<sup>*</sup></label>
-                          <textarea
+                          <label>State<sup className="required">*</sup></label>
+                          <input
                             type="text"
                             className="addInvInput"
                             name="state"
@@ -517,8 +556,8 @@ export default function OnboardNewEntity() {
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Country<sup>*</sup></label>
-                          <textarea
+                          <label>Country<sup className="required">*</sup></label>
+                          <input
                             type="text"
                             className="addInvInput"
                             name="country"
@@ -543,7 +582,7 @@ export default function OnboardNewEntity() {
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Admin Name<sup>*</sup></label>
+                          <label>Admin Name<sup className="required">*</sup></label>
                           <input
                             type="text"
                             className="addInvInput"
@@ -556,7 +595,7 @@ export default function OnboardNewEntity() {
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Phone number:<sup>*</sup></label>
+                          <label>Phone number:<sup className="required">*</sup></label>
                           <input
                             type="number"
                             className="addInvInput"
@@ -567,33 +606,21 @@ export default function OnboardNewEntity() {
                           />
                         </div>
                       </Grid>
-                      <Grid item xs={6}>
-                        <div className="addInvItem">
-                          <label>CIN number:</label>
-                          <input
-                            type="number"
-                            className="addInvInput"
-                            name="cinnum"
-                            onChange={onChangeCinnum}
-                            required
-                            value={state.cinnum}
-                          />
-                        </div>
-                      </Grid>
+                     
                       <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>GST number:</label>
                           <input
                             type="number"
                             className="addInvInput"
-                            name="gstnum"
-                            onChange={onChangeGstnum}
+                            name="gstid"
+                            onChange={onChangeGstId}
                             required
-                            value={state.gstnum}
+                            value={state.gstid}
                           />
                         </div>
                       </Grid>
-                      <Grid item xs={6}>
+                      {/* <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Incorporation Date</label>
                           <input
@@ -605,11 +632,12 @@ export default function OnboardNewEntity() {
                             value={state.incDt}
                           />
                         </div>
-                      </Grid>
-                      <Grid item xs={6}>
+                      </Grid> */}
+                      {/* <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Available Limit</label>
                           <input
+                          disabled
                             type="number"
                             className="addInvInput"
                             name="availablelimit"
@@ -636,6 +664,7 @@ export default function OnboardNewEntity() {
                         <div className="addInvItem">
                           <label>Approval Limit</label>
                           <input
+                          disabled
                             type="number"
                             className="addInvInput"
                             name="approvallimit"
@@ -657,7 +686,7 @@ export default function OnboardNewEntity() {
                             value={state.createdt}
                           />
                         </div>
-                      </Grid>
+                      </Grid> */}
 
                       <Grid item xs={12}>
                         <div className="addInvItem">
@@ -665,7 +694,7 @@ export default function OnboardNewEntity() {
                             className="saveInvBtn"
                             type="submit"
                             value="Submit"
-                            onClick= {submitCompanyDetails}
+                            onClick={submitCompanyDetails}
                           />
                         </div>
                       </Grid>
@@ -674,8 +703,8 @@ export default function OnboardNewEntity() {
                 </Grid>
               </Grid>
             </AccordionDetails>
-          </Accordion>}
-          {stepCount<3 && stepCount>1 && <Accordion>
+          </Accordion>
+          {stepCount>1 && <Accordion expanded={stepCount==2}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="documents"
@@ -688,34 +717,38 @@ export default function OnboardNewEntity() {
                 <Grid item xs={6}>
                   <div className="addInvItem">
                     <label>CIBIL Score of the directors</label>
-                    <label htmlFor="file" className="labelFile">
+                    <label htmlFor="cibilfile" className="labelFile">
                       <Publish />
                       <span>Select File</span>
                     </label>
                     <input
                       type="file"
-                      id="file"
+                      id="cibilfile"
                       name="cibilfile"
                       style={{ display: 'none' }}
                       onChange={onChangeCibilFile}
+                      accept="application/pdf"
                     />
                   </div>
+                  <label style={{float:'right'}}>{state.cibilFile.name}</label>
                 </Grid>
                 <Grid item xs={6}>
                   <div className="addInvItem">
                     <label>PAN Card of the company</label>
-                    <label htmlFor="file" className="labelFile">
+                    <label htmlFor="pancardfile" className="labelFile">
                       <Publish />
                       <span>Select File</span>
                     </label>
                     <input
                       type="file"
-                      id="file"
+                      id="pancardfile"
                       name="pancardfile"
                       style={{ display: 'none' }}
                       onChange={onChangePancardFile}
+                      accept="application/pdf"
                     />
                   </div>
+                  <label style={{float:'right'}}>{state.panCardFile.name}</label>
                 </Grid>
                 <Grid item xs={6}>
                   <div className="addInvItem">
@@ -723,45 +756,85 @@ export default function OnboardNewEntity() {
                       Loan declaration along with the sanction letter for all
                       declared loans
                     </label>
-                    <label htmlFor="file" className="labelFile">
+                    <label htmlFor="loandecfile" className="labelFile">
                       <Publish />
                       <span>Select File</span>
                     </label>
                     <input
                       type="file"
-                      id="file"
+                      id="loandecfile"
                       name="loandecfile"
                       style={{ display: 'none' }}
                       onChange={onChangeLoandecFile}
+                      accept="application/pdf"
                     />
                   </div>
+                  <label style={{float:'right'}}>{state.loanDecFile.name}</label>
                 </Grid>
                 <Grid item xs={6}>
                   <div className="addInvItem">
                     <label>Financial Info (Financial Statement)</label>
-                    <label htmlFor="file" className="labelFile">
+                    <label htmlFor="statementfile" className="labelFile">
                       <Publish />
                       <span>Select File</span>
                     </label>
                     <input
                       type="file"
-                      id="file"
+                      id="statementfile"
                       name="statementfile"
                       style={{ display: 'none' }}
                       onChange={onChangeStatementFile}
+                      accept="application/pdf"
                     />
                   </div>
+                  <label style={{float:'right'}}>{state.statementFile.name}</label>
                 </Grid>
+                <Grid item xs={6}>
+                  <div className="addInvItem">
+                    <label>Other Documents</label>
+                    <label htmlFor="otherfiles" className="otherFiles">
+                      <Publish />
+                      <span>Select File</span>
+                    </label>
+                    <input
+                      type="file"
+                      id="otherfiles"
+                      name="otherfiles"
+                      style={{ display: 'none' }}
+                      onChange={onChangeOtherFiles}
+                      accept="application/pdf"
+                      multiple
+                    />
+                  </div>
+                  {state.otherFiles.length>0 && state.otherFiles.map((file)=>{
+                    return(<label>{file.name}</label>)
+                  })}
+                </Grid>
+                <Grid item xs={12}>
+                <div className="addInvItem">
+              <input
+                            className="saveInvBtn"
+                            type="submit"
+                            value="Submit"
+                            disabled={state.cibilFile==''&&
+                            state.panCardFile==''&&
+                            state.loanDecFile==''&&
+                            state.statementFile==''&&
+                            state.otherFiles==''}
+                            onClick={submitDocuments}
+                          />
+                          </div>
+              </Grid>
               </Grid>
             </AccordionDetails>
           </Accordion>}
-          {stepCount>2 && <Accordion color="primary">
+          {stepCount>2 && <Accordion color="primary" expanded={stepCount==3}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="entity-details"
               id="entity-details"
             >
-              <Grid container xs={12}>
+              <Grid container >
                 <Grid item xs={11}>
                   <Typography className={classes.heading}>
                     Seller RELATIONSHIPS
@@ -781,7 +854,7 @@ export default function OnboardNewEntity() {
                   <Grid item xs={12}></Grid>
                   <Grid item xs={12}>
                     <Paper className={classes.paper}>
-                      <div>
+                      {/* <div>
                         {state.approvalInvoice.length > 0 ? (
                           <table>
                             <tbody>
@@ -790,7 +863,7 @@ export default function OnboardNewEntity() {
                                   <thead>Tracking ID:</thead>
                                 </td>
                                 <td>
-                                  <thead>Buyer Name:</thead>
+                                  <thead>Vendor Name:</thead>
                                 </td>
                                 <td>
                                   <thead>Product Type:</thead>
@@ -830,7 +903,7 @@ export default function OnboardNewEntity() {
                         ) : (
                           <div>No Relationship Record</div>
                         )}
-                      </div>
+                      </div> */}
                     </Paper>
                   </Grid>
                 </Grid>

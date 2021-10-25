@@ -8,9 +8,12 @@ export function handleResponse(response) {
     if (response.data) {
       return response.data;
     }
-  
+    else if(response.body)
+    return response.json();
+
     return response;
   }
+
   
   export function handleError(error) {
     if (error.data) {
