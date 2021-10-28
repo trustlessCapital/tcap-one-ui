@@ -87,6 +87,9 @@ const App = () => {
                   <AddInvoice />
                 </Route>
                 <Route path="/onboardentity">
+                  <OnboardNewEntity/>
+                </Route>
+                <Route path="/adminonboardentity">
                   <OnboardNewEntity />
                 </Route>
                 <Route path="/varelationship">

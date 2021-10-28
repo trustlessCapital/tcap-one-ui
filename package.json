@@ -12,9 +12,10 @@
     "ipfs-core": "^0.10.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-phone-input-2": "^2.14.0",
     "react-phone-input-material-ui": "^2.16.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^4.0.3",
     "recharts": "^2.1.2",
     "web-vitals": "^1.1.2"
   },
