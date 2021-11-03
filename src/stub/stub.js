@@ -19,4 +19,16 @@ export const getverificationOtpStub = {
     organisationName: 'TELANGANA ORG',
     type: 'vendor',
   };
+
   export const dialogDemoData = {dialogText:'text',dialogTitle:'title',yesButtonText:'YES',noButtonText:'NO',info:true}
+  export const companyRelationshipDemoData = {
+    "vendorEmail": "",
+    "anchorEmail": "",
+    "relationship": "anchor",
+    "relationshipYears": "",
+    "status": "active",
+    "vendorContact": "",
+    "anchorContact": "",
+    "anchorApproverEmail": "",
+    "arrangerEmail": ""
+  };

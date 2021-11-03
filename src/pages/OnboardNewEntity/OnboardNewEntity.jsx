@@ -27,7 +27,18 @@ import Grid from '@material-ui/core/Grid';
 import { companyApiProvider } from 'services/api/company/companyService';
 import { documentApiProvider } from 'services/api/document/documentService';
 import DialogWidget from 'components/DialogWideget/DialogWidget';
-import {dialogDemoData} from 'stub/stub' ;
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import { dialogDemoData } from 'stub/stub' ;
+import { companyRelationshipDemoData } from 'stub/stub';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,13 +73,18 @@ export default function OnboardNewEntity() {
   const [entity, setEntity] = useState('');
   const [stepCount,setStepCount] = useState(1);
   const [openDialog,setDialogOpen] = useState(false);
+  const [createRelationshipOpen,setCreateRelationshipOpen] = useState(false);
+  const [companyRelationship,setCompanyRelationship] = useState(companyRelationshipDemoData);
   const [dialogData,setDialogData] = useState(dialogDemoData);
   const [companyCreateSuccessResponse,setCompanyCreateSuccessResponse] = useState({});
   const [userType,setUserType] = useState(window.localStorage.getItem('userData').userType);
+  const [openSnackbar,setOpenSnackbar] = useState(false);
   const handleChange = (event) => {
     setEntity(event.target.value);
   };
-
+  const Alert = (props) => {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
   let initObj = {
     email:'',
     // approvalInvoice: [],
@@ -260,6 +276,22 @@ export default function OnboardNewEntity() {
     setStepCount(3);
     setLoading(false);
   }
+  const createRelationship = async () =>{
+   const anchoreEmailVerify = await companyApiProvider.verifyEmail(companyRelationship.anchorEmail);
+   const vendoreEmailVerify = await companyApiProvider.verifyEmail(companyRelationship.vendorEmail);
+   console.log(anchoreEmailVerify,vendoreEmailVerify);
+   await companyApiProvider.createCompanyRelationship(companyRelationship).then((response) => {
+     if(response.id){
+      setOpenSnackbar(true);
+      setCreateRelationshipOpen(false);
+     }
+     else
+     {
+       alert('something went wrong. please retry');
+       setCreateRelationshipOpen(false);
+      }
+   })
+  }
   const onChangeLimitexp = (e) => {
     setState({ ...state, limitexp: e.target.value });
   };
@@ -284,7 +316,6 @@ export default function OnboardNewEntity() {
   const onChangeStatementFile = (e) => {
     setState({ ...state, statementFile: e.target.files[0] });
   };
-  
   const onChangeOtherFiles = (e) => {
     setState({ ...state, otherFiles: Array.from(e.target.files) });
   };
@@ -355,13 +386,119 @@ export default function OnboardNewEntity() {
 
   return (
     <div className="addInvPage">
+      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={()=>setOpenSnackbar(false)}>
+  <Alert onClose={()=>setOpenSnackbar(false)} severity="success">
+    Company relationship created!
+  </Alert>
+</Snackbar>
+        <Dialog open={createRelationshipOpen} onClose={()=>setCreateRelationshipOpen(false)}>
+        <DialogTitle>Create Relationship</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To create relationship between two companies, please enter valid email address for anchor and vendor.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="vendoremail"
+            label="Vendor Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+            onChange={(e)=>setCompanyRelationship({...companyRelationship,vendorEmail:e.target.value})}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="anchoremail"
+            label="Anchor Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+            onChange={(e)=>setCompanyRelationship({...companyRelationship,anchorEmail:e.target.value})}
+          />
+          <TextField id="relationshipyears" type='number' label="Relationship in Years" value={companyRelationship.relationshipYears} onChange={(e)=>setCompanyRelationship({...companyRelationship,relationshipYears:e.target.value})}/>
+          <br></br>
+<FormControl >
+        <InputLabel htmlFor="relationship">Relationship</InputLabel>
+        <Select
+          native
+          value={companyRelationship.relationship}
+          onChange={(e)=>setCompanyRelationship({...companyRelationship,relationship:e.target.value})}
+          inputProps={{
+            name: 'relationship',
+            id: 'relationship',
+          }}
+        >
+          <option value='anchor'>Anchor</option>
+          <option value='vendor'>Vendor</option>
+          <option value='arranger'>Arranger</option>
+        </Select>
+      </FormControl>
+      <br></br>
+      <FormControl >
+        <InputLabel htmlFor="status">Status</InputLabel>
+        <Select
+          native
+          value={companyRelationship.relationship}
+          onChange={(e)=>setCompanyRelationship({...companyRelationship,status:e.target.value})}
+          inputProps={{
+            name: 'status',
+            id: 'status',
+          }}
+        >
+          <option value='active'>Active</option>
+          <option value='inactive'>Inactive</option>
+        </Select>
+      </FormControl><br></br>
+      
+      <label>Vendor Contact<sup className="required">*</sup></label> 
+      <PhoneInput
+  country={'in'}
+  value={companyRelationship.vendorContact}
+  onChange={(value)=>setCompanyRelationship({...companyRelationship,vendorContact:value})}
+  required='true'
+/>
+<label>Anchor Contact<sup className="required">*</sup></label> 
+<PhoneInput
+  country={'in'}
+  value={companyRelationship.anchorContact}
+  onChange={(value)=>setCompanyRelationship({...companyRelationship,anchorContact:value})}
+  required='true'
+/>
+<TextField
+            autoFocus
+            margin="dense"
+            id="anchorapproveremail"
+            label="Anchor Approver Email"
+            type="email"
+            fullWidth
+            variant="standard"
+            onChange={(e)=>setCompanyRelationship({...companyRelationship,anchorApproverEmail:e.target.value})}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="arrangeremail"
+            label="Arranger Email"
+            type="email"
+            fullWidth
+            variant="standard"
+            onChange={(e)=>setCompanyRelationship({...companyRelationship,arrangerEmail:e.target.value})}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>setCreateRelationshipOpen(false)}>Cancel</Button>
+          <Button onClick={createRelationship}>Create</Button>
+        </DialogActions>
+      </Dialog>
       {loading && <div className="overlay" >
       <CircularProgress />
       </div>}
       <h3 className="addInvPageTitle">Onboard New Entity</h3>
-      {/* <Button>
-          <Link to="/marketplace">Market Place</Link>
-        </Button> */}
+      <Button onClick={()=>setCreateRelationshipOpen(true)}>
+          Create New Relationship
+        </Button>
       <Grid container >
         <Grid item xs={10}>
           <FormControlLabel
