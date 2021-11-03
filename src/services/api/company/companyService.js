@@ -67,10 +67,36 @@ const submitCompany = (companyData) => {
     .catch(handleError);
   }; 
 
+  const createCompanyRelationship = (companyData) => { 
+    companyData.vendorContact = `+${companyData.vendorContact}`;
+    companyData.anchorContact = `+${companyData.anchorContact}`;
+    return fetch(`${BASE_URL}/v1/cr`, {
+       ...requestOptions,
+        headers: {
+          ...headers
+        },
+        body: JSON.stringify(companyData),
+      }).then(handleResponse)
+      .catch(handleError);
+    }; 
+
+    const verifyEmail = (email) => { 
+      return fetch(`${BASE_URL}/v1/company/email/${email}`, {
+         ...requestOptions,
+         method:'GET',
+          headers: {
+            ...headers
+          },
+        }).then(handleResponse)
+        .catch(handleError);
+      }; 
+
 
 export const companyApiProvider = {
   signUp,
   resendOTP,
   verifyOTP,
   submitCompany,
+  verifyEmail,
+  createCompanyRelationship
 };
