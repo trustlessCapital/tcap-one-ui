@@ -1,33 +1,34 @@
-import React from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import ReactPhoneInput from "react-phone-input-material-ui";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import { useState } from "react";
-import { useRef } from "react";
-import { useHistory } from "react-router-dom";
-import PropTypes from "prop-types";
-import { userApiProvider } from "services/api/user/userService";
+import React from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import PhoneInput from 'react-phone-input-2';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import { useState } from 'react';
+import { useRef } from 'react';
+import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { userApiProvider } from 'services/api/user/userService';
+import 'react-phone-input-2/lib/bootstrap.css'
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
+      {'Copyright © '}
       <Link color="inherit" href="https://www.trustless.capital/">
         TCAP
-      </Link>{" "}
+      </Link>{' '}
       {new Date().getFullYear()}
-      {"."}
+      {'.'}
     </Typography>
   );
 }
@@ -35,16 +36,16 @@ function Copyright() {
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -55,10 +56,10 @@ const useStyles = makeStyles((theme) => ({
 export default function Authentication({ setToken }) {
   let history = useHistory();
   const classes = useStyles();
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState('');
   const [verifyOtpButton, setVerifyOtpButton] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState('');
+  const [email, setEmail] = useState('');
 
   const getVerificationOtp = async (event) => {
     console.log(event);
@@ -72,7 +73,7 @@ export default function Authentication({ setToken }) {
     };
     const response = await userApiProvider.login(formData);
     const loginData = await response;
-    console.log("signup response", loginData);
+    console.log('signup response', loginData);
     setVerifyOtpButton(true);
   };
 
@@ -85,9 +86,9 @@ export default function Authentication({ setToken }) {
 
     const response = await userApiProvider.verifyOTP(formData);
     const userData = await response;
-    console.log("verifyOTP response", userData);
-    window.localStorage.setItem("utoken", userData.jwt_token);
-    window.localStorage.setItem("userData", JSON.stringify(userData));
+    console.log('verifyOTP response', userData);
+    window.localStorage.setItem('utoken', userData.jwt_token);
+    window.localStorage.setItem('userData', JSON.stringify(userData));
     setToken({
       user: userData.email,
       type: userData.userType,
@@ -119,14 +120,23 @@ export default function Authentication({ setToken }) {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
-          <ReactPhoneInput
+          {/* <ReactPhoneInput
             defaultCountry={"us"}
             value={phone}
             onChange={(value) => setPhone(value)}
             inputClass={classes.field}
             dropdownClass={classes.countryList}
             component={TextField}
+          /> */}
+
+          <PhoneInput
+            country={'in'}
+            value={phone}
+            onChange={(value) => setPhone(value)}
+            required="true"
+            inputStyle={{ width: '100%' }}
           />
+          <br></br>
           {verifyOtpButton && (
             <TextField
               variant="outlined"

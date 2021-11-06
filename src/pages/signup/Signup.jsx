@@ -1,32 +1,33 @@
-import React from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormLabel from "@material-ui/core/FormLabel";
-import Link from "@material-ui/core/Link";
-import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import ReactPhoneInput from "react-phone-input-material-ui";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import { useState } from "react";
-import { userApiProvider } from "services/api/user/userService";
-import { useHistory } from "react-router-dom";
+import React from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+import Link from '@material-ui/core/Link';
+import Box from '@material-ui/core/Box';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import PhoneInput from 'react-phone-input-2';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import { useState } from 'react';
+import { userApiProvider } from 'services/api/user/userService';
+import { useHistory } from 'react-router-dom';
+import 'react-phone-input-2/lib/bootstrap.css'
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
+      {'Copyright © '}
       <Link color="inherit" href="https://www.trustless.capital/">
         TCAP
-      </Link>{" "}
+      </Link>{' '}
       {new Date().getFullYear()}
-      {"."}
+      {'.'}
     </Typography>
   );
 }
@@ -34,16 +35,16 @@ function Copyright() {
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -54,11 +55,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Signup({ setToken }) {
   const history = useHistory();
   const classes = useStyles();
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState('');
   const [verifyOtpButton, setVerifyOtpButton] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [email, setEmail] = useState("");
-  const [userType, setUserType] = useState("investor");
+  const [otp, setOtp] = useState('');
+  const [email, setEmail] = useState('');
+  const [userType, setUserType] = useState('investor');
 
   const getVerificationOtp = async (event) => {
     if (!email.trim().length || !phone.trim().length) {
@@ -74,7 +75,7 @@ export default function Signup({ setToken }) {
     console.log(formData);
     const response = await userApiProvider.signup(formData);
     const signupData = await response.json();
-    console.log("signup response", signupData);
+    console.log('signup response', signupData);
     setVerifyOtpButton(true);
   };
 
@@ -87,15 +88,15 @@ export default function Signup({ setToken }) {
 
     const response = await userApiProvider.verifyOTP(formData);
     const userData = await response.json();
-    console.log("verifyOTP response", userData);
-    window.localStorage.setItem("utoken", userData.jwt_token);
-    window.localStorage.setItem("userData", JSON.stringify(userData));
+    console.log('verifyOTP response', userData);
+    window.localStorage.setItem('utoken', userData.jwt_token);
+    window.localStorage.setItem('userData', JSON.stringify(userData));
     setToken({
       user: userData.email,
       type: userData.userType,
       utoken: userData.jwt_token,
     });
-    history.push("/");
+    history.push('/');
   };
 
   return (
@@ -122,14 +123,22 @@ export default function Signup({ setToken }) {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
-          <ReactPhoneInput
-            defaultCountry={"us"}
+          {/* <ReactPhoneInput
+            defaultCountry={"in"}
             value={phone}
             onChange={(value) => setPhone(value)}
             inputClass={classes.field}
             dropdownClass={classes.countryList}
             component={TextField}
+          /> */}
+          <PhoneInput
+            country={'in'}
+            value={phone}
+            onChange={(value) => setPhone(value)}
+            required="true"
+            inputStyle={{ width: '100%' }}
           />
+          <br></br>
           <FormLabel component="legend">Signup Type</FormLabel>
           <RadioGroup
             row
