@@ -30,6 +30,8 @@ import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
+import { documentApiProvider } from 'services/api/document/documentService';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -174,8 +176,31 @@ export default function AddInvoice() {
     setState({ ...state, arrname: e.target.value });
   };
   const onChangeInvFile = (e) => {
-    setState({ ...state, invurl: e.target.value });
+    setState({ ...state, invurl: e.target.files[0]});
   };
+  const uploadInvoice = async () => {
+    const documentFormData = new FormData();
+    // Update the formData object
+    documentFormData.append(
+      'document',
+      state.invurl,
+      state.invurl.name
+    );
+     const uploadSuccess = await documentApiProvider.submitDocuments(documentFormData);
+     let userData = localStorage.getItem('userData');
+     const serverUpload = await documentApiProvider.updateDocumentsToServer({
+      //"companyId":companyCreateSuccessResponse.id, // this comes from?
+      "companyId":userData.id,
+      "userEmail":userData.email,
+      "contentId":uploadSuccess.contenId,
+      "version":"1",// this comes from?
+      "type":'INV',// what are the other fields 
+      "description":`its a ${state.invurl.name}`, // static or getting from some other data?
+      "comments":`its a ${state.invurl.name}`, // this comes from?
+      "fileName": state.invurl.name,
+      "fileKey" : uploadSuccess.fileKey
+    })
+  }
   const handleViewOnly = () => {
     setState({ ...state, viewOnly: !state.viewOnly });
   };
@@ -185,6 +210,7 @@ export default function AddInvoice() {
     setState({ ...state, open: true });
     console.log(e.target.value);
   };
+
   const onHandleClose = (e) => {
     if (e.target.firstChild.data == 'No') {
       setState({ ...state, open: false });
@@ -738,6 +764,7 @@ export default function AddInvoice() {
                             style={{ display: 'none' }}
                             onChange={onChangeInvFile}
                           />
+                         <label style={{float:'right'}}>{state.invurl.name}</label>
                         </div>
                       </Grid>
                       <Grid item xs={6}>
@@ -746,6 +773,7 @@ export default function AddInvoice() {
                             className="saveInvBtn"
                             type="submit"
                             value="Submit"
+                            onClick={uploadInvoice}
                           />
                         </div>
                       </Grid>

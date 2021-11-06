@@ -13,7 +13,7 @@ import Button from '@material-ui/core/Button';
 import { TextField } from '@material-ui/core';
 import ReactPhoneInput from 'react-phone-input-material-ui';
 import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
+import 'react-phone-input-2/lib/high-res.css'
 import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -260,8 +260,8 @@ export default function OnboardNewEntity() {
        const uploadSuccess = await documentApiProvider.submitDocuments(documentFormData);
        const serverUpload = await documentApiProvider.updateDocumentsToServer({
         //"companyId":companyCreateSuccessResponse.id, // this comes from?
-        "companyId":"432fb6f9-7382-4743-a836-a662b0f53c2a",
-        "userEmail":'parthdalal6394@gmail.com',
+        "companyId":companyCreateSuccessResponse.id,
+        "userEmail":companyCreateSuccessResponse.email,
         "contentId":uploadSuccess.contenId,
         "version":"2",// this comes from?
         "type":documentsList[i].type,// what are the other fields 
@@ -269,7 +269,7 @@ export default function OnboardNewEntity() {
         "comments":`its a ${documentsList[i].name}`, // this comes from?
         "fileName": state[documentsList[i].name][j].name,
         "fileKey" : uploadSuccess.fileKey 
-    })
+      })
       }
     }
     }
@@ -458,6 +458,7 @@ export default function OnboardNewEntity() {
   value={companyRelationship.vendorContact}
   onChange={(value)=>setCompanyRelationship({...companyRelationship,vendorContact:value})}
   required='true'
+  inputStyle={{ width: '100%' }}
 />
 <label>Anchor Contact<sup className="required">*</sup></label> 
 <PhoneInput
@@ -465,6 +466,7 @@ export default function OnboardNewEntity() {
   value={companyRelationship.anchorContact}
   onChange={(value)=>setCompanyRelationship({...companyRelationship,anchorContact:value})}
   required='true'
+  inputStyle={{ width: '100%' }}
 />
 <TextField
             autoFocus
@@ -1021,6 +1023,7 @@ required
   value={state.phoneNumber}
   onChange={onChangePhoneNumber}
   required='true'
+  inputStyle={{ width: '100%' }}
 />
                           </Grid>
                           </Grid>
