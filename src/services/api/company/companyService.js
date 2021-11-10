@@ -91,6 +91,16 @@ const submitCompany = (companyData) => {
         .catch(handleError);
       }; 
 
+      const getCompanyList = (email) => { 
+        return fetch(`${BASE_URL}/v1/company/all`, {
+           ...requestOptions,
+           method:'GET',
+            headers: {
+              ...headers
+            },
+          }).then(handleResponse)
+          .catch(handleError);
+        }; 
 
 export const companyApiProvider = {
   signUp,
@@ -98,5 +108,6 @@ export const companyApiProvider = {
   verifyOTP,
   submitCompany,
   verifyEmail,
-  createCompanyRelationship
+  createCompanyRelationship,
+  getCompanyList
 };

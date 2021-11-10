@@ -99,6 +99,8 @@ export default function AddInvoice() {
     approve: '',
   };
   const [state, setState] = useState(initObj);
+  const [steps,setSteps] = useState(1);
+  const [documentDetails,setDocumentDetails] = useState(null);
   // Form Events
   // onChangeTid(e) {
   //   this.setState({ tid: e.target.value });
@@ -187,7 +189,7 @@ export default function AddInvoice() {
       state.invurl.name
     );
      const uploadSuccess = await documentApiProvider.submitDocuments(documentFormData);
-     let userData = localStorage.getItem('userData');
+     let userData = JSON.parse(localStorage.getItem('userData'));
      const serverUpload = await documentApiProvider.updateDocumentsToServer({
       //"companyId":companyCreateSuccessResponse.id, // this comes from?
       "companyId":userData.id,
@@ -195,11 +197,41 @@ export default function AddInvoice() {
       "contentId":uploadSuccess.contenId,
       "version":"1",// this comes from?
       "type":'INV',// what are the other fields 
-      "description":`its a ${state.invurl.name}`, // static or getting from some other data?
+      "description":`invoice`, // static or getting from some other data?
       "comments":`its a ${state.invurl.name}`, // this comes from?
       "fileName": state.invurl.name,
       "fileKey" : uploadSuccess.fileKey
     })
+    if(serverUpload.fileKey){
+      setDocumentDetails(serverUpload);
+      setSteps(2);
+    }
+  }
+  const uploadInvoiceDetails = async () => {
+    // const documentFormData = new FormData();
+    // // Update the formData object
+    // documentFormData.append(
+    //   'document',
+    //   state.invurl,
+    //   state.invurl.name
+    // );
+    //  const uploadSuccess = await documentApiProvider.submitDocuments(documentFormData);
+    //  let userData = JSON.parse(localStorage.getItem('userData'));
+    //  const serverUpload = await documentApiProvider.updateDocumentsToServer({
+    //   //"companyId":companyCreateSuccessResponse.id, // this comes from?
+    //   "companyId":userData.id,
+    //   "userEmail":userData.email,
+    //   "contentId":uploadSuccess.contenId,
+    //   "version":"1",// this comes from?
+    //   "type":'INV',// what are the other fields 
+    //   "description":`invoice`, // static or getting from some other data?
+    //   "comments":`its a ${state.invurl.name}`, // this comes from?
+    //   "fileName": state.invurl.name,
+    //   "fileKey" : uploadSuccess.fileKey
+    // })
+    // if(serverUpload.fileKey){
+    //   setSteps(2);
+    // }
   }
   const handleViewOnly = () => {
     setState({ ...state, viewOnly: !state.viewOnly });
@@ -313,14 +345,14 @@ export default function AddInvoice() {
           </DialogActions>
         </Dialog>
         <div className={classes.root}>
-          <Accordion color="primary">
+          {steps>0 && <Accordion color="primary">
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="entity-details"
               id="entity-details"
             >
               <Typography className={classes.heading}>
-                ENTITY DETAILS
+                UPLOAD INVOICE
               </Typography>
               {/* <Button variant="contained"><Link to="/onboardentity">ADD NEW</Link></Button> */}
               {/* <Button variant="contained"> LOOKUP</Button> */}
@@ -328,8 +360,8 @@ export default function AddInvoice() {
             <AccordionDetails>
               <div className={classes.root}>
                 <Grid container spacing={3}>
-                  <Grid item xs={12} justifyContent="flex-end">
-                    {/* <Paper className={classes.paper}> */}
+                  {/* <Grid item xs={12} justifyContent="flex-end">
+                     <Paper className={classes.paper}> 
                     <FormControl className={classes.formControl}>
                       <InputLabel id="demo-simple-select-label">
                         Select Entity
@@ -345,7 +377,7 @@ export default function AddInvoice() {
                         <MenuItem value={'Entity3'}>Entity 3</MenuItem>
                       </Select>
                     </FormControl>
-                    {/* </Paper> */}
+                     </Paper> 
                   </Grid>
                   <Grid item xs={12}>
                     <Paper className={classes.paper}>
@@ -400,12 +432,39 @@ export default function AddInvoice() {
                         )}
                       </div>
                     </Paper>
-                  </Grid>
+                  </Grid> */}
+                  <Grid item xs={6}>
+                        <div className="addInvItem">
+                          <label>Upload Invoice</label>
+                          <label htmlFor="file" className="labelFile">
+                            <Publish />
+                            <span>Select File</span>
+                          </label>
+                          <input
+                            type="file"
+                            id="file"
+                            name="invfile"
+                            style={{ display: 'none' }}
+                            onChange={onChangeInvFile}
+                          />
+                         <label style={{float:'right'}}>{state.invurl.name}</label>
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <div className="addInvItem">
+                          <input
+                            className="saveInvBtn"
+                            type="submit"
+                            value="Submit"
+                            onClick={uploadInvoice}
+                          />
+                        </div>
+                      </Grid>
                 </Grid>
               </div>
             </AccordionDetails>
-          </Accordion>
-          <Accordion>
+          </Accordion>}
+          {steps>1 && <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="company-details"
@@ -752,28 +811,11 @@ export default function AddInvoice() {
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Upload Invoice</label>
-                          <label htmlFor="file" className="labelFile">
-                            <Publish />
-                            <span>Select File</span>
-                          </label>
-                          <input
-                            type="file"
-                            id="file"
-                            name="invfile"
-                            style={{ display: 'none' }}
-                            onChange={onChangeInvFile}
-                          />
-                         <label style={{float:'right'}}>{state.invurl.name}</label>
-                        </div>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <div className="addInvItem">
                           <input
                             className="saveInvBtn"
                             type="submit"
                             value="Submit"
-                            onClick={uploadInvoice}
+                            onClick={uploadInvoiceDetails}
                           />
                         </div>
                       </Grid>
@@ -798,8 +840,8 @@ export default function AddInvoice() {
                 </Grid>
               </Grid>
             </AccordionDetails>
-          </Accordion>
-          <Accordion>
+          </Accordion>}
+          {steps>2 && <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="Seller-approval"
@@ -837,7 +879,7 @@ export default function AddInvoice() {
                 </div>
               </Typography>
             </AccordionDetails>
-          </Accordion>
+          </Accordion>}
         </div>
 
         {/* <h3 className="addInvSectionTitle">Approval Section</h3>
