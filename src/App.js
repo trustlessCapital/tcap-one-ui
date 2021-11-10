@@ -89,9 +89,9 @@ const App = () => {
                 <Route path="/onboardentity">
                   <OnboardNewEntity/>
                 </Route>
-                <Route path="/adminonboardentity">
+               {token.type=='arranger' && <Route path="/adminonboardentity">
                   <OnboardNewEntity />
-                </Route>
+                </Route>}
                 <Route path="/varelationship">
                   <VARelationship />
                 </Route>
