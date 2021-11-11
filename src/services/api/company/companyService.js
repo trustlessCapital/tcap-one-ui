@@ -79,6 +79,16 @@ const submitCompany = (companyData) => {
       }).then(handleResponse)
       .catch(handleError);
     }; 
+    const uploadInvoiceDetails = (invoiceDetails) => { 
+      return fetch(`${BASE_URL}/v1/invoice`, {
+         ...requestOptions,
+          headers: {
+            ...headers
+          },
+          body: JSON.stringify(invoiceDetails),
+        }).then(handleResponse)
+        .catch(handleError);
+      }; 
 
     const verifyEmail = (email) => { 
       return fetch(`${BASE_URL}/v1/company/email/${email}`, {
@@ -109,5 +119,6 @@ export const companyApiProvider = {
   submitCompany,
   verifyEmail,
   createCompanyRelationship,
-  getCompanyList
+  getCompanyList,
+  uploadInvoiceDetails
 };
