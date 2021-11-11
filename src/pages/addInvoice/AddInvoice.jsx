@@ -3,7 +3,7 @@
 //import AiWidgets from '../components/aiWidgets/AiWidgets'
 import './addInvoice.css';
 //import Select from 'react-select';
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Publish } from '@material-ui/icons';
 // import { Component, useState } from "react";
@@ -31,6 +31,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 import { documentApiProvider } from 'services/api/document/documentService';
+import { companyApiProvider } from 'services/api/company/companyService';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,7 +71,7 @@ export default function AddInvoice() {
   let initObj = {
     approvalInvoice: [],
     tid: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    invno: '',
+    invno: undefined,
     vname: '',
     aname: '',
     vloc: '',
@@ -81,7 +82,9 @@ export default function AddInvoice() {
     invamt: '',
     paydt: '',
     irate: '',
-    arrname: '',
+    supplierGSTIN:'',
+    anchorGSTIN:'',
+    anchorApprover: '',
     invurl: '',
     ctype: '',
     polinenum: '',
@@ -97,14 +100,25 @@ export default function AddInvoice() {
     approveName: '',
     submitapproval: '',
     approve: '',
+    comment:''
   };
   const [state, setState] = useState(initObj);
   const [steps,setSteps] = useState(1);
   const [documentDetails,setDocumentDetails] = useState(null);
+  const [anchorList,setAnchorList] = useState([]);
+  const [vendorList,setVendorList] = useState([]);
+  const [arrangerList,setArrangerList] = useState([]);
   // Form Events
   // onChangeTid(e) {
   //   this.setState({ tid: e.target.value });
   // }
+
+  useEffect(async ()=>{
+    const companyData = await companyApiProvider.getCompanyList();
+    setAnchorList(companyData.filter((company)=>company.tcapRelation=='anchor'))
+    setVendorList(companyData.filter((company)=>company.tcapRelation=='vendor'))
+    setArrangerList(companyData.filter((company)=>company.tcapRelation=='arranger'))
+      },[])
   const onChangeInvNo = (e) => {
     setState({ ...state, invno: e.target.value });
   };
@@ -128,6 +142,12 @@ export default function AddInvoice() {
   };
   const onChangeCommodity = (e) => {
     setState({ ...state, commodity: e.target.value });
+  };
+  const onChangeSupplierGSTIN = (e) => {
+    setState({ ...state, supplierGSTIN: e.target.value });
+  };
+  const onChangeAnchorGSTIN = (e) => {
+    setState({ ...state, anchorGSTIN: e.target.value });
   };
   const onChangeEwayapproved = (e) => {
     setState({ ...state, ewayapproved: e.target.value });
@@ -162,6 +182,9 @@ export default function AddInvoice() {
   const onChangeInvDt = (e) => {
     setState({ ...state, invdt: e.target.value });
   };
+  const onChangeComment = (e) => {
+    setState({ ...state, comment: e.target.value });
+  };
   const onChangeDueDt = (e) => {
     setState({ ...state, duedt: e.target.value });
   };
@@ -174,8 +197,8 @@ export default function AddInvoice() {
   const onChangeIRate = (e) => {
     setState({ ...state, irate: e.target.value });
   };
-  const onChangeArrName = (e) => {
-    setState({ ...state, arrname: e.target.value });
+  const onChangeAnchorApprover = (e) => {
+    setState({ ...state, anchorApprover: e.target.value });
   };
   const onChangeInvFile = (e) => {
     setState({ ...state, invurl: e.target.files[0]});
@@ -208,63 +231,37 @@ export default function AddInvoice() {
     }
   }
   const uploadInvoiceDetails = async () => {
-    // const documentFormData = new FormData();
-    // // Update the formData object
-    // documentFormData.append(
-    //   'document',
-    //   state.invurl,
-    //   state.invurl.name
-    // );
-    //  const uploadSuccess = await documentApiProvider.submitDocuments(documentFormData);
-    //  let userData = JSON.parse(localStorage.getItem('userData'));
-    //  const serverUpload = await documentApiProvider.updateDocumentsToServer({
-    //   //"companyId":companyCreateSuccessResponse.id, // this comes from?
-    //   "companyId":userData.id,
-    //   "userEmail":userData.email,
-    //   "contentId":uploadSuccess.contenId,
-    //   "version":"1",// this comes from?
-    //   "type":'INV',// what are the other fields 
-    //   "description":`invoice`, // static or getting from some other data?
-    //   "comments":`its a ${state.invurl.name}`, // this comes from?
-    //   "fileName": state.invurl.name,
-    //   "fileKey" : uploadSuccess.fileKey
-    // })
-    // if(serverUpload.fileKey){
-    //   setSteps(2);
-    // }
-  }
-  const handleViewOnly = () => {
-    setState({ ...state, viewOnly: !state.viewOnly });
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert('are you sure you want to send for approval?');
-    setState({ ...state, open: true });
-    console.log(e.target.value);
-  };
-
-  const onHandleClose = (e) => {
-    if (e.target.firstChild.data == 'No') {
-      setState({ ...state, open: false });
-    } else {
-      var joined = state.approvalInvoice.concat({
-        tid: state.tid,
-        invno: state.invno,
-        vname: state.vname,
-        aname: state.aname,
-        vloc: state.vloc,
-        aloc: state.aloc,
-        ptype: state.ptype,
-        invdt: state.invdt,
-        duedt: state.duedt,
-        invamt: state.invamt,
-        paydt: state.paydt,
-        irate: state.irate,
-        arrname: 'Arranger1',
-        invurl: state.invurl,
-      });
+     const invoiceUpload = await companyApiProvider.uploadInvoiceDetails({
+        "invoiceNumber":state.invno,
+        "commodityType":state.ctype,
+        "invoiceAmount":state.invamt,
+        "dueDate":state.duedt,
+        "transactionDate":state.invdt,
+        "poLineItemNo":state.polinenum,
+        "payoutDate":state.paydt,
+        "productType" : state.ptype,
+        "poPiNo":state.popinum,
+        "grnSrnNo":state.grnsrnnum,
+        "grnSrnDate":state.grnsrnDate,
+        "commodity":state.commodity,
+        "ewayBill":state.ewaynum,
+        "ewayBillDate":state.ewaybilldt,
+        "ewayApproved":state.ewayapproved,
+        "supplierGSTIN":state.supplierGSTIN,
+        "anchorGSTIN":state.anchorGSTIN,
+        "contentId":documentDetails.contentId,
+        "anchorId":state.aname,
+        "vendorId":state.vname,
+        "status":"pending",
+        "anchorApprover":state.anchorApprover,
+        "tcapApprover":"hello@trustless.capital",
+        "comments":state.comment
+        
+    })
+    if(invoiceUpload.invoiceNumber){
+      alert('Invoice uploaded successfully');
       setState({
-        approvalInvoice: joined,
+        approvalInvoice: [],
         tid: Math.floor(Math.random() * (999 - 100 + 1) + 100),
         invno: '',
         vname: '',
@@ -277,11 +274,61 @@ export default function AddInvoice() {
         invamt: '',
         paydt: '',
         irate: '',
-        arrname: '',
+        supplierGSTIN:'',
+        anchorGSTIN:'',
+        anchorApprover: '',
         invurl: '',
+        ctype: '',
+        polinenum: '',
+        grnsrnDate: '',
+        grnsrnnum: '',
+        ewaynum: '',
+        ewaybilldt: '',
+        popinum: '',
+        ewayapproved: '',
+        commodity: '',
         open: false,
         viewOnly: false,
+        approveName: '',
+        submitapproval: '',
+        approve: '',
+        comment:''
       });
+      setSteps(1);
+    }
+  }
+  const handleViewOnly = () => {
+    setState({ ...state, viewOnly: !state.viewOnly });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // alert('are you sure you want to send for approval?');
+     setState({ ...state, open: true });
+  };
+
+  const onHandleClose = (e) => {
+    if (e.target.firstChild.data == 'No') {
+      setState({ ...state, open: false });
+    } else {
+      // var joined = state.approvalInvoice.concat({
+      //   tid: state.tid,
+      //   invno: state.invno,
+      //   vname: state.vname,
+      //   aname: state.aname,
+      //   supplierGSTIN: state.supplierGSTIN,
+      //   anchorGSTIN: state.anchorGSTIN,
+      //   vloc: state.vloc,
+      //   aloc: state.aloc,
+      //   ptype: state.ptype,
+      //   invdt: state.invdt,
+      //   duedt: state.duedt,
+      //   invamt: state.invamt,
+      //   paydt: state.paydt,
+      //   irate: state.irate,
+      //   anchorApprover: state.anchorApprover,
+      //   invurl: state.invurl,
+      // });
+      uploadInvoiceDetails();
     }
   };
 
@@ -295,7 +342,7 @@ export default function AddInvoice() {
       {/* <Button>
           <Link to="/marketplace">Market Place</Link>
         </Button> */}
-      <Grid container xs={12}>
+      <Grid container spacing={3} justifyContent="center">
         <Grid item xs={10}>
           <FormControlLabel
             control={
@@ -359,7 +406,7 @@ export default function AddInvoice() {
             </AccordionSummary>
             <AccordionDetails>
               <div className={classes.root}>
-                <Grid container spacing={3}>
+                <Grid container spacing={3}  justifyContent="center">
                   {/* <Grid item xs={12} justifyContent="flex-end">
                      <Paper className={classes.paper}> 
                     <FormControl className={classes.formControl}>
@@ -475,14 +522,14 @@ export default function AddInvoice() {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Grid container spacing={3}>
+              <Grid container spacing={3}  justifyContent="center">
                 <Grid item xs={12}>
                   <h3 className="addInvSectionTitle">Invoice Details</h3>
                 </Grid>
                 <Grid item xs={12}>
                   <form className="addInvForm" onSubmit={handleSubmit} disabled>
-                    <Grid container spacing={3}>
-                      <Grid item xs={6} justifyContent="flex-end">
+                    <Grid container spacing={3}  justifyContent="center">
+                      <Grid item xs={6} >
                         <div className="addInvItem">
                           <label>Tracking ID</label>
                           <input
@@ -498,7 +545,7 @@ export default function AddInvoice() {
                         <div className="addInvItem">
                           <label>Invoice No</label>
                           <input
-                            type="text"
+                            type="number"
                             name="invNo"
                             className="addInvInput"
                             onChange={onChangeInvNo}
@@ -509,7 +556,7 @@ export default function AddInvoice() {
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Buyer Name</label>
+                          <label>Vendor Name</label>
                           <select
                             className="addInvInput"
                             name="vname"
@@ -517,16 +564,16 @@ export default function AddInvoice() {
                             required
                             value={state.vname}
                           >
-                            <option value="">--Select--</option>
-                            <option value="Buyer1">Buyer1</option>
-                            <option value="Buyer2">Buyer2</option>
-                            <option value="Buyer3">Buyer3</option>
+                            <option value="NA">--Select--</option>
+                            {anchorList && vendorList.map((vendor)=>{
+                              return (<option key={vendor.id} value={vendor.id}>{vendor.organisationName}</option>)
+                            })}
                           </select>
                         </div>
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Seller Name</label>
+                          <label>Anchor Name</label>
                           <select
                             className="addInvInput"
                             name="aname"
@@ -534,10 +581,10 @@ export default function AddInvoice() {
                             required
                             value={state.aname}
                           >
-                            <option value="">--Select--</option>
-                            <option value="Seller1">Seller1</option>
-                            <option value="Seller2">Seller2</option>
-                            <option value="Seller3">Seller3</option>
+                            <option value="NA">--Select--</option>
+                            {anchorList && anchorList.map((anchor)=>{
+                              return (<option key={anchor.id} value={anchor.id}>{anchor.organisationName}</option>)
+                            })}
                           </select>
                         </div>
                       </Grid>
@@ -568,6 +615,32 @@ export default function AddInvoice() {
                             onChange={onChangeCommodity}
                             required
                             value={state.commodity}
+                          />
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <div className="addInvItem">
+                          <label>Supplier GSTIN</label>
+                          <input
+                            type="text"
+                            className="addInvInput"
+                            name="supplierGSTIN"
+                            onChange={onChangeSupplierGSTIN}
+                            required
+                            value={state.supplierGSTIN}
+                          />
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <div className="addInvItem">
+                          <label>Anchor GSTIN</label>
+                          <input
+                            type="text"
+                            className="addInvInput"
+                            name="anchorGSTIN"
+                            onChange={onChangeAnchorGSTIN}
+                            required
+                            value={state.anchorGSTIN}
                           />
                         </div>
                       </Grid>
@@ -779,18 +852,27 @@ export default function AddInvoice() {
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Arranger</label>
+                          <label>Anchor Approver</label>
                           <input
-                            type="text"
-                            value="Arranger1"
+                            type="email"
                             className="addInvInput"
-                            readOnly
-                            style={{ cursor: 'no-drop' }}
-                            name="arrName"
-                            value="Arranger1"
-                            onChange={onChangeArrName}
+                            name="anchorApprover"
+                            value={state.anchorApprover}
+                            onChange={onChangeAnchorApprover}
                             required
                           />
+                        </div>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <div className="addInvItem">
+                          <label>Comment</label>
+                          <textarea
+                            className="addInvInput"
+                            name="comment"
+                            value={state.comment}
+                            onChange={onChangeComment}
+                            required
+                          ></textarea>
                         </div>
                       </Grid>
                       <Grid item xs={12}>
@@ -815,7 +897,7 @@ export default function AddInvoice() {
                             className="saveInvBtn"
                             type="submit"
                             value="Submit"
-                            onClick={uploadInvoiceDetails}
+                           
                           />
                         </div>
                       </Grid>
