@@ -86,6 +86,7 @@ export default function AddInvoice() {
     anchorGSTIN:'',
     anchorApprover: '',
     invurl: '',
+    invverificationurl: '',
     ctype: '',
     polinenum: '',
     grnsrnDate: '',
@@ -105,6 +106,7 @@ export default function AddInvoice() {
   const [state, setState] = useState(initObj);
   const [steps,setSteps] = useState(1);
   const [documentDetails,setDocumentDetails] = useState(null);
+  const [DocumentIvoiceVerificationDetails,setDocumentIvoiceVerificationDetails] = useState(null);
   const [anchorList,setAnchorList] = useState([]);
   const [vendorList,setVendorList] = useState([]);
   const [arrangerList,setArrangerList] = useState([]);
@@ -203,6 +205,9 @@ export default function AddInvoice() {
   const onChangeInvFile = (e) => {
     setState({ ...state, invurl: e.target.files[0]});
   };
+  const onChangeInvVerificationFile = (e) => {
+    setState({ ...state, invverificationurl: e.target.files[0]});
+  };
   const uploadInvoice = async () => {
     const documentFormData = new FormData();
     // Update the formData object
@@ -228,6 +233,34 @@ export default function AddInvoice() {
     if(serverUpload.fileKey){
       setDocumentDetails(serverUpload);
       setSteps(2);
+    }
+  }
+  const uploadInvoiceVerification = async () => {
+    const documentFormData = new FormData();
+    // Update the formData object
+    documentFormData.append(
+      'document',
+      state.invverificationurl,
+      state.invverificationurl.name
+    );
+     const uploadSuccess = await documentApiProvider.submitDocuments(documentFormData);
+     let userData = JSON.parse(localStorage.getItem('userData'));
+     const serverUpload = await documentApiProvider.updateDocumentsToServer({
+      //"companyId":companyCreateSuccessResponse.id, // this comes from?
+      "companyId":userData.id,
+      "userEmail":userData.email,
+      "contentId":uploadSuccess.contenId,
+      "version":"1",// this comes from?
+      "type":'OTH',// what are the other fields 
+      "description":`Others`, // static or getting from some other data?
+      "comments":`Invoice Verification Evidence`, // this comes from?
+      "fileName": state.invverificationurl.name,
+      "fileKey" : uploadSuccess.fileKey
+    })
+    if(serverUpload.fileKey){
+      setDocumentIvoiceVerificationDetails(serverUpload);
+      alert("Invoice verification document uploaded successfully");
+      setSteps(1);
     }
   }
   const uploadInvoiceDetails = async () => {
@@ -278,6 +311,7 @@ export default function AddInvoice() {
         anchorGSTIN:'',
         anchorApprover: '',
         invurl: '',
+        invverificationurl: '', 
         ctype: '',
         polinenum: '',
         grnsrnDate: '',
@@ -294,7 +328,7 @@ export default function AddInvoice() {
         approve: '',
         comment:''
       });
-      setSteps(1);
+      setSteps(3);
     }
   }
   const handleViewOnly = () => {
@@ -407,79 +441,6 @@ export default function AddInvoice() {
             <AccordionDetails>
               <div className={classes.root}>
                 <Grid container spacing={3}  justifyContent="center">
-                  {/* <Grid item xs={12} justifyContent="flex-end">
-                     <Paper className={classes.paper}> 
-                    <FormControl className={classes.formControl}>
-                      <InputLabel id="demo-simple-select-label">
-                        Select Entity
-                      </InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={entity}
-                        onChange={handleChange}
-                      >
-                        <MenuItem value={'Entity1'}>Entity 1</MenuItem>
-                        <MenuItem value={'Entity2'}>Entity 2</MenuItem>
-                        <MenuItem value={'Entity3'}>Entity 3</MenuItem>
-                      </Select>
-                    </FormControl>
-                     </Paper> 
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Paper className={classes.paper}>
-                      <div>
-                        {state.approvalInvoice.length > 0 ? (
-                          <table>
-                            <tbody>
-                              <tr>
-                                <td>
-                                  <thead>Tracking ID:</thead>
-                                </td>
-                                <td>
-                                  <thead>Buyer Name:</thead>
-                                </td>
-                                <td>
-                                  <thead>Product Type:</thead>
-                                </td>
-                                <td>
-                                  <thead>Inv Date:</thead>
-                                </td>
-                                <td>
-                                  <thead>Invoice Amt:</thead>
-                                </td>
-                                <td>
-                                  <thead>Interest Rate:</thead>
-                                </td>
-                                <td>
-                                  <thead>Action</thead>
-                                </td>
-                              </tr>
-
-                              {state.approvalInvoice.length > 0 &&
-                                state.approvalInvoice.map((invoice, index) => {
-                                  return (
-                                    <tr key={index}>
-                                      <td>{invoice.tid}</td>
-                                      <td>{invoice.vname}</td>
-                                      <td>{invoice.ptype}</td>
-                                      <td>{invoice.invdt}</td>
-                                      <td>{invoice.invamt}</td>
-                                      <td>{invoice.irate}</td>
-                                      <td>
-                                        <Button>Approve</Button>
-                                      </td>
-                                    </tr>
-                                  );
-                                })}
-                            </tbody>
-                          </table>
-                        ) : (
-                          <div>No Entity Selected</div>
-                        )}
-                      </div>
-                    </Paper>
-                  </Grid> */}
                   <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Upload Invoice</label>
@@ -930,36 +891,39 @@ export default function AddInvoice() {
               id="Seller-approval"
             >
               <Typography className={classes.heading}>
-                Seller APPROVAL
+                INVOICE VERIFICATION EVIDENCE
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
-                <div className="addInvItem">
-                  <label>Invoice No</label>
-                  <input
-                    type="text"
-                    name="approveName"
-                    className="addInvInput"
-                    onChange={onChangeApproveName}
-                    required
-                    value={state.approveName}
-                  />
-                </div>
-              </Typography>
-              <Typography>
-                <div className="addInvItem">
-                  <label>Invoice No</label>
-                  <input
-                    type="text"
-                    name="approve"
-                    className="addInvInput"
-                    onChange={onChangeApprove}
-                    required
-                    value={state.approve}
-                  />
-                </div>
-              </Typography>
+            <Grid container spacing={3}  justifyContent="center">
+                  <Grid item xs={6}>
+                        <div className="addInvItem">
+                          <label>Upload Invoice Verification Evidence</label>
+                          <label htmlFor="invoiceverificationfile" className="labelFile">
+                            <Publish />
+                            <span>Select File</span>
+                          </label>
+                          <input
+                            type="file"
+                            id="invoiceverificationfile"
+                            name="invoiceverificationfile"
+                            style={{ display: 'none' }}
+                            onChange={onChangeInvVerificationFile}
+                          />
+                         <label style={{float:'right'}}>{state.invverificationurl?.name}</label>
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <div className="addInvItem">
+                          <input
+                            className="saveInvBtn"
+                            type="submit"
+                            value="Submit"
+                            onClick={uploadInvoiceVerification}
+                          />
+                        </div>
+                      </Grid>
+                </Grid>
             </AccordionDetails>
           </Accordion>}
         </div>
