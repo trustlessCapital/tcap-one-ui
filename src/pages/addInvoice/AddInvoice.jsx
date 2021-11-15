@@ -7,6 +7,7 @@ import React, { Component, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Publish } from '@material-ui/icons';
 // import { Component, useState } from "react";
+import { useHistory } from "react-router-dom";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -59,8 +60,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AddInvoice() {
+export default function AddInvoice(props) {
   // userData;
+  const history = useHistory();
   const classes = useStyles();
   const [entity, setEntity] = useState('');
 
@@ -121,6 +123,11 @@ export default function AddInvoice() {
     setVendorList(companyData.filter((company)=>company.tcapRelation=='vendor'))
     setArrangerList(companyData.filter((company)=>company.tcapRelation=='arranger'))
       },[])
+
+      useEffect(()=>{
+        if((props.userData?.type!='vendor' && props.userData?.type!='arranger'))
+        history.push('/')
+      },[props.verified])
   const onChangeInvNo = (e) => {
     setState({ ...state, invno: e.target.value });
   };

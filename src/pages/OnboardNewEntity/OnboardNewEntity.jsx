@@ -3,9 +3,10 @@
 //import AiWidgets from '../components/aiWidgets/AiWidgets'
 import './newEntity.css';
 //import Select from 'react-select';
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Publish } from '@material-ui/icons';
+import { useHistory } from "react-router-dom";
 // import { Component, useState } from "react";
 
 import { Link } from 'react-router-dom';
@@ -67,8 +68,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function OnboardNewEntity() {
+export default function OnboardNewEntity(props) {
   // userData;
+  const history = useHistory();
   const classes = useStyles();
   const [entity, setEntity] = useState('');
   const [stepCount,setStepCount] = useState(1);
@@ -79,6 +81,10 @@ export default function OnboardNewEntity() {
   const [companyCreateSuccessResponse,setCompanyCreateSuccessResponse] = useState({});
   const [userType,setUserType] = useState(window.localStorage.getItem('userData').userType);
   const [openSnackbar,setOpenSnackbar] = useState(false);
+  useEffect(()=>{
+    if(props.verified?.companyId && props.userData?.type!='arranger')
+    history.push('/')
+  },[props.verified])
   const handleChange = (event) => {
     setEntity(event.target.value);
   };
@@ -498,9 +504,9 @@ export default function OnboardNewEntity() {
       <CircularProgress />
       </div>}
       <h3 className="addInvPageTitle">Onboard New Entity</h3>
-      <Button onClick={()=>setCreateRelationshipOpen(true)}>
+      {(props.userData?.type=='vendor'|| props.userData?.type=='arranger') && <Button onClick={()=>setCreateRelationshipOpen(true)}>
           Create New Relationship
-        </Button>
+        </Button>}
       <Grid container >
         <Grid item xs={10}>
           <FormControlLabel

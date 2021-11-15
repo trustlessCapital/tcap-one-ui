@@ -23,6 +23,7 @@ import Seller from "pages/seller/seller";
 import Arranger from "pages/arranger/arranger";
 import Investor from "pages/investor/investor";
 import Signup from "pages/signup/Signup";
+import { companyApiProvider } from "services/api/company/companyService";
 
 //import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 //import { Home } from "@material-ui/icons";
@@ -40,11 +41,12 @@ const theme = createTheme({
 
 const App = () => {
   const [token, setToken] = useState(null);
+  const [emailVerify,setEmailVerify] = useState(null);
 
   const history = useHistory();
   console.log("history", history);
 
-  useEffect(() => {
+  useEffect(async() => {
     let userData = localStorage.getItem("userData");
 
     if (userData && userData.trim().length) {
@@ -56,6 +58,8 @@ const App = () => {
           utoken: userData.jwt_token,
         });
       }
+       setEmailVerify(await companyApiProvider.verifyEmail(userData.email));
+       console.log(emailVerify)
     }
   }, []);
 
@@ -65,12 +69,13 @@ const App = () => {
 
   const logout = () => {
     setToken(null);
+    // history.push('/signup');
   };
 
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        {token && <Topbar token={token} logout={logout} />}
+        {token && <Topbar token={token} logout={logout} verified={emailVerify} userData={token}/>}
         <div className="container">
           {/* <Sidebar token={token}/> */}
           <div className="pageContents">
@@ -78,49 +83,49 @@ const App = () => {
               {/* <Quicklinks/> */}
               <Switch>
                 <Route exact path="/">
-                  <Dashboard />
+                  <Dashboard verified={emailVerify} userData={token}/>
                 </Route>
                 <Route exact path="/admin">
                   <Admin />
                 </Route>
                 <Route path="/addinvoices">
-                  <AddInvoice />
+                  <AddInvoice verified={emailVerify} userData={token}/>
                 </Route>
-                <Route path="/onboardentity">
-                  <OnboardNewEntity/>
+                 <Route path="/onboardentity">
+                  <OnboardNewEntity verified={emailVerify} userData={token}/>
                 </Route>
-               {token.type=='arranger' && <Route path="/adminonboardentity">
-                  <OnboardNewEntity />
-                </Route>}
+                <Route path="/adminonboardentity">
+                  <OnboardNewEntity verified={emailVerify} userData={token}/>
+                </Route>
                 <Route path="/varelationship">
-                  <VARelationship />
+                  <VARelationship verified={emailVerify} userData={token}/>
                 </Route>
                 <Route path="/entitylist">
-                  <EntityList />
+                  <EntityList verified={emailVerify} userData={token}/>
                 </Route>
                 <Route path="/myinvestments">
-                  <MyInvestments />
+                  <MyInvestments verified={emailVerify} userData={token}/>
                 </Route>
                 <Route path="/marketplace">
-                  <Marketplace />
+                  <Marketplace verified={emailVerify} userData={token}/>
                 </Route>
                 <Route path="/msmeapprove">
-                  <MsmeApprove />
+                  <MsmeApprove verified={emailVerify} userData={token}/>
                 </Route>
                 <Route path="/anchorapprove">
-                  <AnchorApprove />
+                  <AnchorApprove verified={emailVerify} userData={token}/>
                 </Route>
                 <Route path="/buyer">
-                  <Buyer />
+                  <Buyer verified={emailVerify} userData={token}/>
                 </Route>
                 <Route path="/seller">
-                  <Seller />
+                  <Seller verified={emailVerify} userData={token}/>
                 </Route>
                 <Route path="/arranger">
-                  <Arranger />
+                  <Arranger verified={emailVerify} userData={token}/>
                 </Route>
                 <Route path="/investor">
-                  <Investor />
+                  <Investor verified={emailVerify} userData={token}/>
                 </Route>
                 <Route path="/signup">
                   <Signup setToken={setToken} />

@@ -87,13 +87,16 @@ export default function Authentication({ setToken }) {
     const response = await userApiProvider.verifyOTP(formData);
     const userData = await response;
     console.log('verifyOTP response', userData);
-    window.localStorage.setItem('utoken', userData.jwt_token);
-    window.localStorage.setItem('userData', JSON.stringify(userData));
-    setToken({
-      user: userData.email,
-      type: userData.userType,
-      utoken: userData.jwt_token,
-    });
+   
+    if(userData.jwt_token){
+      window.localStorage.setItem('utoken', userData.jwt_token);
+      window.localStorage.setItem('userData', JSON.stringify(userData));
+      setToken({
+        user: userData.email,
+        type: userData.userType,
+        utoken: userData.jwt_token,
+      });
+  }
   };
 
   return (

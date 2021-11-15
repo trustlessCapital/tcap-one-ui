@@ -19,6 +19,9 @@ import MenuIcon from "@material-ui/icons/Menu";
 
 import { Link, useHistory } from "react-router-dom";
 
+//services
+import { companyApiProvider } from "services/api/company/companyService";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -36,8 +39,9 @@ export default function Topbar(props) {
   const classes = useStyles();
   const { type, userName } = props.token;
   const history = useHistory();
+  const [emailVerify,setEmailVerify] = useState(props.verified);
+  const [token, setToken] = useState(null); 
   const [view, setView] = useState(history.location.pathname);
-  console.log(history);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -50,7 +54,6 @@ export default function Topbar(props) {
   const logout = (event) => {
     localStorage.removeItem("userData");
     localStorage.removeItem("utoken");
-
     props.logout();
   };
 
@@ -126,7 +129,7 @@ export default function Topbar(props) {
                 {/* <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
   Trade Finance
 </Button> */}
-                <Button
+                {!props.verified?.companyId && props.userData?.type!='arranger' && <Button
                   aria-controls="simple-menu"
                   aria-haspopup="true"
                   onClick={handleClick}
@@ -134,7 +137,7 @@ export default function Topbar(props) {
                   <Link to="/onboardentity" style={{ textDecoration: "none" }}>
                     Onboard new Entity
                   </Link>
-                </Button>
+                </Button>}
                 <Button
                   aria-controls="simple-menu"
                   aria-haspopup="true"
@@ -144,7 +147,7 @@ export default function Topbar(props) {
                     Vendor Anchor Relationship
                   </Link>
                 </Button>
-                <Button
+                {(props.userData?.type=='arranger' || props.userData?.type=='vendor') &&<Button
                   aria-controls="simple-menu"
                   aria-haspopup="true"
                   onClick={handleClick}
@@ -152,7 +155,7 @@ export default function Topbar(props) {
                   <Link to="/addInvoices" style={{ textDecoration: "none" }}>
                     Upload New Invoice
                   </Link>
-                </Button>
+                </Button>}
                 <Button
                   aria-controls="simple-menu"
                   aria-haspopup="true"
