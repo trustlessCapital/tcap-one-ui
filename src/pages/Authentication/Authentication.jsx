@@ -74,7 +74,16 @@ export default function Authentication({ setToken }) {
     const response = await userApiProvider.login(formData);
     const loginData = await response;
     console.log('signup response', loginData);
+    
+   if(!loginData.isEmailVerified ||  !loginData.isPhoneVerified){
+    alert('email and phone number needs to be verified');
+  }
+  else if(!loginData.email){
+    alert('Account doesnt exist or something went wrong please try again');
+  }
+  else{
     setVerifyOtpButton(true);
+  }
   };
 
   const verifyOTP = async () => {
@@ -86,6 +95,7 @@ export default function Authentication({ setToken }) {
 
     const response = await userApiProvider.verifyOTP(formData);
     const userData = await response;
+
     console.log('verifyOTP response', userData);
    
     if(userData.jwt_token){

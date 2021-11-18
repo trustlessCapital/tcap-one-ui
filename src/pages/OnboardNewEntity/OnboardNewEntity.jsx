@@ -80,6 +80,7 @@ export default function OnboardNewEntity(props) {
   const [dialogData,setDialogData] = useState(dialogDemoData);
   const [companyCreateSuccessResponse,setCompanyCreateSuccessResponse] = useState({});
   const [userType,setUserType] = useState(window.localStorage.getItem('userData').userType);
+  const [userData,setUserData] = useState(window.localStorage.getItem('userData'));
   const [openSnackbar,setOpenSnackbar] = useState(false);
   useEffect(()=>{
     if(props.verified?.companyId && props.userData?.type!='arranger')
@@ -92,7 +93,7 @@ export default function OnboardNewEntity(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
   let initObj = {
-    email:'',
+    email:userData?.email,
     // approvalInvoice: [],
     vid: Math.floor(Math.random() * (999 - 100 + 1) + 100),
     organisationName: '',
@@ -114,7 +115,7 @@ export default function OnboardNewEntity(props) {
     arrname: '',
     invurl: '',
     relationship: '',
-    pnum: '',
+    phoneNumber: userData?.phoneNumber,
     grnsrnDate: '',
     availablelimit: '',
     gstid: '',
@@ -281,6 +282,8 @@ export default function OnboardNewEntity(props) {
     }
     setStepCount(3);
     setLoading(false);
+    alert('Company Onbaording Completed!')
+    history.push("/");
   }
   const createRelationship = async () =>{
    const anchoreEmailVerify = await companyApiProvider.verifyEmail(companyRelationship.anchorEmail);
@@ -537,7 +540,7 @@ export default function OnboardNewEntity(props) {
       <div className="addInvPageWrapper">
         <DialogWidget {...dialogData} open = {openDialog} onHandleDialogClose={onHandleDialogClose} />
         <div className={classes.root}>
-          <Accordion expanded={stepCount==1}>
+          <Accordion expanded={stepCount<4}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="company-details"
@@ -1134,6 +1137,7 @@ required
                             className="saveInvBtn"
                             type="submit"
                             value="Submit"
+                            disabled={stepCount>1}
                             onClick={submitCompanyDetails}
                           />
                         </div>
@@ -1144,7 +1148,7 @@ required
               </Grid>
             </AccordionDetails>
           </Accordion>
-          {stepCount>1 && <Accordion expanded={stepCount==2}>
+          {stepCount>1 && <Accordion expanded={stepCount<4}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="documents"
@@ -1256,11 +1260,11 @@ required
                             className="saveInvBtn"
                             type="submit"
                             value="Submit"
-                            disabled={state.cibilFile==''&&
+                            disabled={(state.cibilFile==''&&
                             state.panCardFile==''&&
                             state.loanDecFile==''&&
                             state.statementFile==''&&
-                            state.otherFiles==''}
+                            state.otherFiles=='') || stepCount>2}
                             onClick={submitDocuments}
                           />
                           </div>
@@ -1268,7 +1272,7 @@ required
               </Grid>
             </AccordionDetails>
           </Accordion>}
-          {stepCount>2 && (companyCreateSuccessResponse.tcapRelation=='anchor' || companyCreateSuccessResponse.tcapRelation=='arranger') && <Accordion color="primary" expanded={stepCount==3}>
+          {stepCount>2 && (companyCreateSuccessResponse.tcapRelation=='anchor' || companyCreateSuccessResponse.tcapRelation=='arranger') && <Accordion color="primary" expanded={stepCount<4}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="entity-details"

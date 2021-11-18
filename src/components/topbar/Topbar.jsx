@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Topbar(props) {
+  console.log(props.verified);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const classes = useStyles();
   const { type, userName } = props.token;
@@ -147,7 +148,7 @@ export default function Topbar(props) {
                     Vendor Anchor Relationship
                   </Link>
                 </Button>
-                {(props.userData?.type=='arranger' || props.userData?.type=='vendor') &&<Button
+                {(props.verified?.tcapRelation=='arranger' || props.verified?.tcapRelation=='vendor') &&<Button
                   aria-controls="simple-menu"
                   aria-haspopup="true"
                   onClick={handleClick}
@@ -156,15 +157,15 @@ export default function Topbar(props) {
                     Upload New Invoice
                   </Link>
                 </Button>}
-                <Button
+                {(props.userData?.user=='lingraj@trustless.capital' || props.userData?.user=='kapil@trustless.capital' || props.userData?.user=='nagarjun@trustless.capital' || props.userData?.user=='hello@trustless.capital') &&<Button
                   aria-controls="simple-menu"
                   aria-haspopup="true"
                   onClick={handleClick}
                 >
-                  <Link to="/entitylist" style={{ textDecoration: "none" }}>
-                    Entity List
+                   <Link to="/entitylist" style={{ textDecoration: "none" }}>
+                    Companies
                   </Link>
-                </Button>
+                </Button>}
                 {/* <Menu
   id="simple-menu"
   anchorEl={anchorEl}

@@ -111,6 +111,7 @@ export default function AddInvoice(props) {
   const [DocumentIvoiceVerificationDetails,setDocumentIvoiceVerificationDetails] = useState(null);
   const [anchorList,setAnchorList] = useState([]);
   const [vendorList,setVendorList] = useState([]);
+  const [invoices,setInvoices] = useState([]);
   const [arrangerList,setArrangerList] = useState([]);
   // Form Events
   // onChangeTid(e) {
@@ -118,15 +119,23 @@ export default function AddInvoice(props) {
   // }
 
   useEffect(async ()=>{
+    console.log(props.verified);
     const companyData = await companyApiProvider.getCompanyList();
     setAnchorList(companyData.filter((company)=>company.tcapRelation=='anchor'))
     setVendorList(companyData.filter((company)=>company.tcapRelation=='vendor'))
     setArrangerList(companyData.filter((company)=>company.tcapRelation=='arranger'))
       },[])
 
-      useEffect(()=>{
-        if((props.userData?.type!='vendor' && props.userData?.type!='arranger'))
+      useEffect(async ()=>{
+       if(props){ 
+         if((props.verified?.tcapRelation!='vendor' && props.verified?.tcapRelation!='arranger'))
         history.push('/')
+        else
+        {
+          const invoicesData = await companyApiProvider.getVendorInvoices(props.verified?.id);
+          setInvoices(invoicesData);
+        }
+}
       },[props.verified])
   const onChangeInvNo = (e) => {
     setState({ ...state, invno: e.target.value });
@@ -384,7 +393,7 @@ export default function AddInvoice(props) {
           <Link to="/marketplace">Market Place</Link>
         </Button> */}
       <Grid container spacing={3} justifyContent="center">
-        <Grid item xs={10}>
+        <Grid item xs={12}>
           <FormControlLabel
             control={
               <Switch
@@ -397,7 +406,7 @@ export default function AddInvoice(props) {
             label="View Only"
           />
         </Grid>
-        <Grid item xs={2}>
+        {/* <Grid item xs={2}>
           <Button variant="contained" className={classes.buttonMargin}>
             SAVE
           </Button>
@@ -408,7 +417,7 @@ export default function AddInvoice(props) {
           >
             SAVE AND CLOSE
           </Button>
-        </Grid>
+        </Grid> */}
       </Grid>
       <div className="addInvPageWrapper">
         <Dialog
@@ -567,9 +576,11 @@ export default function AddInvoice(props) {
                             value={state.ctype}
                           >
                             <option value="">--Select--</option>
-                            <option value="Buyer1">Type 1</option>
-                            <option value="Buyer2">Type 2</option>
-                            <option value="Buyer3">Type 3</option>
+                            <option value="Agriculture">Agriculture</option>
+                            <option value="Metals and materials">Metals and materials</option>
+                            <option value="Precious metals and materials">Precious metals and materials</option>
+                            <option value="Energy">Energy</option>
+                            <option value="Services">Services</option>
                           </select>
                         </div>
                       </Grid>
@@ -612,7 +623,7 @@ export default function AddInvoice(props) {
                           />
                         </div>
                       </Grid>
-                      <Grid item xs={6}>
+                      {/* <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Buyer Location</label>
                           <input
@@ -624,8 +635,8 @@ export default function AddInvoice(props) {
                             value={state.vloc}
                           />
                         </div>
-                      </Grid>
-                      <Grid item xs={6}>
+                      </Grid> */}
+                      {/* <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Seller Location</label>
                           <input
@@ -637,7 +648,7 @@ export default function AddInvoice(props) {
                             value={state.aloc}
                           />
                         </div>
-                      </Grid>
+                      </Grid> */}
                       <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>PO Line Item number:</label>
@@ -805,7 +816,7 @@ export default function AddInvoice(props) {
                           />
                         </div>
                       </Grid>
-                      <Grid item xs={6}>
+                      {/* <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Interest Rate</label>
                           <input
@@ -817,7 +828,7 @@ export default function AddInvoice(props) {
                             value={state.irate}
                           />
                         </div>
-                      </Grid>
+                      </Grid> */}
                       <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Anchor Approver</label>
@@ -843,7 +854,7 @@ export default function AddInvoice(props) {
                           ></textarea>
                         </div>
                       </Grid>
-                      <Grid item xs={12}>
+                      {/* <Grid item xs={12}>
                         <div className="addInvItem">
                           <label>Submit for approval</label>
                           <select
@@ -858,7 +869,7 @@ export default function AddInvoice(props) {
                             <option value="N">No</option>
                           </select>
                         </div>
-                      </Grid>
+                      </Grid> */}
                       <Grid item xs={6}>
                         <div className="addInvItem">
                           <input
@@ -933,6 +944,44 @@ export default function AddInvoice(props) {
                 </Grid>
             </AccordionDetails>
           </Accordion>}
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="Seller-approval"
+              id="Seller-approval"
+            >
+              <Typography className={classes.heading}>
+                INVOICES
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+            <Grid container spacing={3}  justifyContent="center">
+                  <Grid item xs={12}>
+                  {invoices.length>0 && <div>
+            <h1>Invoices</h1>
+            <div>
+               {invoices.map((invoice)=>{
+                return(<div style={{border:'1px grey solid',padding:'10px'}} key={invoice.id}> 
+                <h5>
+                   Invoice Number: {invoice.invoiceNumber}<br></br>
+{/* Anchor Contact: {relationship.anchorContact}<br></br>
+Anchor Email: {relationship.anchorEmail}<br></br>
+Arranger Email: {relationship.arrangerEmail}<br></br>
+Relationship: {relationship.relationship}<br></br>
+Relationship in Years: {relationship.relationshipYears}<br></br>
+Status: {relationship.status}<br></br>
+Vendor Contact: {relationship.vendorContact}<br></br>
+Vendor Email: {relationship.vendorEmail}<br></br> */}
+                </h5>
+                </div>)
+               }) }
+            </div>
+            </div>}
+                      </Grid>
+                      
+                </Grid>
+            </AccordionDetails>
+          </Accordion>
         </div>
 
         {/* <h3 className="addInvSectionTitle">Approval Section</h3>

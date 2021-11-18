@@ -20,6 +20,19 @@ export const getverificationOtpStub = {
     type: 'vendor',
   };
 
+  export const addToMarketplaceStub = {
+    party:2,
+    borrowerAddress:"", 
+    debtAmount:"", 
+    rate:"", 
+    dueDate:"",
+    riskGroup:0,
+    anchorAddress:"",
+    digest:"", 
+    hashFunction:"", 
+    size:""
+  }
+
   export const dialogDemoData = {dialogText:'text',dialogTitle:'title',yesButtonText:'YES',noButtonText:'NO',info:true}
   export const companyRelationshipDemoData = {
     "vendorEmail": "",
