@@ -103,14 +103,64 @@ const submitCompany = (companyData) => {
 
       const getCompanyList = (email) => { 
         return fetch(`${BASE_URL}/v1/company/all`, {
-           ...requestOptions,
+           ...requestOptions, ////v1/cr/vendor/:email
            method:'GET',
             headers: {
               ...headers
             },
           }).then(handleResponse)
           .catch(handleError);
-        }; 
+        };
+        const getVendorRelationships = (email) => { 
+          return fetch(`${BASE_URL}/v1/cr/vendor/${email}`, {
+             ...requestOptions,
+             method:'GET',
+              headers: {
+                ...headers
+              },
+            }).then(handleResponse)
+            .catch(handleError);
+          }; 
+          const getAnchorRelationships = (email) => { 
+            return fetch(`${BASE_URL}/v1/cr/anchor/${email}`, {
+               ...requestOptions,
+               method:'GET',
+                headers: {
+                  ...headers
+                },
+              }).then(handleResponse)
+              .catch(handleError);
+            }; 
+            const getVendorInvoices = (email) => { 
+              return fetch(`${BASE_URL}/v1/invoice/vendor/${email}`, {
+                 ...requestOptions,
+                 method:'GET',
+                  headers: {
+                    ...headers
+                  },
+                }).then(handleResponse)
+                .catch(handleError);
+              }; 
+              const getAllInvoices = () => { 
+                return fetch(`${BASE_URL}/v1/invoice/all`, {
+                   ...requestOptions,
+                   method:'GET',
+                    headers: {
+                      ...headers
+                    },
+                  }).then(handleResponse)
+                  .catch(handleError);
+                }; 
+                const addToMarketplace = (invoiceData) => { 
+                  return fetch(`${BASE_URL}/v1/mp/issue`, {
+                     ...requestOptions,
+                      headers: {
+                        ...headers
+                      },
+                      body: JSON.stringify(invoiceData),
+                    }).then(handleResponse)
+                    .catch(handleError);
+                  }; 
 
 export const companyApiProvider = {
   signUp,
@@ -120,5 +170,10 @@ export const companyApiProvider = {
   verifyEmail,
   createCompanyRelationship,
   getCompanyList,
-  uploadInvoiceDetails
+  uploadInvoiceDetails,
+  getVendorRelationships,
+  getAnchorRelationships,
+  getVendorInvoices,
+  getAllInvoices,
+  addToMarketplace
 };

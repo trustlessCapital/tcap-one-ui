@@ -45,20 +45,24 @@ const App = () => {
 
   const history = useHistory();
   console.log("history", history);
-
+  const [userDataDetails,setUserDetails] = useState([]);
   useEffect(async() => {
     let userData = localStorage.getItem("userData");
 
     if (userData && userData.trim().length) {
       userData = JSON.parse(userData);
+      const userDataDetails= await companyApiProvider.verifyEmail(userData?.email);
+    await setUserDetails(userDataDetails);
       if (userData.hasOwnProperty("jwt_token")) {
         setToken({
           user: userData.email,
-          type: userData.userType,
+          type: userDataDetails.tcapRelation,
           utoken: userData.jwt_token,
+          userId:userData.id
         });
       }
-       setEmailVerify(await companyApiProvider.verifyEmail(userData.email));
+      var verifiedEmail = await companyApiProvider.verifyEmail(userData.email)
+       setEmailVerify(verifiedEmail);
        console.log(emailVerify)
     }
   }, []);

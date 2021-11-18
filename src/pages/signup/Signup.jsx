@@ -74,9 +74,14 @@ export default function Signup({ setToken }) {
 
     console.log(formData);
     const response = await userApiProvider.signup(formData);
-    const signupData = await response.json();
+    const signupData = await response;
+    if(signupData.id){
     console.log('signup response', signupData);
     setVerifyOtpButton(true);
+  }
+  else{
+    alert('User Already exist ro something went wrong! please try again.')
+  }
   };
 
   const verifyOTP = async () => {
@@ -87,7 +92,7 @@ export default function Signup({ setToken }) {
     };
 
     const response = await userApiProvider.verifyOTP(formData);
-    const userData = await response.json();
+    const userData = await response;
     console.log('verifyOTP response', userData);
     window.localStorage.setItem('utoken', userData.jwt_token);
     window.localStorage.setItem('userData', JSON.stringify(userData));
