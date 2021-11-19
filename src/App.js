@@ -58,7 +58,8 @@ const App = () => {
           user: userData.email,
           type: userDataDetails.tcapRelation,
           utoken: userData.jwt_token,
-          userId:userData.id
+          userId:userData.id,
+          walletAddress:userData?.walletAddress || null
         });
       }
       var verifiedEmail = await companyApiProvider.verifyEmail(userData.email)

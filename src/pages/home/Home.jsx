@@ -22,7 +22,7 @@ const [userDataDetails,setUserDetails] = useState([]);
     return (
       <div className="home">
         <div className="homeWidgets">
-        <div><h1>Welcome to TCAP</h1></div>
+        <div style={{flexGrow:'1'}}><h1>Welcome to TCAP</h1></div>
           {/* <SmWidgets/>
                 <LgWidgets/> */}
 
