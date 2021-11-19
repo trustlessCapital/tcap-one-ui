@@ -3,7 +3,7 @@
 //import AiWidgets from '../components/aiWidgets/AiWidgets'
 import './investor.css';
 //import Select from 'react-select';
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Publish } from '@material-ui/icons';
 // import { Component, useState } from "react";
@@ -31,6 +31,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import EntityList from 'components/EntityList/entityList';
 import InvoiceList from 'components/InvoiceList/invoicelist';
+import { companyApiProvider } from 'services/api/company/companyService';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,17 +59,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Investor() {
+export default function Investor(props) {
   // userData;
   const classes = useStyles();
-
+  const [balance,setBalance] = useState(null);
+useEffect(async ()=>{
+const investorBalance = await companyApiProvider.getInvestorBalance(props.userData?.walletAddress);
+setBalance(investorBalance);
+},[])
   return (
     <div className="addInvPage">
       <h3 className="addInvPageTitle">Investor</h3>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-      <Typography>Please complete you KYC  <Button variant="contained">
+      {/* <Typography>Please complete you KYC  <Button variant="contained">
         <Link to="#">Complete KYC</Link>
+      </Button></Typography> */}
+      <Typography>Currency: USDC, Balance: {balance?.balance}  <Button variant="contained">
+        <Link to="/marketplace">Go to Marketplace</Link>
       </Button></Typography>
       </Grid>
       </Grid>
@@ -151,7 +159,7 @@ export default function Investor() {
               </div>
             </AccordionDetails>
           </Accordion>
-          <Accordion>
+          {/* <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="entity-list"
@@ -170,7 +178,7 @@ export default function Investor() {
                 </Grid>
               </div>
             </AccordionDetails>
-          </Accordion>
+          </Accordion> */}
         </div>
       </div>
     </div>

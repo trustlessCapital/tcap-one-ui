@@ -161,6 +161,16 @@ const submitCompany = (companyData) => {
                     }).then(handleResponse)
                     .catch(handleError);
                   }; 
+                  const getInvestorBalance = (walletAddress='0x3154338Cd13655B0782Bf1A822b9cD8130689E43') => { 
+                    return fetch(`${BASE_URL}/api/user/balance/${walletAddress}`, {
+                       ...requestOptions,
+                       method:'GET',
+                        headers: {
+                          ...headers
+                        },
+                      }).then(handleResponse)
+                      .catch(handleError);
+                    }; 
 
 export const companyApiProvider = {
   signUp,
@@ -175,5 +185,6 @@ export const companyApiProvider = {
   getAnchorRelationships,
   getVendorInvoices,
   getAllInvoices,
-  addToMarketplace
+  addToMarketplace,
+  getInvestorBalance
 };
