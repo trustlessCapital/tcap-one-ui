@@ -261,7 +261,8 @@ export default function AddInvoice(props) {
     );
      const uploadSuccess = await documentApiProvider.submitDocuments(documentFormData);
      let userData = JSON.parse(localStorage.getItem('userData'));
-     const serverUpload = await documentApiProvider.updateDocumentsToServer({
+     if(uploadSuccess.contenId)
+     {const serverUpload = await documentApiProvider.updateDocumentsToServer({
       //"companyId":companyCreateSuccessResponse.id, // this comes from?
       "companyId":userData.id,
       "userEmail":userData.email,
@@ -277,9 +278,13 @@ export default function AddInvoice(props) {
       setDocumentIvoiceVerificationDetails(serverUpload);
       alert("Invoice verification document uploaded successfully");
       setSteps(1);
+    }}
+    else{
+      alert('something wrong with document upload . please try again!!');
     }
   }
   const uploadInvoiceDetails = async () => {
+    let userData = JSON.parse(localStorage.getItem('userData'));
      const invoiceUpload = await companyApiProvider.uploadInvoiceDetails({
         "invoiceNumber":state.invno,
         "commodityType":state.ctype,
@@ -300,7 +305,7 @@ export default function AddInvoice(props) {
         "anchorGSTIN":state.anchorGSTIN,
         "contentId":documentDetails.contentId,
         "anchorId":state.aname,
-        "vendorId":state.vname,
+        "vendorId":(vendorList.filter((vendor)=> (vendor.email==userData.email)))[0].id,
         "status":"pending",
         "anchorApprover":state.anchorApprover,
         "tcapApprover":"hello@trustless.capital",
@@ -531,7 +536,7 @@ export default function AddInvoice(props) {
                           />
                         </div>
                       </Grid>
-                      <Grid item xs={6}>
+                      {/* <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Vendor Name</label>
                           <select
@@ -547,7 +552,7 @@ export default function AddInvoice(props) {
                             })}
                           </select>
                         </div>
-                      </Grid>
+                      </Grid> */}
                       <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Anchor Name</label>
