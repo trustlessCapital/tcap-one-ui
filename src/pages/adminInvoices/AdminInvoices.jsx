@@ -130,8 +130,8 @@ console.log(digestData)
           <Button onClick={()=>setAddToMarketPlaceOpen(false)} >Cancel</Button>
           <Button onClick={addToMarketPlace} disabled={addToMarketPlaceDetailsResponse.celoTxHash}>Create</Button>
         </DialogActions>
-       {addToMarketPlaceDetailsResponse.ipfsTxHash&& <div style={{padding:'20px'}}>IPFS Link:<a src={`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.ipfsTxHash}`}>{`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.ipfsTxHash}`}</a></div>}
-       {addToMarketPlaceDetailsResponse.celoTxHash &&  <div style={{padding:'20px'}}>Celo Link:<a src={`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.celoTxHash}`}>{`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.celoTxHash}`}</a></div>}
+       {addToMarketPlaceDetailsResponse.ipfsTxHash&& <div style={{padding:'20px'}}>IPFS TX Link:<a src={`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.ipfsTxHash}`}>{`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.ipfsTxHash}`}</a></div>}
+       {addToMarketPlaceDetailsResponse.celoTxHash &&  <div style={{padding:'20px'}}>BlockChain TX Link:<a src={`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.celoTxHash}`}>{`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.celoTxHash}`}</a></div>}
       </Dialog>
         <h3 className="mpTitle">INVOICES</h3>
         <table className="mpTable">

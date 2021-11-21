@@ -37,7 +37,7 @@ const [userDataDetails,setUserDetails] = useState([]);
           
             </div>
           </>}
-          {props?.userData?.type=='company' && userDataDetails.tcapRelation=='vendor' && <div>
+          {userDataDetails.tcapRelation=='vendor' && <div>
             <h1>{userDataDetails.tcapRelation} Relationships</h1>
             <div>
                {relationships.map((relationship)=>{
