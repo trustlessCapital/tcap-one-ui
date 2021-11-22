@@ -247,6 +247,7 @@ export default function AddInvoice(props) {
       "fileKey" : uploadSuccess.fileKey
     })
     if(serverUpload.fileKey){
+      alert('document uploaded successfully!')
       setDocumentDetails(serverUpload);
       setSteps(2);
     }
