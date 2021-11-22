@@ -62,9 +62,9 @@ const App = () => {
           walletAddress:userData?.walletAddress || null
         });
       }
-      var verifiedEmail = await companyApiProvider.verifyEmail(userData.email)
+      if(userData.userType!='investor'){var verifiedEmail = await companyApiProvider.verifyEmail(userData.email)
        setEmailVerify(verifiedEmail);
-       console.log(emailVerify)
+       console.log(emailVerify)}
     }
   }, []);
 
