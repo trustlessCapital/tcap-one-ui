@@ -10,7 +10,7 @@ export default function Dashboard(props) {
             <Home verified = {props?.verified} userData = {props?.userData}/>
             <br></br>
            {(props?.verified?.tcapRelation=='admin' || props?.verified?.tcapRelation=='arranger' || props.userData?.user=='hello@trustless.capital') && <AdminInvoices verified = {props?.verified} userData = {props?.userData}/>}
-           { <Investor verified = {props?.verified} userData = {props?.userData}/>}
+           {props.userData?.type=='investor' && <Investor verified = {props?.verified} userData = {props?.userData}/>}
         </div>
     )
 }
