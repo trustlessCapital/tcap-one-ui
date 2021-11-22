@@ -38,7 +38,7 @@ const [userDataDetails,setUserDetails] = useState([]);
             </div>
           </>}
           {userDataDetails.tcapRelation=='vendor' && <div>
-            <h1>{userDataDetails.tcapRelation} Relationships</h1>
+            <h1>Clients</h1>
             <div>
                {relationships.map((relationship)=>{
                 return(<div style={{border:'1px grey solid',padding:'10px'}} key={relationship.id}> 

@@ -26,12 +26,13 @@ export default function Marketplace(props) {
     },[])
     const investMoney = async (invoice) => {
       let investAmount = prompt("Enter amount to invest?");
+      let userData = JSON.parse(localStorage.getItem('userData'));
       console.log(investAmount);
       if(investAmount){
       const invest = await companyApiProvider.investMoney({
         
           "borrower": invoice.borrowerAddress,
-          "investor": props.userData?.walletAddress,
+          "investor": userData?.walletAddress,
           "nftTokenId": invoice.nftTokenId,
           "investmentAmt":investAmount,
           "investmentType": "0",
