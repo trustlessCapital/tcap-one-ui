@@ -51,12 +51,14 @@ const App = () => {
 
     if (userData && userData.trim().length) {
       userData = JSON.parse(userData);
-      const userDataDetails= await companyApiProvider.verifyEmail(userData?.email);
+      if(userData?.userType!='investor'){
+        const userDataDetails= await companyApiProvider.verifyEmail(userData?.email);
+      }
     await setUserDetails(userDataDetails);
       if (userData.hasOwnProperty("jwt_token")) {
         setToken({
           user: userData.email,
-          type: userDataDetails.tcapRelation,
+          type: userData?.userType=='investor' ? 'investor': userDataDetails.tcapRelation,
           utoken: userData.jwt_token,
           userId:userData.id,
           walletAddress:userData?.walletAddress || null
