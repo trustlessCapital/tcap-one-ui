@@ -114,6 +114,7 @@ export default function Topbar(props) {
                   className={classes.menuButton}
                   color="inherit"
                   aria-label="menu"
+                  onClick={()=>{history.push('/')}}
                 >
                   <img
                     src="https://www.trustless.capital/assets/images/logo-red-small.png"
@@ -178,11 +179,27 @@ export default function Topbar(props) {
   <MenuItem onClick={handleClose}> <Link to="/addInvoices">Upload New Invoice</Link></MenuItem>
   <MenuItem onClick={handleClose}> <Link to="/entitylist">Entity List</Link></MenuItem>
 </Menu> */}
-                <Button color="inherit">
+                {/* <Button color="inherit">
                   <Link to="/" onClick={logout}>
                     Logout
                   </Link>
-                </Button>
+                </Button> */}
+                <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+  {props?.userData?.user}
+</Button>
+<Menu
+  id="simple-menu"
+  anchorEl={anchorEl}
+  keepMounted
+  open={Boolean(anchorEl)}
+  onClose={handleClose}
+>
+  <MenuItem onClick={handleClose}>Profile</MenuItem>
+  <MenuItem onClick={handleClose}>My account</MenuItem>
+  <MenuItem onClick={handleClose}> <Link to="/" onClick={logout}>
+                    Logout
+                  </Link></MenuItem>
+</Menu>
               </Toolbar>
             </AppBar>
           </div>

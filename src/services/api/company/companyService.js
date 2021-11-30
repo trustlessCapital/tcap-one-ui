@@ -151,6 +151,19 @@ const getVendorInvoices = (vendorId) => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+const getInvoiceEvidence = (invoiceEvidenceId) => {
+  return fetch(`${BASE_URL}/document/evidence/${invoiceEvidenceId}`, {
+    ...requestOptions,
+    method: 'GET',
+    headers: {
+      ...headers,
+    },
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 const getAllInvoices = () => {
   return fetch(`${BASE_URL}/v1/invoice/all`, {
     ...requestOptions,
@@ -173,10 +186,23 @@ const addToMarketplace = (invoiceData) => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+const verifyInvoice = (invoiceData) => {
+  return fetch(`${BASE_URL}/v1/invoice/verify`, {
+    ...requestOptions,
+    method: 'PUT',
+    headers: {
+      ...headers,
+    },
+    body: JSON.stringify(invoiceData),
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
 const getInvestorBalance = (
-  walletAddress = '0x3154338Cd13655B0782Bf1A822b9cD8130689E43'
+  walletAddress = '0xfE0839635FF2e05F99Fd6b0938120dA22Da1FA0C'
 ) => {
-  return fetch(`${BASE_URL}/api/user/balance/${walletAddress}`, {
+  return fetch(`${BASE_URL}/v1/mp/balances/${walletAddress}`, {
     ...requestOptions,
     method: 'GET',
     headers: {
@@ -225,5 +251,7 @@ export const companyApiProvider = {
   addToMarketplace,
   getInvestorBalance,
   investMoney,
-  getAllDeals
+  getAllDeals,
+  getInvoiceEvidence,
+  verifyInvoice
 };
