@@ -75,9 +75,10 @@ setBalance(investorBalance);
       {/* <Typography>Please complete you KYC  <Button variant="contained">
         <Link to="#">Complete KYC</Link>
       </Button></Typography> */}
-      <Typography>Currency: USDC, Balance: {balance?.balance}  <Button variant="contained">
+      <Typography>Currency: USDC, Balance: {balance?.usdc}<br></br></Typography>
+      <Typography>Currency: ETH, Balance: {balance?.eth} </Typography> <Button variant="contained">
         <Link to="/marketplace">Go to Marketplace</Link>
-      </Button></Typography>
+      </Button>
       </Grid>
       </Grid>
       {/* <Button variant="contained">

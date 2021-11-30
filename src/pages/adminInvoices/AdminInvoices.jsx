@@ -72,6 +72,16 @@ console.log(digestData)
         size: decoded[1],
       };
   }
+  const verifyInvoice = async (invoice) =>{
+    let verifyInvoiceDoc;
+    let evidenceDetails = await companyApiProvider.getInvoiceEvidence(`evidence-${invoice.id}`);
+    if(evidenceDetails.contentId){
+       verifyInvoiceDoc= await companyApiProvider.verifyInvoice({...invoice,status:'approved',userId:props?.userData?.userId});
+    }
+    if(verifyInvoiceDoc.id){
+      alert("invoice approved successfully,ready to be added to marketplace ");
+    }
+  }
     return (
       <div className="mp">
         <Dialog open={addToMarketPlaceOpen} onClose={()=>setAddToMarketPlaceOpen(false)}>
@@ -130,9 +140,10 @@ console.log(digestData)
           <Button onClick={()=>setAddToMarketPlaceOpen(false)} >Cancel</Button>
           <Button onClick={addToMarketPlace} disabled={addToMarketPlaceDetailsResponse.celoTxHash}>Create</Button>
         </DialogActions>
-       {addToMarketPlaceDetailsResponse.ipfsTxHash&& <div style={{padding:'20px'}}>IPFS TX Link:<a src={`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.ipfsTxHash}`}>{`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.ipfsTxHash}`}</a></div>}
-       {addToMarketPlaceDetailsResponse.celoTxHash &&  <div style={{padding:'20px'}}>BlockChain TX Link:<a src={`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.celoTxHash}`}>{`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.celoTxHash}`}</a></div>}
+       {addToMarketPlaceDetailsResponse.ipfsTxHash&& <div style={{padding:'20px'}}>IPFS TX Link:<a href={`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.ipfsTxHash}`} target="_blank">{`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.ipfsTxHash}`}</a></div>}
+       {addToMarketPlaceDetailsResponse.celoTxHash &&  <div style={{padding:'20px'}}>BlockChain TX Link:<a href={`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.celoTxHash}`} target="_blank">{`https://rinkeby-explorer.arbitrum.io/tx/${addToMarketPlaceDetailsResponse.celoTxHash}`}</a></div>}
       </Dialog>
+      
         <h3 className="mpTitle">INVOICES</h3>
         <table className="mpTable">
           <tr className="mpTr">
@@ -143,12 +154,12 @@ console.log(digestData)
             <th className="mpTh">APY</th>
             <th className="mpTh">Risk Score</th>
             <th className="mpTh">Maturity Date</th>
-
+            <th className="mpTh">Evidence</th>
             <th className="mpTh">Action</th>
           </tr>
 
           {invoices && invoices.map((invoice,index)=>{
-            if(invoice.status == 'pending') 
+            if(invoice.status == 'pending' || invoice.status == 'approved') 
             {return(
             <tr className="mpTr" key={invoice.id}>
             <td className="mpTd">{invoice.invoiceNumber}</td>
@@ -158,8 +169,11 @@ console.log(digestData)
             <td className="mpTd currencyRight"></td>
             <td className="mpTd currencyRight"></td>
             <td className="mpTd currencyRight">{invoice.payoutDate}</td>
+            <td className="mpTd currencyRight">
+            <button className="investBtn investBtnLink" disabled={invoice.status=='approved'} onClick={()=>{verifyInvoice(invoice)}}>Verify</button>
+            </td>
             <td className="mpTd viewDetails">
-              <button className="investBtn investBtnLink" onClick={()=>{setAddToMarketPlaceOpen(true);setSelectedInvoice(invoice)}}>Add to Marketplace</button>
+              <button className="investBtn investBtnLink" disabled={invoice.status=='pending'} onClick={()=>{setAddToMarketPlaceOpen(true);setSelectedInvoice(invoice)}}>Add to Marketplace</button>
             </td>
             </tr>
             )}

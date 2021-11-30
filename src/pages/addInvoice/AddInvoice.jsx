@@ -30,6 +30,12 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 import { documentApiProvider } from 'services/api/document/documentService';
 import { companyApiProvider } from 'services/api/company/companyService';
@@ -108,7 +114,6 @@ export default function AddInvoice(props) {
   const [state, setState] = useState(initObj);
   const [steps,setSteps] = useState(1);
   const [documentDetails,setDocumentDetails] = useState(null);
-  const [DocumentIvoiceVerificationDetails,setDocumentIvoiceVerificationDetails] = useState(null);
   const [anchorList,setAnchorList] = useState([]);
   const [vendorList,setVendorList] = useState([]);
   const [invoices,setInvoices] = useState([]);
@@ -247,40 +252,9 @@ export default function AddInvoice(props) {
       "fileKey" : uploadSuccess.fileKey
     })
     if(serverUpload.fileKey){
+      alert('document uploaded successfully!')
       setDocumentDetails(serverUpload);
       setSteps(2);
-    }
-  }
-  const uploadInvoiceVerification = async () => {
-    const documentFormData = new FormData();
-    // Update the formData object
-    documentFormData.append(
-      'document',
-      state.invverificationurl,
-      state.invverificationurl.name
-    );
-     const uploadSuccess = await documentApiProvider.submitDocuments(documentFormData);
-     let userData = JSON.parse(localStorage.getItem('userData'));
-     if(uploadSuccess.contenId)
-     {const serverUpload = await documentApiProvider.updateDocumentsToServer({
-      //"companyId":companyCreateSuccessResponse.id, // this comes from?
-      "companyId":userData.id,
-      "userEmail":userData.email,
-      "contentId":uploadSuccess.contenId,
-      "version":"1",// this comes from?
-      "type":'OTH',// what are the other fields 
-      "description":`Others`, // static or getting from some other data?
-      "comments":`Invoice Verification Evidence`, // this comes from?
-      "fileName": state.invverificationurl.name,
-      "fileKey" : uploadSuccess.fileKey
-    })
-    if(serverUpload.fileKey){
-      setDocumentIvoiceVerificationDetails(serverUpload);
-      alert("Invoice verification document uploaded successfully");
-      setSteps(1);
-    }}
-    else{
-      alert('something wrong with document upload . please try again!!');
     }
   }
   const uploadInvoiceDetails = async () => {
@@ -907,7 +881,7 @@ export default function AddInvoice(props) {
               </Grid>
             </AccordionDetails>
           </Accordion>}
-          {steps>2 && <Accordion>
+          {/* {steps>2 && <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="Seller-approval"
@@ -918,37 +892,9 @@ export default function AddInvoice(props) {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-            <Grid container spacing={3}  justifyContent="center">
-                  <Grid item xs={6}>
-                        <div className="addInvItem">
-                          <label>Upload Invoice Verification Evidence</label>
-                          <label htmlFor="invoiceverificationfile" className="labelFile">
-                            <Publish />
-                            <span>Select File</span>
-                          </label>
-                          <input
-                            type="file"
-                            id="invoiceverificationfile"
-                            name="invoiceverificationfile"
-                            style={{ display: 'none' }}
-                            onChange={onChangeInvVerificationFile}
-                          />
-                         <label style={{float:'right'}}>{state.invverificationurl?.name}</label>
-                        </div>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <div className="addInvItem">
-                          <input
-                            className="saveInvBtn"
-                            type="submit"
-                            value="Submit"
-                            onClick={uploadInvoiceVerification}
-                          />
-                        </div>
-                      </Grid>
-                </Grid>
+            
             </AccordionDetails>
-          </Accordion>}
+          </Accordion>} */}
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -962,24 +908,40 @@ export default function AddInvoice(props) {
             <AccordionDetails>
             <Grid container spacing={3}  justifyContent="center">
                   <Grid item xs={12}>
-                  {invoices.length>0 && <div>
-            <h1>Invoices</h1>
+                  {invoices?.invoices?.length>0 && <div>
+            {/* <h1>Invoices</h1> */}
             <div>
-               {invoices.map((invoice)=>{
-                return(<div style={{border:'1px grey solid',padding:'10px'}} key={invoice.id}> 
-                <h5>
-                   Invoice Number: {invoice.invoiceNumber}<br></br>
-{/* Anchor Contact: {relationship.anchorContact}<br></br>
-Anchor Email: {relationship.anchorEmail}<br></br>
-Arranger Email: {relationship.arrangerEmail}<br></br>
-Relationship: {relationship.relationship}<br></br>
-Relationship in Years: {relationship.relationshipYears}<br></br>
-Status: {relationship.status}<br></br>
-Vendor Contact: {relationship.vendorContact}<br></br>
-Vendor Email: {relationship.vendorEmail}<br></br> */}
-                </h5>
-                </div>)
+
+            <TableContainer component={Paper}>
+      <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>#</TableCell>
+            <TableCell align="right">Commodity Type</TableCell>
+            <TableCell align="right">Due Date</TableCell>
+            <TableCell align="right">Status</TableCell>
+            <TableCell align="right">Transaction Date</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+
+        {invoices.invoices.map((invoice)=>{
+                return(
+               <TableRow key={invoice.invoiceNumber}>
+              <TableCell component="th" scope="row">
+                {invoice.invoiceNumber}
+              </TableCell>
+              <TableCell align="right">{invoice.commodityType}</TableCell>
+              <TableCell align="right">{invoice.dueDate}</TableCell>
+              <TableCell align="right">{invoice.status}</TableCell>
+              <TableCell align="right">{invoice.transactionDate}</TableCell>
+            </TableRow>
+                )
                }) }
+        </TableBody>
+      </Table>
+    </TableContainer>
+               
             </div>
             </div>}
                       </Grid>
