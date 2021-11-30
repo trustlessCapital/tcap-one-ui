@@ -212,6 +212,19 @@ const getInvestorBalance = (
     .then(handleResponse)
     .catch(handleError);
 };
+const getInvestmentHistory = (
+  walletAddress = '0xfE0839635FF2e05F99Fd6b0938120dA22Da1FA0C'
+) => {
+  return fetch(`${BASE_URL}/v1/mp/investments/${walletAddress}`, {
+    ...requestOptions,
+    method: 'GET',
+    headers: {
+      ...headers,
+    },
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
 const investMoney = (investData) => {
   return fetch(`${BASE_URL}/v1/mp/invest`, {
     ...requestOptions,
@@ -253,5 +266,6 @@ export const companyApiProvider = {
   investMoney,
   getAllDeals,
   getInvoiceEvidence,
-  verifyInvoice
+  verifyInvoice,
+  getInvestmentHistory
 };

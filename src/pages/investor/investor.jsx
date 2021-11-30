@@ -63,9 +63,12 @@ export default function Investor(props) {
   // userData;
   const classes = useStyles();
   const [balance,setBalance] = useState(null);
+  const [investmentHistory,setInvestmentHistory] = useState([]);
 useEffect(async ()=>{
 const investorBalance = await companyApiProvider.getInvestorBalance(props.userData?.walletAddress);
 setBalance(investorBalance);
+const invHistory = await companyApiProvider.getInvestmentHistory(props.userData?.walletAddress);
+setInvestmentHistory(invHistory);
 },[])
   return (
     <div className="addInvPage">
@@ -154,7 +157,7 @@ setBalance(investorBalance);
               <div className={classes.root}>
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
-                    <InvoiceList />
+                    <InvoiceList history = {investmentHistory} />
                   </Grid>
                 </Grid>
               </div>
