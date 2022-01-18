@@ -13,7 +13,8 @@ import PhoneInput from 'react-phone-input-2';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import validator from 'validator'
 import { useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -60,9 +61,15 @@ export default function Authentication({ setToken }) {
   const [verifyOtpButton, setVerifyOtpButton] = useState(false);
   const [otp, setOtp] = useState('');
   const [email, setEmail] = useState('');
+  const [formIsValid, setFormIsValid] = useState(false);
+
+  useEffect(() => {
+    setFormIsValid(validator.isEmail(email) && phone.trim().length == 12)
+  }, [email, phone]);
 
   const getVerificationOtp = async (event) => {
     console.log(event);
+
     if (!email.trim().length || !phone.trim().length) {
       return;
     }
@@ -74,16 +81,16 @@ export default function Authentication({ setToken }) {
     const response = await userApiProvider.login(formData);
     const loginData = await response;
     console.log('signup response', loginData);
-    
-   if(!loginData.isEmailVerified ||  !loginData.isPhoneVerified){
-    alert('email and phone number needs to be verified');
-  }
-  else if(!loginData.email){
-    alert('Account doesnt exist or something went wrong please try again');
-  }
-  else{
-    setVerifyOtpButton(true);
-  }
+      
+    if(!loginData.isEmailVerified ||  !loginData.isPhoneVerified){
+      alert('email and phone number needs to be verified');
+    }
+    else if(!loginData.email){
+      alert('Account doesnt exist or something went wrong please try again');
+    }
+    else{
+      setVerifyOtpButton(true);
+    }
   };
 
   const verifyOTP = async () => {
@@ -145,7 +152,7 @@ export default function Authentication({ setToken }) {
           <PhoneInput
             country={'in'}
             value={phone}
-            onChange={(value) => setPhone(value)}
+            onChange={(value) => {setPhone(value)}}
             required="true"
             inputStyle={{ width: '100%' }}
           />
@@ -169,6 +176,7 @@ export default function Authentication({ setToken }) {
           /> */}
           {!verifyOtpButton && (
             <Button
+              disabled={!formIsValid}
               fullWidth
               variant="contained"
               color="primary"
@@ -180,6 +188,7 @@ export default function Authentication({ setToken }) {
           )}
           {verifyOtpButton && (
             <Button
+              disabled={!formIsValid}
               onClick={verifyOTP}
               fullWidth
               variant="contained"
