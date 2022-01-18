@@ -2,7 +2,8 @@ import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
+import { MDBInput } from 'mdb-react-ui-kit';
+// import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
@@ -127,7 +128,7 @@ export default function Authentication({ setToken }) {
           TCAP ONE
         </Typography>
         <form className={classes.form} noValidate>
-          <TextField
+          {/* <TextField
             variant="outlined"
             margin="normal"
             required
@@ -139,6 +140,14 @@ export default function Authentication({ setToken }) {
             autoFocus
             value={email}
             onChange={(event) => setEmail(event.target.value)}
+          /> */}
+          <MDBInput 
+            label='Email Address'
+            id='typeEmail'
+            type='email'
+            size='lg'
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
           />
           {/* <ReactPhoneInput
             defaultCountry={"us"}
@@ -148,7 +157,7 @@ export default function Authentication({ setToken }) {
             dropdownClass={classes.countryList}
             component={TextField}
           /> */}
-
+          <br></br>
           <PhoneInput
             country={'in'}
             value={phone}
@@ -158,7 +167,16 @@ export default function Authentication({ setToken }) {
           />
           <br></br>
           {verifyOtpButton && (
-            <TextField
+            <MDBInput
+              label='OTP'
+              id='otp'
+              type='number' 
+              size='md'
+              onChange={(event) => setOtp(event.target.value)}
+            />
+          )}
+
+          {/* <TextField
               variant="outlined"
               margin="normal"
               required
@@ -168,8 +186,9 @@ export default function Authentication({ setToken }) {
               type="number"
               id="otp"
               onChange={(event) => setOtp(event.target.value)}
-            />
-          )}
+            /> */}
+
+
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"

@@ -8,20 +8,38 @@
     color:#333;
 }
 
-.mpTitle{
-    font-size: 20px;
+.MarketCard{
+    font-size: medium;
+    margin: 2.5rem 4rem 2.5rem 4rem;
+    padding: 2.5rem;
+    line-height: 2.5rem;
+    box-shadow: 0 2px 5px #950101;
+    border-radius: 2rem;
+}
+.MarketCard button{
+    line-height: 1.2rem;
+    width: 5rem;
+    height: 5rem;
+    background: #FF1700;
+    color: #fff;
+    float: right;
+    border: none;
+    position: relative;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 1);
+    bottom: 9rem;
+    right: 3rem;
+    cursor: pointer;
+    border-radius: 80%;
+}
+.MarketCard button:hover{
+    background-color: #950101;
 }
 
-.mpTable .mpTh{
-    font-size: 22px;
-    font-weight: normal;
-    text-align: left;
+h3{
+    font-size: 3rem;
+    text-align: center;
 }
 
-.mpTable  .mpTd{
-    font-size: 18px;
-    text-align: left;
-}
 .currencyRight{
     text-align: right;
 }
@@ -35,15 +53,8 @@
     width:20px !important;
     height: 20px !important;
 }
-.investBtn{
-    background-color: #e50914;
-    padding: 5px 10px;
-    border:1px solid #CCC;
-    border-radius: 10px ;
-}
-.investBtnLink{
-    color: white;
-}
+
 .disabled{
     background-color: grey;
 }
+
