@@ -5,6 +5,8 @@ import {VisibilityOutlined}  from "@material-ui/icons"
 import { Link} from "react-router-dom";
 import { companyApiProvider } from 'services/api/company/companyService';
 import MarketCard from "./MarketCard";
+import { v4 as uuidv4 } from 'uuid'
+import { Spinner } from 'react-bootstrap';
 
 export default function Marketplace(props) {
   const [invoices,setInvoices] = useState([]);
@@ -28,13 +30,16 @@ export default function Marketplace(props) {
     
     return (
       <div className="mp">
-        <h3>MARKETPLACE</h3>
+        <h3 className='Head'>MARKETPLACE</h3>
           
-          {invoices && invoices.map((invoice)=>{
+          {invoices && invoices.map((invoice, index)=>{
             
             return(
               <MarketCard
-                trackingID = {invoice.assetID}
+                key={uuidv4()}
+                id = {index}
+                image = "https://storage.googleapis.com/tinlake/pool-media/consolfreight-4/icon.svg"
+                assetID = {invoice.assetID}
                 vendorName = {invoice.vendorId}
                 anchorName = {invoice.anchorId}
                 riskScore = {invoice.riskScore}

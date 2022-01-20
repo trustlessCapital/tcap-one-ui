@@ -1,20 +1,30 @@
 
 .mp{
+    transition-duration: 0.2ms;
     flex:5;
     padding: 20px;
     box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
     -webkit-box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
     color:#333;
+    background-color: #F9F6F7;
 }
 
+.Head{
+    padding-top: 2rem;
+}
 .MarketCard{
     font-size: medium;
-    margin: 2.5rem 4rem 2.5rem 4rem;
+    margin: 1rem 1rem 1rem 1rem;
     padding: 2.5rem;
     line-height: 2.5rem;
-    box-shadow: 0 2px 5px #950101;
     border-radius: 2rem;
+}
+.Accord:hover{
+    transform: scale(1.03);
+}
+.Text{
+    padding-top: 0.5rem;
 }
 .MarketCard button{
     line-height: 1.2rem;
@@ -31,15 +41,30 @@
     cursor: pointer;
     border-radius: 80%;
 }
+
+.Accord{
+    padding: 1.8rem 1.5rem 0rem 1.5rem;
+    transition: transform .2s; /* Animation */
+}
+
+
 .MarketCard button:hover{
     background-color: #950101;
 }
-
+.Info{
+    padding: 2rem;
+}
 h3{
     font-size: 3rem;
     text-align: center;
 }
-
+.Ad{
+    
+    
+}
+.ImpAd{
+    padding-top: 3rem;
+}
 .currencyRight{
     text-align: right;
 }
