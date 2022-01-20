@@ -7,6 +7,22 @@
     z-index: 999;
 }
 
+.MarketLink{
+    float: left;
+}
+
+.TopBar{
+    height: 6rem !important;
+}
+
+.brandname{
+    font-size: 1.5rem;
+}
+
+.bar{
+    position: relative;
+}
+
 .topbarWrapper{
     height:100%;
     /* padding:0 30px;  */

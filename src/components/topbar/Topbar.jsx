@@ -7,6 +7,7 @@ import {
   AccountCircle,
   Description,
 } from "@material-ui/icons";
+import { MDBBtn } from 'mdb-react-ui-kit';
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -16,7 +17,12 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import Dropdown from "react-bootstrap/Dropdown"
+import Navbar from "react-bootstrap/Navbar"
+import NavDropdown from "react-bootstrap/NavDropdown";
+import Nav from "react-bootstrap/Nav";
+import Container from "react-bootstrap/Container";
 import { Link, useHistory } from "react-router-dom";
 
 //services
@@ -43,6 +49,17 @@ export default function Topbar(props) {
   const [emailVerify,setEmailVerify] = useState(props.verified);
   const [token, setToken] = useState(null); 
   const [view, setView] = useState(history.location.pathname);
+  const [hover, setHover] = useState();
+
+
+  const handleMouseIn = () => {
+    setHover(true);
+  };
+
+  
+  const handleMouseOut = () => {
+    setHover(false);
+  };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -67,8 +84,8 @@ export default function Topbar(props) {
   return (
     <>
       {view !== "/auth" ? (
-        <div className="topbar">
-          <div className="topbarWrapper">
+        <div>
+          <div className="bar">
             {/* <div className="topLeft">
               <span className="logo">
                 <img
@@ -107,7 +124,75 @@ export default function Topbar(props) {
                 </div>
               )}
             </div> */}
-            <AppBar position="static" color="secondary">
+
+            <>  
+              <Navbar bg="dark" variant="dark" className="TopBar" fixed="top">
+                <Container>
+                  <Navbar.Brand href="#home" className="brandname">
+                    <img
+                      alt="Trustless Capital"
+                      src="https://www.trustless.capital/assets/images/logo-red-small.png"
+                      width="40"
+                      height="40"
+                      className="d-inline-block align-top"
+                      onClick={()=>{history.push('/')}}
+                    />{' '}
+                    TCAP One
+                  </Navbar.Brand>
+
+                  <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                  <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="me-auto">
+                      <Nav.Link 
+                        href="/marketplace"
+                        className="MarketLink"
+                        >MARKETPLACE
+                      </Nav.Link>
+                  </Nav>
+                  <Nav>
+                      {
+                        !props.verified?.companyId && props.userData?.type!='arranger' &&
+                        <Nav.Link href="/onboardentity" className="rightlinks">
+                          Onboard new Entity
+                        </Nav.Link>
+                      }
+                      <Nav.Link 
+                        href="/varelationship"
+                      >
+                        Vendor Anchor Relationship
+                      </Nav.Link>
+                      
+                      {
+                        (props.verified?.tcapRelation=='arranger' || props.verified?.tcapRelation=='vendor') &&
+                        <Nav.Link href="/addInvoices" className="rightlinks">
+                          Upload New Invoice
+                        </Nav.Link>
+                      }
+
+                      {(props.userData?.user=='lingraj@trustless.capital' || props.userData?.user=='kapil@trustless.capital' || props.userData?.user=='nagarjun@trustless.capital' || props.userData?.user=='hello@trustless.capital') &&
+                        <Nav.Link href="/entitylist" className="rightlinks">
+                          Companies
+                        </Nav.Link>
+                      }
+                      <NavDropdown title={props?.userData?.user} id="Menu" className="rightlinks">
+                        <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>
+                        <NavDropdown.Item href="#action/3.2">My Account</NavDropdown.Item>
+                        
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item 
+                          href="/"
+                          onClick={logout}
+                          >Logout
+                        </NavDropdown.Item>
+                      </NavDropdown>
+                    </Nav>
+                  </Navbar.Collapse>
+                </Container>
+              </Navbar>
+            </>
+
+
+            {/* <AppBar position="static" color="secondary">
               <Toolbar>
                 <IconButton
                   edge="start"
@@ -127,10 +212,26 @@ export default function Topbar(props) {
 
                 <Typography variant="h6" className={classes.title}>
                   TCAP One
-                </Typography>
+                </Typography> */}
+
+
+
+
                 {/* <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
   Trade Finance
 </Button> */}
+
+
+                {/* <MDBBtn
+                  className='bg-transparent text-dark shadow-none'
+                  size="lg"
+                >
+                  <Link className="MarketLink bg-transparent text-dark shadow-none" to="/marketplace" style={{ textDecoration: "none" }}>
+                    MARKETPLACE
+                  </Link>
+
+                </MDBBtn>
+
                 {!props.verified?.companyId && props.userData?.type!='arranger' && <Button
                   aria-controls="simple-menu"
                   aria-haspopup="true"
@@ -166,7 +267,7 @@ export default function Topbar(props) {
                    <Link to="/entitylist" style={{ textDecoration: "none" }}>
                     Companies
                   </Link>
-                </Button>}
+                </Button>} */}
                 {/* <Menu
   id="simple-menu"
   anchorEl={anchorEl}
@@ -184,24 +285,23 @@ export default function Topbar(props) {
                     Logout
                   </Link>
                 </Button> */}
-                <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-  {props?.userData?.user}
-</Button>
-<Menu
-  id="simple-menu"
-  anchorEl={anchorEl}
-  keepMounted
-  open={Boolean(anchorEl)}
-  onClose={handleClose}
->
-  <MenuItem onClick={handleClose}>Profile</MenuItem>
-  <MenuItem onClick={handleClose}>My account</MenuItem>
-  <MenuItem onClick={handleClose}> <Link to="/" onClick={logout}>
-                    Logout
-                  </Link></MenuItem>
-</Menu>
+                
+                
+                
+                {/* <DropdownButton id="Menu" title={props?.userData?.user}>
+                  <Dropdown.Item href="#/action-1">Profile</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">My Account</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">
+                      <Link to="/" onClick={logout}>
+                        Logout
+                      </Link>
+                  </Dropdown.Item>
+                </DropdownButton>
+                
+                
+                
               </Toolbar>
-            </AppBar>
+            </AppBar> */}
           </div>
         </div>
       ) : (

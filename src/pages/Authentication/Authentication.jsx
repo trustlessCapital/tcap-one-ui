@@ -2,7 +2,8 @@ import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
+import { MDBInput } from 'mdb-react-ui-kit';
+// import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
@@ -13,7 +14,8 @@ import PhoneInput from 'react-phone-input-2';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import validator from 'validator'
 import { useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -60,9 +62,15 @@ export default function Authentication({ setToken }) {
   const [verifyOtpButton, setVerifyOtpButton] = useState(false);
   const [otp, setOtp] = useState('');
   const [email, setEmail] = useState('');
+  const [formIsValid, setFormIsValid] = useState(false);
+
+  useEffect(() => {
+    setFormIsValid(validator.isEmail(email) && phone.trim().length == 12)
+  }, [email, phone]);
 
   const getVerificationOtp = async (event) => {
     console.log(event);
+
     if (!email.trim().length || !phone.trim().length) {
       return;
     }
@@ -74,16 +82,16 @@ export default function Authentication({ setToken }) {
     const response = await userApiProvider.login(formData);
     const loginData = await response;
     console.log('signup response', loginData);
-    
-   if(!loginData.isEmailVerified ||  !loginData.isPhoneVerified){
-    alert('email and phone number needs to be verified');
-  }
-  else if(!loginData.email){
-    alert('Account doesnt exist or something went wrong please try again');
-  }
-  else{
-    setVerifyOtpButton(true);
-  }
+      
+    if(!loginData.isEmailVerified ||  !loginData.isPhoneVerified){
+      alert('email and phone number needs to be verified');
+    }
+    else if(!loginData.email){
+      alert('Account doesnt exist or something went wrong please try again');
+    }
+    else{
+      setVerifyOtpButton(true);
+    }
   };
 
   const verifyOTP = async () => {
@@ -120,7 +128,7 @@ export default function Authentication({ setToken }) {
           TCAP ONE
         </Typography>
         <form className={classes.form} noValidate>
-          <TextField
+          {/* <TextField
             variant="outlined"
             margin="normal"
             required
@@ -132,6 +140,14 @@ export default function Authentication({ setToken }) {
             autoFocus
             value={email}
             onChange={(event) => setEmail(event.target.value)}
+          /> */}
+          <MDBInput 
+            label='Email Address'
+            id='typeEmail'
+            type='email'
+            size='lg'
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
           />
           {/* <ReactPhoneInput
             defaultCountry={"us"}
@@ -141,17 +157,26 @@ export default function Authentication({ setToken }) {
             dropdownClass={classes.countryList}
             component={TextField}
           /> */}
-
+          <br></br>
           <PhoneInput
             country={'in'}
             value={phone}
-            onChange={(value) => setPhone(value)}
+            onChange={(value) => {setPhone(value)}}
             required="true"
             inputStyle={{ width: '100%' }}
           />
           <br></br>
           {verifyOtpButton && (
-            <TextField
+            <MDBInput
+              label='OTP'
+              id='otp'
+              type='number' 
+              size='md'
+              onChange={(event) => setOtp(event.target.value)}
+            />
+          )}
+
+          {/* <TextField
               variant="outlined"
               margin="normal"
               required
@@ -161,14 +186,16 @@ export default function Authentication({ setToken }) {
               type="number"
               id="otp"
               onChange={(event) => setOtp(event.target.value)}
-            />
-          )}
+            /> */}
+
+
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           /> */}
           {!verifyOtpButton && (
             <Button
+              disabled={!formIsValid}
               fullWidth
               variant="contained"
               color="primary"
@@ -180,6 +207,7 @@ export default function Authentication({ setToken }) {
           )}
           {verifyOtpButton && (
             <Button
+              disabled={!formIsValid}
               onClick={verifyOTP}
               fullWidth
               variant="contained"
