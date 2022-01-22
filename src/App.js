@@ -19,11 +19,13 @@ import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import VARelationship from "pages/VendorAnchorRelationship/VARelationship";
 import Buyer from "pages/buyer/buyer";
+import Container from "react-bootstrap/Container";
 import Seller from "pages/seller/seller";
 import Arranger from "pages/arranger/arranger";
 import Investor from "pages/investor/investor";
 import Signup from "pages/signup/Signup";
 import { companyApiProvider } from "services/api/company/companyService";
+
 
 //import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 //import { Home } from "@material-ui/icons";
@@ -83,7 +85,7 @@ const App = () => {
     <Router>
       <ThemeProvider theme={theme}>
         {token && <Topbar token={token} logout={logout} verified={emailVerify} userData={token}/>}
-        <div className="container">
+        <Container fluid>
           {/* <Sidebar token={token}/> */}
           <div className="pageContents">
             <div className="pagesWrapper">
@@ -140,7 +142,7 @@ const App = () => {
               </Switch>
             </div>
           </div>
-        </div>
+        </Container>
       </ThemeProvider>
     </Router>
   );

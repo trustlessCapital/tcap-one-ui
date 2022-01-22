@@ -12,6 +12,9 @@
 
 .Head{
     padding-top: 2rem;
+    padding-bottom: 3rem;
+    font-size: 3.5rem;
+    font-family: 'Zilla Slab', serif;
 }
 .MarketCard{
     font-size: medium;
@@ -20,26 +23,59 @@
     line-height: 2.5rem;
     border-radius: 2rem;
 }
+.Value{
+    padding-left: 3rem;
+    padding-top: 0.8rem;
+    font-size: 0.9rem;
+}
+.rows{
+    padding-top: 2rem;
+}
+
+.InvestButton{
+    padding-left: 4rem !important;
+}
+.Value1{
+    padding-left: 3rem;
+    padding-top: 0.8rem;
+    font-size: 0.9rem;
+}
+.Heading{
+    font-size: 1rem;
+    font-family: 'Merriweather', sans-serif;
+}
+.accordion-button{
+    padding: 0 20px 10px 0 !important;
+}
+.Heading1{
+    font-size: 1rem;
+    padding-left: 0;
+    padding-right: 10px;
+    font-family: 'Merriweather', sans-serif;
+}
 .Accord:hover{
     transform: scale(1.03);
 }
+.Img{
+    padding-top: 0rem
+}
 .Text{
     padding-top: 0.5rem;
+    font-size: 1.2rem;
 }
-.MarketCard button{
+.Buttons{
     line-height: 1.2rem;
-    width: 5rem;
-    height: 5rem;
+    width: 4rem;
+    height: 2rem;
     background: #FF1700;
     color: #fff;
     float: right;
     border: none;
-    position: relative;
+    
     box-shadow: 0 1px 4px rgba(0, 0, 0, 1);
-    bottom: 9rem;
-    right: 3rem;
+   
     cursor: pointer;
-    border-radius: 80%;
+    
 }
 
 .Accord{

@@ -127,7 +127,7 @@ export default function Topbar(props) {
 
             <>  
               <Navbar bg="dark" variant="dark" className="TopBar" fixed="top">
-                <Container>
+                <Container fluid>
                   <Navbar.Brand href="#home" className="brandname">
                     <img
                       alt="Trustless Capital"

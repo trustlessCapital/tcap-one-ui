@@ -73,6 +73,7 @@ setInvestmentHistory(invHistory);
   return (
     <div className="addInvPage">
       <h3 className="addInvPageTitle">Investor</h3>
+      
       <Grid container spacing={3}>
         <Grid item xs={12}>
       {/* <Typography>Please complete you KYC  <Button variant="contained">

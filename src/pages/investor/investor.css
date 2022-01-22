@@ -1,6 +1,8 @@
 .addInvPage{
-    flex:4;
-    margin: 20px;
+    flex:4;   
+}
+.sides{
+    padding-top: 3rem;
 }
 .addInvPageTitle{
     color:#3c3c3c;
