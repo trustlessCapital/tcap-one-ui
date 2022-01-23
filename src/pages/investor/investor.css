@@ -6,6 +6,20 @@
 }
 .addInvPageTitle{
     color:#3c3c3c;
+    padding-bottom: 2rem;
+    font-size: 3rem;
+    text-align: center;
+}
+.Point{
+    padding: 1rem 0rem 0 6rem;
+    font-size: 5rem;
+}
+.Graph{
+    background-color: #fafafa !important;
+}
+.Balance{
+    height: 250px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 1);
 }
 .addInvPageWrapper{
     display: block;
