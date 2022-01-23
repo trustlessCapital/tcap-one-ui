@@ -87,8 +87,8 @@ setInvestmentHistory(invHistory);
         <Col>
           <Row>
             <Col className='Balance' sm={5}>
-              <Row>
-                <h3>Currency: USDC, Balance: </h3>
+              <Row className='balhead'>
+                <h3 className='balheadval'>Currency: USDC, Balance: </h3>
               </Row>
               <Row className='Point'>
 
@@ -98,7 +98,9 @@ setInvestmentHistory(invHistory);
                 />
               </Row>
             </Col>
-            
+            <Col>
+              <Graph />
+            </Col>
           </Row>
           
           {/* <Grid container spacing={3}>

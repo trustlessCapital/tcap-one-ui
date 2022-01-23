@@ -18,8 +18,15 @@
     background-color: #fafafa !important;
 }
 .Balance{
-    height: 250px;
+    height: 350px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 1);
+}
+.balhead{
+    padding-top: 3.5rem;
+    padding-bottom: 1.8rem;
+}
+.balheadval{
+    font-size: 2rem;
 }
 .addInvPageWrapper{
     display: block;
