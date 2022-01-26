@@ -78,7 +78,7 @@ setInvestmentHistory(invHistory);
 },[])
   return (
     <div className="addInvPage">
-      <h1 className="addInvPageTitle">Investor</h1>
+      {/* <h1 className="addInvPageTitle">Investor</h1> */}
       <Container fluid>
       <Row>
         <Col sm={3}>
@@ -101,6 +101,7 @@ setInvestmentHistory(invHistory);
             <Col>
               <Graph />
             </Col>
+          
           </Row>
           
           {/* <Grid container spacing={3}>

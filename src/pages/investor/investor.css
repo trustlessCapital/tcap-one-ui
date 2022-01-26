@@ -17,9 +17,13 @@
 .Graph{
     background-color: #fafafa !important;
 }
+.Component-root-16{
+    height: 352px !important;
+}
 .Balance{
     height: 350px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 1);
+    background-color: #FFF;
 }
 .balhead{
     padding-top: 3.5rem;
@@ -30,6 +34,7 @@
 }
 .addInvPageWrapper{
     display: block;
+    padding-top: 3rem;
 }
 .addInvForm{
     display: block;

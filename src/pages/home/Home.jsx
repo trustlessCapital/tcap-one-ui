@@ -19,7 +19,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-
+import Sidebar from "./Sidebar";
 import { documentApiProvider } from 'services/api/document/documentService';
 
 export default function Home(props) {
@@ -129,7 +129,7 @@ export default function Home(props) {
       </Dialog>
       <div className="homeWidgets">
         <div style={{ flexGrow: '1' }}>
-          <h1>Welcome {props?.userData?.user}</h1>
+          {/* <h1>Welcome {props?.userData?.user}</h1> */}
         </div>
         {/* <SmWidgets/>
                 <LgWidgets/> */}
@@ -143,14 +143,33 @@ export default function Home(props) {
           ) && (
             <>
               <br></br>
-              <div>
+              <div className='KYC'>
                 Please verify you KYC &nbsp;
                 <Link to="/onboardentity">Verify</Link>
               </div>
               <div></div>
             </>
           )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         {userDataDetails?.tcapRelation == 'vendor' && (
+          <div>
+          <Sidebar />
           <Grid container>
             <Grid item xs={6}>
               <h3>Active Deals</h3>
@@ -209,7 +228,29 @@ export default function Home(props) {
               </TableContainer>
             </Grid>
           </Grid>
+          </div>
         )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         {props?.userData?.type == 'company' &&
           userDataDetails.tcapRelation == 'vendor' && (
             <div>

@@ -14,13 +14,24 @@ table {
     border-collapse: collapse;
     width: 100%;
   }
-  
+.KYC{
+  position: absolute;
+  top: 10rem;
+  left: 10rem;
+}
   td, th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
   }
-  
+.Deals{
+  padding-top: 3rem;
+}
   tr:nth-child(even) {
     background-color: #dddddd;
+  }
+
+  .items:hover{
+    background-color: rgb(184, 182, 182);
+    color: black;
   }

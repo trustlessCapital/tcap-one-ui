@@ -11,7 +11,7 @@ import { NavLink } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
-    <div className="sides" style={{ height: '100vh', padding:'0', overflow: 'scroll initial' }}>
+    <div className="sides" style={{ height: '100vh', paddingTop:"3rem", overflow: 'scroll initial' }}>
       <CDBSidebar textColor="#fff" backgroundColor="#333">
         <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
           <a href="/" className="text-decoration-none" style={{ color: 'inherit' }}>
@@ -22,16 +22,16 @@ const Sidebar = () => {
         <CDBSidebarContent className="sidebar-content">
           <CDBSidebarMenu>
             <NavLink exact to="/" activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="columns">My Details</CDBSidebarMenuItem>
+              <CDBSidebarMenuItem className="items" icon="columns">My Details</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/InvestmentHistory" activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="table">My Active Investments</CDBSidebarMenuItem>
+            <NavLink exact to="/MyDraftInvoicesVendor" activeClassName="activeClicked">
+              <CDBSidebarMenuItem className="items" icon="table">My Draft Invoices</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/profile" activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="user">Completed Deals</CDBSidebarMenuItem>
+            <NavLink exact to="/CompletedDealsVendor" activeClassName="activeClicked">
+              <CDBSidebarMenuItem className="items" icon="user">Completed Deals</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/analytics" activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="chart-line">My Favourites</CDBSidebarMenuItem>
+            <NavLink exact to="/MyFavourites" activeClassName="activeClicked">
+              <CDBSidebarMenuItem className="items" icon="chart-line">My Favourites</CDBSidebarMenuItem>
             </NavLink>
             
           </CDBSidebarMenu>

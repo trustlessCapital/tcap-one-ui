@@ -25,6 +25,8 @@ import Arranger from "pages/arranger/arranger";
 import Investor from "pages/investor/investor";
 import Signup from "pages/signup/Signup";
 import { companyApiProvider } from "services/api/company/companyService";
+import MyDraftInvoicesVendor from "pages/home/MyDraftInvoicesVendor";
+import CompletedDealsVendor from "pages/home/CompletedDealsVendor";
 
 
 //import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -135,6 +137,12 @@ const App = () => {
                 </Route>
                 <Route path="/investor">
                   <Investor verified={emailVerify} userData={token}/>
+                </Route>
+                <Route path="/MyDraftInvoicesVendor">
+                  <MyDraftInvoicesVendor verified={emailVerify} userData={token}/>
+                </Route>
+                <Route path="/CompletedDealsVendor">
+                  <CompletedDealsVendor verified={emailVerify} userData={token}/>
                 </Route>
                 <Route path="/signup">
                   <Signup setToken={setToken} />
