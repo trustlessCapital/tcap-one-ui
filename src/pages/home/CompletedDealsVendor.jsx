@@ -104,11 +104,11 @@ export default function CompletedDealsVendor(props) {
 
         {userDataDetails?.tcapRelation == 'vendor' && (
         <Container fluid >
-        <Row>
+        <Row  className='Deals'>
             <Col sm={3}>
                 <Sidebar />
             </Col>
-            <Col sm={9} className='Deals'>
+            <Col sm={9}>
             <Grid container>
                 <Grid item xs={12}>
                 <h3>Approved/Completed Deals</h3>

@@ -27,7 +27,7 @@ import Signup from "pages/signup/Signup";
 import { companyApiProvider } from "services/api/company/companyService";
 import MyDraftInvoicesVendor from "pages/home/MyDraftInvoicesVendor";
 import CompletedDealsVendor from "pages/home/CompletedDealsVendor";
-
+import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
 
 //import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 //import { Home } from "@material-ui/icons";
@@ -92,7 +92,9 @@ const App = () => {
           <div className="pageContents">
             <div className="pagesWrapper">
               {/* <Quicklinks/> */}
+              <AnimatePresence>
               <Switch>
+               
                 <Route exact path="/">
                   <Dashboard verified={emailVerify} userData={token}/>
                 </Route>
@@ -138,16 +140,19 @@ const App = () => {
                 <Route path="/investor">
                   <Investor verified={emailVerify} userData={token}/>
                 </Route>
+                <motion.div exit={{ opacity: 0.1 }}>
                 <Route path="/MyDraftInvoicesVendor">
                   <MyDraftInvoicesVendor verified={emailVerify} userData={token}/>
                 </Route>
                 <Route path="/CompletedDealsVendor">
                   <CompletedDealsVendor verified={emailVerify} userData={token}/>
                 </Route>
+                </motion.div>
                 <Route path="/signup">
                   <Signup setToken={setToken} />
                 </Route>
               </Switch>
+              </AnimatePresence>
             </div>
           </div>
         </Container>

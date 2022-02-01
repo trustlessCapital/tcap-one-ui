@@ -133,44 +133,46 @@ function MyDraftInvoicesVendor(props){
                 </DialogActions>
             </Dialog>
             <Container fluid>
-                <Row>
+                <Row className='Deals'>
                     <Col sm={3}>
                         <Sidebar />
                     </Col>
-                    <Col sm={9} className='Deals'>
-                    <Grid container>
-                            <Grid item xs={12}>
-                                <h3>My Draft Invoices</h3>
-                                    <TableContainer className="content" component={Paper}>
-                                        <Table aria-label="simple table">
-                                        <TableHead>
-                                            <TableRow>
-                                            <TableCell>Invoice Number</TableCell>
-                                            <TableCell align="right">Anchor Name</TableCell>
-                                            <TableCell align="right">Invoice Value</TableCell>
-                                            <TableCell align="right">Evidence</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
+                    <Col sm={9}>
+                    <div class="container-fluid">
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                            <div class="table-responsive table-scroll bg-white table-hover" data-mdb-perfect-scrollbar="true" style={{position: "relative", height: "700px"}}>
+                                <table class="table">
+                                        <thead class="table-dark" style={{position: "sticky", top: "0"}}>
+                                            <tr>
+                                            <th class="heads" scope="col">Invoice Number</th>
+                                            <th class="heads" scope="col" align="right">Anchor Name</th>
+                                            <th class="heads" scope="col" align="right">Invoice Value</th>
+                                            <th class="heads" scope="col" align="right">Evidence</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                             {vendorInvoices.invoices.map((row,index) => (
-                                            <TableRow key={row.invoiceNumber}>
-                                                <TableCell component="th" scope="row">
+                                            <tr key={row.invoiceNumber}>
+                                                <th scope="row">
                                                 {row.invoiceNumber}
-                                                </TableCell>
-                                                <TableCell align="right">{vendorInvoices.anchors[index][1]}</TableCell>
-                                                <TableCell align="right">{row.invoiceAmount}</TableCell>
-                                                <TableCell align="right">
+                                                </th>
+                                                <td align="right">{vendorInvoices.anchors[index][1]}</td>
+                                                <td align="right">{row.invoiceAmount}</td>
+                                                <td align="right">
                                                 <button className="investBtn investBtnLink" onClick={()=>uploadEvidenceFunc(row)}>
                                                     Upload
                                                 </button>
-                                                </TableCell>
-                                            </TableRow>
+                                                </td>
+                                            </tr>
                                             ))}
-                                        </TableBody>
-                                        </Table>
-                                </TableContainer>
-                            </Grid>
-                        </Grid>
+                                        </tbody>
+                                        </table>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </Col>
             
             </Row>

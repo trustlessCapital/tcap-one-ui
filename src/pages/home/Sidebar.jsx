@@ -11,7 +11,7 @@ import { NavLink } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
-    <div className="sides" style={{ height: '100vh', paddingTop:"3rem", overflow: 'scroll initial' }}>
+    <div className="sides" style={{ height: '100vh', paddingTop:"0rem", overflow: 'scroll initial' }}>
       <CDBSidebar textColor="#fff" backgroundColor="#333">
         <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
           <a href="/" className="text-decoration-none" style={{ color: 'inherit' }}>
