@@ -24,9 +24,11 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import { Link, useHistory } from "react-router-dom";
+import Web3signin from "pages/web3signin/Web3signin";
 
 //services
 import { companyApiProvider } from "services/api/company/companyService";
+import { localStorageAvailable } from "@toruslabs/openlogin";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,8 +72,9 @@ export default function Topbar(props) {
   };
 
   const logout = (event) => {
-    localStorage.removeItem("userData");
-    localStorage.removeItem("utoken");
+    window.localStorage.removeItem("userData");
+    window.localStorage.removeItem("privKey");
+    <Web3signin logout="true" />
     props.logout();
   };
 
@@ -151,7 +154,7 @@ export default function Topbar(props) {
                   </Nav>
                   <Nav>
                       {
-                        !props.verified?.companyId && props.userData?.type!='arranger' &&
+                        !props.userData?.userType=="ADMIN" && props.userData?.type!='arranger' &&
                         <Nav.Link href="/onboardentity" className="rightlinks">
                           Onboard new Entity
                         </Nav.Link>
@@ -169,7 +172,7 @@ export default function Topbar(props) {
                         </Nav.Link>
                       }
 
-                      {(props.userData?.user=='lingraj@trustless.capital' || props.userData?.user=='kapil@trustless.capital' || props.userData?.user=='nagarjun@trustless.capital' || props.userData?.user=='hello@trustless.capital') &&
+                      {(props.userData?.user=='lingraj@trustless.capital' || props.userData?.user=='kapil@trustless.capital' || props.userData?.user=='nagarjun@trustless.capital' || props.userData?.user=='abhijit.panda1319@gmail.com') &&
                         <Nav.Link href="/entitylist" className="rightlinks">
                           Companies
                         </Nav.Link>

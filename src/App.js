@@ -28,6 +28,7 @@ import { companyApiProvider } from "services/api/company/companyService";
 import MyDraftInvoicesVendor from "pages/home/MyDraftInvoicesVendor";
 import CompletedDealsVendor from "pages/home/CompletedDealsVendor";
 import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
+import Web3signin from "pages/web3signin/Web3signin";
 
 //import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 //import { Home } from "@material-ui/icons";
@@ -43,27 +44,36 @@ const theme = createTheme({
   },
 });
 
+var c=1;
+
 const App = () => {
   const [token, setToken] = useState(null);
   const [emailVerify,setEmailVerify] = useState(null);
 
   const history = useHistory();
   console.log("history", history);
-  const [userDataDetails,setUserDetails] = useState([]);
+  const [userDataDetails, setUserDetails] = useState([]);
   useEffect(async() => {
     let userData = localStorage.getItem("userData");
-
+    console.log(userData);
     if (userData && userData.trim().length) {
       userData = JSON.parse(userData);
       if(userData?.userType!='investor'){
         const userDataDetails= await companyApiProvider.verifyEmail(userData?.email);
       }
     await setUserDetails(userDataDetails);
-      if (userData.hasOwnProperty("jwt_token")) {
+      if (userData.hasOwnProperty("privKey")) {
+        // setToken({
+        //   user: userData.email,
+        //   type: userData?.userType=='investor' ? 'investor': userDataDetails.tcapRelation,
+        //   utoken: userData.jwt_token,
+        //   userId:userData.id,
+        //   walletAddress:userData?.walletAddress || null
+        // });
         setToken({
           user: userData.email,
           type: userData?.userType=='investor' ? 'investor': userDataDetails.tcapRelation,
-          utoken: userData.jwt_token,
+          privKey: userData.privKey,
           userId:userData.id,
           walletAddress:userData?.walletAddress || null
         });
@@ -74,8 +84,10 @@ const App = () => {
     }
   }, []);
 
-  if (window.location.pathname !== "/signup" && !token) {
-    return <Authentication setToken={setToken} />;
+
+  if (window.location.pathname !== "/login" && !token && c<=2) {
+    c = c+1;
+    return <Web3signin setToken = {setToken}/>;
   }
 
   const logout = () => {
@@ -86,7 +98,7 @@ const App = () => {
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        {token && <Topbar token={token} logout={logout} verified={emailVerify} userData={token}/>}
+        {token && <Topbar token={token} logout = {logout} verified={emailVerify} userData={token}/>}
         <Container fluid>
           {/* <Sidebar token={token}/> */}
           <div className="pageContents">

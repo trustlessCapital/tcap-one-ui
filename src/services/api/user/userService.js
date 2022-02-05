@@ -50,6 +50,18 @@ const verifyOTP = (otpData) => {
     .catch(handleError);
 };
 
+const web3sign = (web3signdata) => {
+  return fetch(`${BASE_URL}/user/detail`, {
+    ...requestOptions,
+    headers: {
+      ...headers,
+    },
+    body: JSON.stringify(web3signdata),
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 const signup = (signupData) => {
   return fetch(`${BASE_URL}/user/signup`, {
     ...requestOptions,
@@ -67,4 +79,5 @@ export const userApiProvider = {
   login,
   verifyOTP,
   signup,
+  web3sign,
 };
