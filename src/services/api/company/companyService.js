@@ -101,6 +101,7 @@ const uploadInvoiceDetails = (invoiceDetails) => {
 const verifyEmail = (email) => {
   console.log('Headers', headers);
   console.log('Email', email);
+  
   return fetch(`${BASE_URL}/v1/company/email/${email}`, {
     ...requestOptions,
     method: 'GET',

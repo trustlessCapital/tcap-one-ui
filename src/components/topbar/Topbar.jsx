@@ -74,7 +74,6 @@ export default function Topbar(props) {
   const logout = (event) => {
     window.localStorage.removeItem("userData");
     window.localStorage.removeItem("privKey");
-    <Web3signin logout="true" />
     props.logout();
   };
 

@@ -215,7 +215,6 @@ export default function Web3signin(props) {
         props.setToken({
             user: userData.email,
             type: userData.userType,
-            
       });
       
       }else{

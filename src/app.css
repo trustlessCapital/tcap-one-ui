@@ -10,3 +10,10 @@
 .pagesWrapper{
     padding: 0px;
 }
+.central{
+    text-align: center !important;
+}
+.loginbutton{
+    margin-top: 1rem !important;
+    width: 10rem;
+}
