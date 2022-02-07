@@ -1,0 +1,56 @@
+
+.mp{
+    flex:5;
+    padding: 20px;
+    box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    color:#333;
+}
+
+.mpTitle{
+    font-size: 20px;
+}
+
+.mpTable .mpTh{
+    font-size: 22px;
+    font-weight: normal;
+    text-align: left;
+}
+
+.mpTable  .mpTd{
+    font-size: 18px;
+    text-align: left;
+}
+.currencyRight{
+    text-align: right;
+}
+.viewDetails{
+    display: flex;
+}
+.mpIcon{
+    margin-right: 10px;
+}
+.mpIcon{
+    width:20px !important;
+    height: 20px !important;
+}
+.investBtn{
+    background-color: #e50914;
+    padding: 5px 10px;
+    border:1px solid #CCC;
+    border-radius: 10px ;
+}
+.investBtnLink{
+    color: white;
+}
+.disabled{
+    background-color: grey;
+}
+.items:hover{
+    background-color: rgb(184, 182, 182);
+    color: black;
+  }
+  .adminlanding{
+      padding-bottom: 3rem;
+  }

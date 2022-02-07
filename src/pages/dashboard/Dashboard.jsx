@@ -1,8 +1,8 @@
 
 import './dashboard.css'
 import Home from  "../home/Home";
-import AdminInvoices from 'pages/adminInvoices/AdminInvoices';
 import Investor from 'pages/investor/investor';
+import AdminLanding from 'pages/adminInvoices/AdminLanding';
 
 export default function Dashboard(props) {
     const userData = localStorage.getItem('userData');
@@ -10,7 +10,7 @@ export default function Dashboard(props) {
         <div className="home">
             {userData.userType!='investor' && <Home verified = {props?.verified} userData = {props?.userData}/>}
             <br></br>
-           {(props?.verified?.tcapRelation=='admin' || props?.verified?.tcapRelation=='arranger' || props.userData?.user=='abhijit.panda1319@gmail.com') && <AdminInvoices verified = {props?.verified} userData = {props?.userData}/>}
+           {(props?.verified?.tcapRelation=='admin' || props?.verified?.tcapRelation=='arranger' || props.userData?.user=='abhijit.panda1319@gmail.com') && <AdminLanding verified = {props?.verified} userData = {props?.userData}/>}
            {userData.userType=='investor' && <Investor verified = {props?.verified} userData = {props?.userData}/>}
         </div>
     )

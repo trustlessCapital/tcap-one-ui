@@ -132,7 +132,7 @@ export default function Home(props) {
         </DialogActions>
       </Dialog>
       <div className="homeWidgets">
-        <div style={{ flexGrow: '1' }}>
+        <div> {/* style={{ flexGrow: '1' } */}
           {/* <h1>Welcome {props?.userData?.user}</h1> */}
         </div>
         {/* <SmWidgets/>
@@ -143,7 +143,7 @@ export default function Home(props) {
             props.userData?.user == 'lingraj@trustless.capital' ||
             props.userData?.user == 'kapil@trustless.capital' ||
             props.userData?.user == 'nagarjun@trustless.capital' ||
-            props.userData?.user == 'hello@trustless.capital'
+            props.userData?.user == 'abhijit.panda1319@gmail.com'
           ) && (
             <>
               <br></br>

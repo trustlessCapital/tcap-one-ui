@@ -1,4 +1,4 @@
-import './admininvoices.css'
+import './admin.css'
 import React, { useEffect,useState } from 'react'
 import {VisibilityOutlined}  from "@material-ui/icons"
 import { Link} from "react-router-dom";
