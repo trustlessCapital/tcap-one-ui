@@ -113,6 +113,8 @@ const verifyEmail = (email) => {
     .catch(handleError);
 };
 
+
+
 const getCompanyList = (email) => {
   return fetch(`${BASE_URL}/v1/company/all`, {
     ...requestOptions, ////v1/cr/vendor/:email

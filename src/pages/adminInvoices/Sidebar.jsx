@@ -22,21 +22,27 @@ const Sidebar = () => {
         <CDBSidebarContent className="sidebar-content">
           <CDBSidebarMenu>
             <NavLink exact to="/" activeClassName="activeClicked">
+              <CDBSidebarMenuItem className="items" icon="columns">Dashboard</CDBSidebarMenuItem>
+            </NavLink>
+            <NavLink exact to="/AdminManageUsers" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="columns">Manage Users</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/MyDraftInvoicesVendor" activeClassName="activeClicked">
+            <NavLink exact to="/AdminManageEntity" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="table">Manage Entity</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/CompletedDealsVendor" activeClassName="activeClicked">
+            <NavLink exact to="/AdminManageRelationships" activeClassName="activeClicked">
+              <CDBSidebarMenuItem className="items" icon="table">Manage Relationships</CDBSidebarMenuItem>
+            </NavLink>
+            <NavLink exact to="/AdminPendingApproval" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="user">Pending Approval</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/MyFavourites" activeClassName="activeClicked">
+            <NavLink exact to="/AdminAllDeals" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="chart-line">All Deals</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/MyFavourites" activeClassName="activeClicked">
+            <NavLink exact to="/AdminActiveDeals" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="chart-line">Active Deals</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/MyFavourites" activeClassName="activeClicked">
+            <NavLink exact to="/AdminCompletedDeals" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="chart-line">Completed Deals</CDBSidebarMenuItem>
             </NavLink>
             

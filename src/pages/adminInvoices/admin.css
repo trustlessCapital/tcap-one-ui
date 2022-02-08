@@ -23,7 +23,7 @@
     text-align: left;
 }
 .currencyRight{
-    text-align: right;
+    text-align: center;
 }
 .viewDetails{
     display: flex;
@@ -54,3 +54,34 @@
   .adminlanding{
       padding-bottom: 3rem;
   }
+
+  .addnewuser{
+      position: absolute;
+      top: 7.5rem;
+      right: 6rem  
+  }
+.addnewuser:hover{
+    background-color: #F90716 !important;
+}
+.form-check-input[type=radio]:checked:after {
+    border-radius: 50%;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-color: #1266f1;
+    background-color: #1266f1;
+    transition: border-color;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    left: 14.8% !important;
+    top: 50%;
+}
+.was-validated .form-control:invalid, .form-control.is-invalid {
+    margin-bottom: 0rem !important;
+    background-image: none;
+    border-color: #f93154;
+}
+.Add{
+    margin-right: 2rem !important;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
