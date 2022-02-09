@@ -27,6 +27,7 @@ import Signup from "pages/signup/Signup";
 import { companyApiProvider } from "services/api/company/companyService";
 import MyDraftInvoicesVendor from "pages/home/MyDraftInvoicesVendor";
 import AdminManageUsers from "pages/adminInvoices/AdminManageUsers";
+import AdminManageEntity from "pages/adminInvoices/AdminManageEntity";
 import CompletedDealsVendor from "pages/home/CompletedDealsVendor";
 import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
 import validator from 'validator';
@@ -377,6 +378,9 @@ const App = () => {
                 </Route>
                 <Route path="/AdminManageUsers">
                   <AdminManageUsers verified={emailVerify} userData={token}/>
+                </Route>
+                <Route path="/AdminManageEntity">
+                  <AdminManageEntity verified={emailVerify} userData={token}/>
                 </Route>
                 </motion.div>
                 <Route path="/signup">

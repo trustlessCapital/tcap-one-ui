@@ -88,17 +88,16 @@ console.log(digestData)
        verifyInvoiceDoc= await companyApiProvider.verifyInvoice({...invoice,status:'approved',userId:props?.userData?.userId});
     }
     if(verifyInvoiceDoc.id){
-      alert("invoice approved successfully,ready to be added to marketplace ");
+      alert("invoice approved successfully, ready to be added to marketplace ");
     }
   }
     return (
-      <div className="mp">
-        
+      <div className="mp">  
       <Button style={{backgroundColor: "#FFAFAF", color: "#FFFFFF", border:"none"}} variant="secondary" className="addnewuser" onClick={() => {setModalShow(true)}}>Add New User</Button>
-      <AddNewUserModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
+        <AddNewUserModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+        />
     
 
       

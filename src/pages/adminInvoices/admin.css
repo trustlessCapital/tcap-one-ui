@@ -85,3 +85,121 @@
     padding-left: 2rem;
     padding-right: 2rem;
 }
+.addInvPage{
+    flex:4;
+    margin: 20px;
+}
+.addInvPageTitle{
+    color:#3c3c3c;
+}
+.addInvPageWrapper{
+    display: block;
+}
+.addInvForm{
+    display: block;
+}
+.addInvSectionTitle{
+    color:#FFF;
+    background-color: #e50914;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 600;
+}
+.saveInvBtn{
+    background-color: #e50914;
+    color: #FFF;
+    padding: 10px 20px;
+    border:1px solid #CCC;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.formSection{
+    margin: 5px;
+    display: flex;
+}
+.formSectionTitle{width:100%;}
+.addInvItem{
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px;
+    align-items: center;
+    justify-content: end;
+}
+.addInvItem label{
+    min-width:25% !important;
+    color:#3c3c3c;
+    font-weight: 600;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+.labelFile{
+    border: 1px solid #CCC;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: #EEE;
+}
+.addInvItem span{
+    margin-top: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.addInvItem .addInvInput{
+    flex-grow: 1;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #CCC;
+    font-size: 14px;
+}
+
+.addInvItem select{
+    width:64% !important;
+    padding: 6px 10px !important;
+    border-radius: 5px !important;
+    border: 1px solid #CCC !important;
+}
+.inputCols{
+    display: flex;
+    margin-bottom: 5px;
+}
+.colLeft{
+    width:50%;
+}
+.colRight{ 
+    width:50%;
+}
+
+.saveInvBtn{
+    background-color: #e50914;
+    color: #FFF;
+    padding: 10px 20px;
+    border:1px solid #CCC;
+    border-radius: 5px;
+    font-size: 16px;
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+  .required{
+      color: red;
+  }
+  .overlay{
+      position: absolute;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      background-color:lightgray;
+      opacity: 0.9;
+  }
