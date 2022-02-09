@@ -1,12 +1,14 @@
 import "./Marketplace.jsx"
 import React from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 // import Card from "react-bootstrap/Card";
 // import ListGroup from "react-bootstrap/ListGroup";
 import { companyApiProvider } from 'services/api/company/companyService';
 import Row from "react-bootstrap/Row";
+import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
-import Accordion from 'react-bootstrap/Accordion'
+import Accordion from 'react-bootstrap/Accordion';
 
 function MarketCard(props){
 
@@ -34,18 +36,21 @@ function MarketCard(props){
     return(
         <Accordion defaultActiveKey="0" flush className="Accord">
             <Accordion.Item eventKey={props.id}>
-                
-                <Accordion.Header>
-
                 <Container fluid>
-                        <Row>
-                            <Col sm={1}>
-                                <img height = "40" width = "40" src ={props.image}></img>
-                            </Col>
-                            <Col className = "Text" sm={5}><p>ConsolFreight Series 4</p></Col>
-                            <Col className = "Text" sm={2}>Invoice Amount</Col>
-                        </Row>
-                    </Container>
+                   <Row className="rows">
+                        <Col className = "Img" sm={1}>
+                            <img height = "55" width = "55" src ={props.image}></img>
+                        </Col>
+                        <Col className = "Text" sm={4}><p>ConsolFreight Series 4</p></Col>
+                        <Col className = "Value" sm={2}>1234</Col>
+                        <Col className = "Value" sm={2}>1234</Col>
+                        <Col className = "Value1" sm={1}>1234</Col>
+                        <Col className = "InvestButton" sm={2}><Button onClick={()=>investMoney(props)} variant="outline-info">INVEST</Button>{' '}</Col>
+                    </Row>
+                </Container>
+                <Accordion.Header>
+                    
+                
 
                 </Accordion.Header>
 
@@ -73,7 +78,7 @@ function MarketCard(props){
                                 <Col md={3}><strong>Insurance Coverage : </strong>{props.insuranceCoverage}</Col>
                             </Row>
                         </Container>
-                        <button onClick={()=>investMoney(props)}>Invest Now</button>
+                        
                 </Accordion.Body>
             </Accordion.Item>
 

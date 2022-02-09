@@ -6,7 +6,7 @@
 }
 .homeWidgets{
     display: flex;
-    margin: 20px;
+    /* margin: 20px; */
     flex-direction: column;
 }
 table {
@@ -14,13 +14,45 @@ table {
     border-collapse: collapse;
     width: 100%;
   }
-  
+.KYC{
+  position: absolute;
+  top: 10rem;
+  left: 10rem;
+}
   td, th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
   }
-  
+.Deals{
+  padding-top: 3rem;
+}
   tr:nth-child(even) {
     background-color: #dddddd;
   }
+
+  .items:hover{
+    background-color: rgb(184, 182, 182);
+    color: black;
+  }
+  .homey{
+    padding-top: 2rem;
+  }
+  .Balance{
+    height: 350px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 1);
+    background-color: #FFF;
+    
+}
+.balhead{
+    padding-top: 3.5rem;
+    padding-bottom: 1.8rem;
+}
+
+.balheadval{
+    font-size: 2rem;
+}
+
+.heads{
+  padding-top: 1rem;
+}

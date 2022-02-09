@@ -114,7 +114,7 @@ export default function Authentication({ setToken }) {
         type: userData.userType,
         utoken: userData.jwt_token,
       });
-  }
+    }
   };
 
   return (

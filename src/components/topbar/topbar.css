@@ -13,6 +13,7 @@
 
 .TopBar{
     height: 6rem !important;
+    padding: 0 4rem 0 4rem !important;
 }
 
 .brandname{

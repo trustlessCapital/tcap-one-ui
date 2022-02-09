@@ -1,4 +1,4 @@
-import './admininvoices.css'
+import './admin.css'
 import React, { useEffect,useState } from 'react'
 import {VisibilityOutlined}  from "@material-ui/icons"
 import { Link} from "react-router-dom";
@@ -30,7 +30,10 @@ export default function AdminInvoices(props) {
     }
 
     useEffect(async ()=>{
-      const companyData = await companyApiProvider.getCompanyList();
+      const Data = await companyApiProvider.getCompanyList();
+      const jData = JSON.stringify(Data);
+      const companyData = JSON.parse(jData);
+
       const companyMap = new Map();
       companyData.forEach((company)=>{
         companyMap.set(company.id,company.organisationName);

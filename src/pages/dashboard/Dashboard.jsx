@@ -1,17 +1,37 @@
 
 import './dashboard.css'
 import Home from  "../home/Home";
-import AdminInvoices from 'pages/adminInvoices/AdminInvoices';
 import Investor from 'pages/investor/investor';
+import AdminLanding from 'pages/adminInvoices/AdminLanding';
 
 export default function Dashboard(props) {
-    const userData = JSON.parse(localStorage.getItem('userData'));
+    const userData = localStorage.getItem('userData');
     return (
         <div className="home">
             {userData.userType!='investor' && <Home verified = {props?.verified} userData = {props?.userData}/>}
             <br></br>
-           {(props?.verified?.tcapRelation=='admin' || props?.verified?.tcapRelation=='arranger' || props.userData?.user=='hello@trustless.capital') && <AdminInvoices verified = {props?.verified} userData = {props?.userData}/>}
+           {(props?.verified?.tcapRelation=='admin' || props?.verified?.tcapRelation=='arranger' || props.userData?.user=='abhijit.panda1319@gmail.com') && <AdminLanding verified = {props?.verified} userData = {props?.userData}/>}
            {userData.userType=='investor' && <Investor verified = {props?.verified} userData = {props?.userData}/>}
         </div>
     )
 }
+
+
+// import './dashboard.css'
+// import Home from  "../home/Home";
+// import AdminInvoices from 'pages/adminInvoices/AdminInvoices';
+// import Investor from 'pages/investor/investor';
+
+// export default function Dashboard(props) {
+//     const userData = localStorage.getItem('userData');
+//     return (
+//         <div className="home">
+//             {userData.userType!='investor' && <Home verified = {props?.verified} userData = {props?.userData}/>}
+//             <br></br>
+//            {(props.userData?.user=='abhijit.panda1319@gmail.com' || props?.verified?.tcapRelation=='admin' || props?.verified?.tcapRelation=='arranger' ) && <AdminDashboard verified = {props?.verified} userData = {props?.userData}/>}
+
+//            {userData.userType=='investor' && <Investor verified = {props?.verified} userData = {props?.userData}/>}
+//         </div>
+//     )
+// }
+

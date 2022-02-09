@@ -6,6 +6,9 @@ import { Link} from "react-router-dom";
 import { companyApiProvider } from 'services/api/company/companyService';
 import MarketCard from "./MarketCard";
 import { v4 as uuidv4 } from 'uuid'
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
 import { Spinner } from 'react-bootstrap';
 
 export default function Marketplace(props) {
@@ -30,8 +33,17 @@ export default function Marketplace(props) {
     
     return (
       <div className="mp">
-        <h3 className='Head'>MARKETPLACE</h3>
+        <h3 className='Head'>Welcome to Real World Asset Marketplace</h3>
           
+          <Container fluid>
+            <Row>
+              <Col sm={1}></Col>
+              <Col sm={4}></Col>
+              <Col className = "Heading" sm={2}>Invoice Amount</Col>
+              <Col className = "Heading" sm={2}>APR Yield</Col>
+              <Col className = "Heading1" sm={2}>Payout Date</Col>
+            </Row>
+          </Container>
           {invoices && invoices.map((invoice, index)=>{
             
             return(

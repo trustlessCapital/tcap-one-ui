@@ -32,6 +32,12 @@ import Grid from '@material-ui/core/Grid';
 import EntityList from 'components/EntityList/entityList';
 import InvoiceList from 'components/InvoiceList/invoicelist';
 import { companyApiProvider } from 'services/api/company/companyService';
+import Sidebar from './sidebar';
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import CountUp from 'react-countup';
+import Graph from "./Graph";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,119 +78,148 @@ setInvestmentHistory(invHistory);
 },[])
   return (
     <div className="addInvPage">
-      <h3 className="addInvPageTitle">Investor</h3>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-      {/* <Typography>Please complete you KYC  <Button variant="contained">
-        <Link to="#">Complete KYC</Link>
-      </Button></Typography> */}
-      <Typography>Currency: USDC, Balance: {balance?.usdc}<br></br></Typography>
-      <Typography>Currency: ETH, Balance: {balance?.eth} </Typography> <Button variant="contained">
-        <Link to="/marketplace">Go to Marketplace</Link>
-      </Button>
-      </Grid>
-      </Grid>
-      {/* <Button variant="contained">
-        <Link to="/onboardentity">Onboard Buyer/Seller</Link>
-      </Button>
-      <Button variant="contained">
-        <Link to="/addinvoices">Upload Invoices</Link>
-      </Button>
-      <Button variant="contained">
-        <Link to="/viewinvoices">View Invoices</Link>
-      </Button> */}
-      {/* <Grid container xs={12}>
-        <Grid item xs={10}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={state.viewOnly}
-                onChange={handleViewOnly}
-                name="viewOnly"
-                color="primary"
+      {/* <h1 className="addInvPageTitle">Investor</h1> */}
+      <Container fluid>
+      <Row>
+        <Col sm={3}>
+          <Sidebar />
+        </Col>
+        <Col>
+          <Row>
+            <Col className='Balance' sm={5}>
+              <Row className='balhead'>
+                <h3 className='balheadval'>Currency: USDC, Balance: </h3>
+              </Row>
+              <Row className='Point'>
+
+                <CountUp 
+                  end={21000} //{balance?.usdc}
+                  duration={5} //{balance?.eth}
+                />
+              </Row>
+            </Col>
+            <Col>
+              <Graph />
+            </Col>
+          
+          </Row>
+          
+          {/* <Grid container spacing={3}>
+            <Grid item xs={12}> */}
+          {/* <Typography>Please complete you KYC  <Button variant="contained">
+            <Link to="#">Complete KYC</Link>
+          </Button></Typography> */}
+          {/* <Typography>Currency: USDC, Balance: {balance?.usdc}<br></br></Typography>
+          <Typography>Currency: ETH, Balance: {balance?.eth} </Typography> <Button variant="contained">
+            <Link to="/marketplace">Go to Marketplace</Link>
+          </Button>
+          </Grid>
+          </Grid> */}
+          {/* <Button variant="contained">
+            <Link to="/onboardentity">Onboard Buyer/Seller</Link>
+          </Button>
+          <Button variant="contained">
+            <Link to="/addinvoices">Upload Invoices</Link>
+          </Button>
+          <Button variant="contained">
+            <Link to="/viewinvoices">View Invoices</Link>
+          </Button> */}
+          {/* <Grid container xs={12}>
+            <Grid item xs={10}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={state.viewOnly}
+                    onChange={handleViewOnly}
+                    name="viewOnly"
+                    color="primary"
+                  />
+                }
+                label="View Only"
               />
-            }
-            label="View Only"
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <Button variant="contained" className={classes.buttonMargin}>
-            SAVE
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.buttonMargin}
-          >
-            SAVE AND CLOSE
-          </Button>
-        </Grid>
-      </Grid> */}
-      <div className="addInvPageWrapper">
-        {/* <Dialog
-          open={state.open}
-          onClose={onHandleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">{'Submit Invoice?'}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Are you sure you want to submit the invoice?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={onHandleClose} color="primary">
-              No
-            </Button>
-            <Button onClick={onHandleClose} color="primary" autoFocus>
-              Yes
-            </Button>
-          </DialogActions>
-        </Dialog> */}
-        <div className={classes.root}>
-          <Accordion color="primary">
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="entity-details"
-              id="entity-details"
+            </Grid>
+            <Grid item xs={2}>
+              <Button variant="contained" className={classes.buttonMargin}>
+                SAVE
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.buttonMargin}
+              >
+                SAVE AND CLOSE
+              </Button>
+            </Grid>
+          </Grid> */}
+          <div className="addInvPageWrapper">
+            {/* <Dialog
+              open={state.open}
+              onClose={onHandleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
             >
-              <Typography className={classes.heading}>INVESTMENT HISTORY</Typography>
-              {/* <Button variant="contained"><Link to="/onboardentity">ADD NEW</Link></Button> */}
-              {/* <Button variant="contained"> LOOKUP</Button> */}
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className={classes.root}>
-                <Grid container spacing={3}>
-                  <Grid item xs={12}>
-                    <InvoiceList history = {investmentHistory} />
-                  </Grid>
-                </Grid>
-              </div>
-            </AccordionDetails>
-          </Accordion>
-          {/* <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="entity-list"
-              id="entity-list"
-            >
-              <Typography className={classes.heading}>
-                DEALS
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className={classes.root}>
-                <Grid container spacing={3}>
-                  <Grid item xs={12}>
-                    <EntityList />
-                  </Grid>
-                </Grid>
-              </div>
-            </AccordionDetails>
-          </Accordion> */}
-        </div>
-      </div>
+              <DialogTitle id="alert-dialog-title">{'Submit Invoice?'}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Are you sure you want to submit the invoice?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={onHandleClose} color="primary">
+                  No
+                </Button>
+                <Button onClick={onHandleClose} color="primary" autoFocus>
+                  Yes
+                </Button>
+              </DialogActions>
+            </Dialog> */}
+            <div className={classes.root}>
+              <Accordion color="primary">
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="entity-details"
+                  id="entity-details"
+                >
+                  <Typography className={classes.heading}>INVESTMENT HISTORY</Typography>
+                  {/* <Button variant="contained"><Link to="/onboardentity">ADD NEW</Link></Button> */}
+                  {/* <Button variant="contained"> LOOKUP</Button> */}
+                </AccordionSummary>
+                <AccordionDetails>
+                  <div className={classes.root}>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <InvoiceList history = {investmentHistory} />
+                      </Grid>
+                    </Grid>
+                  </div>
+                </AccordionDetails>
+              </Accordion>
+              {/* <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="entity-list"
+                  id="entity-list"
+                >
+                  <Typography className={classes.heading}>
+                    DEALS
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <div className={classes.root}>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <EntityList />
+                      </Grid>
+                    </Grid>
+                  </div>
+                </AccordionDetails>
+              </Accordion> */}
+            </div>
+          </div>
+      </Col>
+      </Row>
+      </Container>
     </div>
+    
   );
 }

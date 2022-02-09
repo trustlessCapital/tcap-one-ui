@@ -19,8 +19,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-
+import Sidebar from "./Sidebar";
 import { documentApiProvider } from 'services/api/document/documentService';
+import Row from "react-bootstrap/Row";
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import CountUp from "react-countup";
 
 export default function Home(props) {
   const [relationships, setRelationships] = useState([]);
@@ -128,8 +132,8 @@ export default function Home(props) {
         </DialogActions>
       </Dialog>
       <div className="homeWidgets">
-        <div style={{ flexGrow: '1' }}>
-          <h1>Welcome {props?.userData?.user}</h1>
+        <div> {/* style={{ flexGrow: '1' } */}
+          {/* <h1>Welcome {props?.userData?.user}</h1> */}
         </div>
         {/* <SmWidgets/>
                 <LgWidgets/> */}
@@ -139,77 +143,60 @@ export default function Home(props) {
             props.userData?.user == 'lingraj@trustless.capital' ||
             props.userData?.user == 'kapil@trustless.capital' ||
             props.userData?.user == 'nagarjun@trustless.capital' ||
-            props.userData?.user == 'hello@trustless.capital'
+            props.userData?.user == 'abhijit.panda1319@gmail.com'
           ) && (
             <>
               <br></br>
-              <div>
+              <div className='KYC'>
                 Please verify you KYC &nbsp;
                 <Link to="/onboardentity">Verify</Link>
               </div>
               <div></div>
             </>
           )}
-        {userDataDetails?.tcapRelation == 'vendor' && (
-          <Grid container>
-            <Grid item xs={6}>
-              <h3>Active Deals</h3>
-              <TableContainer component={Paper}>
-                <Table aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Invoice Number</TableCell>
-                      <TableCell align="right">Anchor Name</TableCell>
-                      <TableCell align="right">Invoice Value</TableCell>
-                      <TableCell align="right">Evidence</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {vendorInvoices.invoices.map((row,index) => (
-                      <TableRow key={row.invoiceNumber}>
-                        <TableCell component="th" scope="row">
-                          {row.invoiceNumber}
-                        </TableCell>
-                        <TableCell align="right">{vendorInvoices.anchors[index][1]}</TableCell>
-                        <TableCell align="right">{row.invoiceAmount}</TableCell>
-                        <TableCell align="right">
-                          <button className="investBtn investBtnLink" onClick={()=>uploadEvidenceFunc(row)}>
-                            Upload
-                          </button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Grid>
-            <Grid item xs={6}>
-              <h3>Approved/Completed Deals</h3>
-              <TableContainer component={Paper}>
-                <Table aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Invoice Number</TableCell>
-                      <TableCell align="right">Anchor Name</TableCell>
-                      <TableCell align="right">Invoice Value</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {vendorInvoices.invoices.filter((invoice)=>invoice.status=='approved').map((row) => (
-                      <TableRow key={row.invoiceNumber}>
-                        <TableCell component="th" scope="row">
-                          {row.invoiceNumber}
-                        </TableCell>
-                        <TableCell align="right">{row.anchorId}</TableCell>
-                        <TableCell align="right">{row.invoiceAmount}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Grid>
-          </Grid>
-        )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+          {userDataDetails?.tcapRelation == 'vendor' && (
+            <Container fluid>
+              <Row className='homey'>
+                <Col sm={3}>
+                  <Sidebar />
+                </Col>
+                <Col className='Balance' sm={4}>
+                  <Row className='balhead'>
+                    <h3 className='balheadval'>Currency: USDC, Borrowed: </h3>
+                  </Row>
+                  <Row className='Point'>
+
+                    <CountUp 
+                      end={21000} //{balance?.usdc}
+                      duration={5} //{balance?.eth}
+                    />
+                  </Row>
+                </Col>
+              </Row>
+            </Container>
+            
+          )}
+
+
+
+  
+
+
+
+
         {props?.userData?.type == 'company' &&
           userDataDetails.tcapRelation == 'vendor' && (
             <div>
