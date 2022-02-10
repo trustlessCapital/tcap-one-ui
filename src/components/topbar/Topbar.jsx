@@ -74,6 +74,7 @@ export default function Topbar(props) {
   const logout = (event) => {
     window.localStorage.removeItem("userData");
     window.localStorage.removeItem("privKey");
+    window.localStorage.removeItem("email");
     props.logout();
   };
 

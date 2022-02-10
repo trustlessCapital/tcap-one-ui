@@ -126,24 +126,29 @@ const App = () => {
   const [OpenloginUserInfo, setOpenloginUserInfo] = useState();
   const [webAuth, setwebAuth] = useState(false);
   const [userDataDetails, setUserDetails] = useState([]);
-  const [userData, setUserData] = useState(null);
+  // const [userData, setUserData] = useState(null);
   // const {data} = useFetch("https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/abhijit.panda1319@gmail.com")
   // const userData = data;
 
   localStorage.setItem('privKey', privKey);
-  localStorage.setItem('userData', userData);
+  
   var loginObject ={
     loginProvider: "google",
     clientId: "BDEZMlXEtCPU0_sfOO22To8ZnFS8ppSJs_yBNBxiMWhdAmPJSUk4jlCI3ykKBHO2cl1iDEu_M6UDVFAqALmZPto",
     redirectUrl: "http://localhost:7005/"
   }
-  console.log('User', userData);
+
   useEffect(() => {
     setFormIsValid(validator.isEmail(email))
   }, [email]);
   console.log('token', token);
 
   const tokenset = async () =>{
+    const em = localStorage.getItem("email");
+    const url = `https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/${em}`;
+    const response = await fetch(url);
+    const userData = await response.json();
+    localStorage.setItem('userData', userData);
     console.log(userData);
     if (userData && userData.email.trim().length) {
       if(userData?.userType!='investor'){
@@ -198,7 +203,7 @@ const App = () => {
 
   const onLoginEmail = async (event) => {
 
-    
+    localStorage.setItem("email", email);
     if (isLoading || privKey || !openlogin) return;
 
     setLoading(true);
@@ -211,16 +216,8 @@ const App = () => {
         redirectUrl: "http://localhost:7005/",
     });
 
-    
-    
     setPrivKey(openlogin.privKey);
-    
-      
-    
-      
-  
-    
-    
+
     } finally {
       setLoading(false);
     }
@@ -245,20 +242,7 @@ const App = () => {
   useEffect(() => {
     
     onMount();
-    const url = "https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/abhijit.panda1319@gmail.com";
-
-        const fetchData = async () => {
-            try {
-                const response = await fetch(url);
-                const json = await response.json();
-                console.log(userData, json);
-                setUserData(json);
-            } catch (error) {
-                console.log("error", error);
-            }
-        };
-
-        fetchData();
+    
   
   }, []);
 
