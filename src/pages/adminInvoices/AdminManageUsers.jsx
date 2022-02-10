@@ -23,76 +23,13 @@ import Sidebar from './Sidebar';
 import AddNewUserModal from './AddNewUserModal';
 
 export default function AdminManageUsers(props) {
-  const [invoices,setInvoices] = useState([]);
-  const [selectedInvoice,setSelectedInvoice] = useState(null);
-  const [addToMarketPlaceDetails,setaddToMarketPlaceDetails] = useState(addToMarketplaceStub);
-  const [addToMarketPlaceDetailsResponse,setaddToMarketPlaceDetailsResponse] = useState({});
-  const [companyList,setCompanyList] = useState(new Map());
-  const [addToMarketPlaceOpen,setAddToMarketPlaceOpen] = useState(false);
   const [modalShow, setModalShow] = useState(false);
+  const privKey = localStorage.getItem("privKey");
 
-    const Status = ({type}) =>{
-        return <span className={"status" + type}>{type}</span>
-    }
-
-    useEffect(async ()=>{
-      const Data = await companyApiProvider.getCompanyList();
-      const jData = JSON.stringify(Data);
-      const companyData = JSON.parse(jData);
-
-      const companyMap = new Map();
-      companyData.forEach((company)=>{
-        companyMap.set(company.id,company.organisationName);
-      })
-      setCompanyList(companyMap);      
-      await setCompanyList(companyMap);
-      const invoicesData = await companyApiProvider.getAllInvoices();
-          setInvoices(invoicesData);
-          console.log(invoicesData)
-    },[])
-    useEffect(async ()=>{
-if(addToMarketPlaceDetails.digest !='')
-{
-  const marketPlaceDetails = await companyApiProvider.addToMarketplace(addToMarketPlaceDetails);
-  console.log(marketPlaceDetails);
-  if(marketPlaceDetails.celoTxHash)
-  {
-    setaddToMarketPlaceDetailsResponse(marketPlaceDetails);
-  }
-}
-    },[addToMarketPlaceDetails])
-    const addToMarketPlace = async () =>{
-      let unixDate = new Date(addToMarketPlaceDetails.dueDate).getTime();
-      let unixinSeconds = Math.floor(unixDate/1000);
-      let digestDataoutput={};
-      const digestData = await getBytes32FromMultiash(selectedInvoice.contentId);
-//       digestData.then((response) => {
-// digestDataoutput = response;
-//       })
-console.log(digestData)
-      await setaddToMarketPlaceDetails({...addToMarketPlaceDetails,dueDate:unixinSeconds, digest: digestData.digest,hashFunction:digestData.hashFunction,size:digestData.size });
-        console.log(addToMarketPlaceDetails);
-    }
-    async function getBytes32FromMultiash(contentId){
-      const decoded = base58.decode(contentId);
-      return {
-        digest: `0x${decoded.slice(2).toString('hex')}`,
-        hashFunction: decoded[0],
-        size: decoded[1],
-      };
-  }
-  const verifyInvoice = async (invoice) =>{
-    let verifyInvoiceDoc;
-    let evidenceDetails = await companyApiProvider.getInvoiceEvidence(`evidence-${invoice.id}`);
-    if(evidenceDetails.contentId){
-       verifyInvoiceDoc= await companyApiProvider.verifyInvoice({...invoice,status:'approved',userId:props?.userData?.userId});
-    }
-    if(verifyInvoiceDoc.id){
-      alert("invoice approved successfully, ready to be added to marketplace ");
-    }
-  }
     return (
-      <div className="mp">  
+      <div className="mp"> 
+      {props.userData?.user == "abhijit.panda1319@gmail.com" && privKey && 
+      <div> 
       <Button style={{backgroundColor: "#FFAFAF", color: "#FFFFFF", border:"none"}} variant="secondary" className="addnewuser" onClick={() => {setModalShow(true)}}>Add New User</Button>
         <AddNewUserModal
           show={modalShow}
@@ -180,6 +117,8 @@ console.log(digestData)
             
             </Row>
             </Container>
+            </div>
+      }
       </div>
     );
 }

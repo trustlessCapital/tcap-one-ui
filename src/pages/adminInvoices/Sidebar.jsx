@@ -30,8 +30,8 @@ const Sidebar = () => {
             <NavLink exact to="/AdminManageEntity" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="table">Manage Entity</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/AdminPendingApproval" activeClassName="activeClicked">
-              <CDBSidebarMenuItem className="items" icon="user">Pending Approval</CDBSidebarMenuItem>
+            <NavLink exact to="/AdminPendingApprovals" activeClassName="activeClicked">
+              <CDBSidebarMenuItem className="items" icon="user">Pending Approvals</CDBSidebarMenuItem>
             </NavLink>
             <NavLink exact to="/AdminAllDeals" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="chart-line">All Deals</CDBSidebarMenuItem>

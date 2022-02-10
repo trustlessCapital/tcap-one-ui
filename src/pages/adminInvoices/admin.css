@@ -9,18 +9,19 @@
 }
 
 .mpTitle{
-    font-size: 20px;
+    padding-bottom: 2rem;
+    font-size: 3.5rem;
+    font-family: 'Zilla Slab', serif;
 }
 
 .mpTable .mpTh{
-    font-size: 22px;
+    font-size: 0.99rem;
     font-weight: normal;
-    text-align: left;
+    text-align: center;
 }
-
 .mpTable  .mpTd{
-    font-size: 18px;
-    text-align: left;
+    font-size: 0.9rem;
+    text-align: center;
 }
 .currencyRight{
     text-align: center;
@@ -168,14 +169,16 @@
 .colRight{ 
     width:50%;
 }
-
+button{
+    font-size: 0.9rem !important;
+}
 .saveInvBtn{
     background-color: #e50914;
     color: #FFF;
     padding: 10px 20px;
     border:1px solid #CCC;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 0.5px;
 }
 table {
     font-family: arial, sans-serif;
@@ -203,3 +206,6 @@ table {
       background-color:lightgray;
       opacity: 0.9;
   }
+ .table-dark{
+     z-index: 1;
+ }

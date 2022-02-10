@@ -18,9 +18,8 @@ import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import 'react-phone-input-2/lib/bootstrap.css'
 import { userApiProvider } from 'services/api/user/userService';
-import useFetch from "react-fetch-hook"
-import axios from "axios"
-
+import useFetch from "react-fetch-hook";
+import axios from "axios";
 
 
 const VERIFIER = [
@@ -228,7 +227,6 @@ export default function Web3signin(props) {
   useEffect(() => {
     
     onMount();
-    
     
     
   }, []);
