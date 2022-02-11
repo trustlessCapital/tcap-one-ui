@@ -142,8 +142,8 @@ const App = () => {
   console.log('token', token);
 
   const tokenset = async () =>{
-    const em = localStorage.getItem("email");
-    const url = `https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/${em}`;
+    const Email = localStorage.getItem("email");
+    const url = `https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/${Email}`;
     const response = await fetch(url);
     const userData = await response.json();
     localStorage.setItem('userData', userData);
