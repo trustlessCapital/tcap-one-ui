@@ -53,7 +53,7 @@ export default function Topbar(props) {
   const [view, setView] = useState(history.location.pathname);
   const [hover, setHover] = useState();
 
-
+  const userData = localStorage.getItem("userData");
   const handleMouseIn = () => {
     setHover(true);
   };
@@ -74,8 +74,10 @@ export default function Topbar(props) {
   const logout = (event) => {
     window.localStorage.removeItem("userData");
     window.localStorage.removeItem("privKey");
+    window.localStorage.removeItem("email");
     props.logout();
   };
+  console.log(props.userData);
 
   useEffect(() => {
     return history.listen((location) => {
@@ -171,7 +173,7 @@ export default function Topbar(props) {
                         </Nav.Link>
                       }
 
-                      {(props.userData?.user=='lingraj@trustless.capital' || props.userData?.user=='kapil@trustless.capital' || props.userData?.user=='nagarjun@trustless.capital' || props.userData?.user=='abhijit.panda1319@gmail.com') &&
+                      {(props.userData?.user=='lingraj@trustless.capital' || props.userData?.user=='kapil@trustless.capital' || props.userData?.user=='nagarjun@trustless.capital' || props.userData?.userType==='ADMIN') &&
                         <Nav.Link href="/entitylist" className="rightlinks">
                           Companies
                         </Nav.Link>

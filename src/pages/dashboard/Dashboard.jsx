@@ -10,7 +10,7 @@ export default function Dashboard(props) {
         <div className="home">
             {userData.userType!='investor' && <Home verified = {props?.verified} userData = {props?.userData}/>}
             <br></br>
-           {(props?.verified?.tcapRelation=='admin' || props?.verified?.tcapRelation=='arranger' || props.userData?.user=='abhijit.panda1319@gmail.com') && <AdminLanding verified = {props?.verified} userData = {props?.userData}/>}
+           {(props?.verified?.tcapRelation=='admin' || props?.verified?.tcapRelation=='arranger' || props.userData?.userType=='ADMIN') && <AdminLanding verified = {props?.verified} userData = {props?.userData}/>}
            {userData.userType=='investor' && <Investor verified = {props?.verified} userData = {props?.userData}/>}
         </div>
     )
@@ -28,7 +28,7 @@ export default function Dashboard(props) {
 //         <div className="home">
 //             {userData.userType!='investor' && <Home verified = {props?.verified} userData = {props?.userData}/>}
 //             <br></br>
-//            {(props.userData?.user=='abhijit.panda1319@gmail.com' || props?.verified?.tcapRelation=='admin' || props?.verified?.tcapRelation=='arranger' ) && <AdminDashboard verified = {props?.verified} userData = {props?.userData}/>}
+//            {(props.userData?.userType=='ADMIN' || props?.verified?.tcapRelation=='admin' || props?.verified?.tcapRelation=='arranger' ) && <AdminDashboard verified = {props?.verified} userData = {props?.userData}/>}
 
 //            {userData.userType=='investor' && <Investor verified = {props?.verified} userData = {props?.userData}/>}
 //         </div>

@@ -27,7 +27,9 @@ import Signup from "pages/signup/Signup";
 import { companyApiProvider } from "services/api/company/companyService";
 import MyDraftInvoicesVendor from "pages/home/MyDraftInvoicesVendor";
 import AdminManageUsers from "pages/adminInvoices/AdminManageUsers";
+import AdminManageEntity from "pages/adminInvoices/AdminManageEntity";
 import CompletedDealsVendor from "pages/home/CompletedDealsVendor";
+import AdminPendingApprovals from "pages/adminInvoices/AdminPendingApprovals";
 import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
 import validator from 'validator';
 import OpenLogin from "@toruslabs/openlogin";
@@ -124,24 +126,27 @@ const App = () => {
   const [OpenloginUserInfo, setOpenloginUserInfo] = useState();
   const [webAuth, setwebAuth] = useState(false);
   const [userDataDetails, setUserDetails] = useState([]);
-  const [userData, setUserData] = useState(null);
-  // const {data} = useFetch("https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/abhijit.panda1319@gmail.com")
-  // const userData = data;
+
 
   localStorage.setItem('privKey', privKey);
-  localStorage.setItem('userData', userData);
+  
   var loginObject ={
     loginProvider: "google",
     clientId: "BDEZMlXEtCPU0_sfOO22To8ZnFS8ppSJs_yBNBxiMWhdAmPJSUk4jlCI3ykKBHO2cl1iDEu_M6UDVFAqALmZPto",
     redirectUrl: "http://localhost:7005/"
   }
-  console.log('User', userData);
+
   useEffect(() => {
     setFormIsValid(validator.isEmail(email))
   }, [email]);
   console.log('token', token);
 
   const tokenset = async () =>{
+    const Email = localStorage.getItem("email");
+    const url = `https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/${Email}`;
+    const response = await fetch(url);
+    const userData = await response.json();
+    localStorage.setItem('userData', userData);
     console.log(userData);
     if (userData && userData.email.trim().length) {
       if(userData?.userType!='investor'){
@@ -159,7 +164,8 @@ const App = () => {
         setToken({
           user: userData.email,
           type: userData?.userType=='investor' ? 'investor': userDataDetails.tcapRelation,
-          privKey: userData.privKey,
+          userType: userData?.userType,
+          privKey: privKey,
           userId:userData.id,
           walletAddress:userData?.walletAddress || null
         });
@@ -196,7 +202,7 @@ const App = () => {
 
   const onLoginEmail = async (event) => {
 
-    
+    localStorage.setItem("email", email);
     if (isLoading || privKey || !openlogin) return;
 
     setLoading(true);
@@ -209,16 +215,8 @@ const App = () => {
         redirectUrl: "http://localhost:7005/",
     });
 
-    
-    
     setPrivKey(openlogin.privKey);
-    
-      
-    
-      
-  
-    
-    
+
     } finally {
       setLoading(false);
     }
@@ -243,20 +241,7 @@ const App = () => {
   useEffect(() => {
     
     onMount();
-    const url = "https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/abhijit.panda1319@gmail.com";
-
-        const fetchData = async () => {
-            try {
-                const response = await fetch(url);
-                const json = await response.json();
-                console.log(userData, json);
-                setUserData(json);
-            } catch (error) {
-                console.log("error", error);
-            }
-        };
-
-        fetchData();
+    
   
   }, []);
 
@@ -377,6 +362,12 @@ const App = () => {
                 </Route>
                 <Route path="/AdminManageUsers">
                   <AdminManageUsers verified={emailVerify} userData={token}/>
+                </Route>
+                <Route path="/AdminManageEntity">
+                  <AdminManageEntity verified={emailVerify} userData={token}/>
+                </Route>
+                <Route path="/AdminPendingApprovals">
+                  <AdminPendingApprovals verified={emailVerify} userData={token}/>
                 </Route>
                 </motion.div>
                 <Route path="/signup">

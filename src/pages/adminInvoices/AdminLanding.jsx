@@ -37,7 +37,7 @@ export default function AdminLanding(props) {
 
 
 
-          {props.userData?.user == "abhijit.panda1319@gmail.com" && privKey && (
+          {props.userData?.userType=="ADMIN" && privKey && (
             <Container fluid>
               <Row className='homey'>
                 <Col sm={3}>

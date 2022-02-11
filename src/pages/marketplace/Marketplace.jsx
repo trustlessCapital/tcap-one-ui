@@ -12,7 +12,7 @@ import Container from "react-bootstrap/Container";
 import { Spinner } from 'react-bootstrap';
 
 export default function Marketplace(props) {
-  const [invoices,setInvoices] = useState([]);
+  const [invoices,setInvoices] = useState(null);
   const [companyList,setCompanyList] = useState(new Map());
     const Status = ({type}) =>{
         return <span className={"status" + type}>{type}</span>

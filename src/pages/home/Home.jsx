@@ -140,10 +140,10 @@ export default function Home(props) {
 
         {!props.verified?.companyId &&
           !(
-            props.userData?.user == 'lingraj@trustless.capital' ||
-            props.userData?.user == 'kapil@trustless.capital' ||
-            props.userData?.user == 'nagarjun@trustless.capital' ||
-            props.userData?.user == 'abhijit.panda1319@gmail.com'
+            props.userData?.user === 'lingraj@trustless.capital' ||
+            props.userData?.user === 'kapil@trustless.capital' ||
+            props.userData?.user === 'nagarjun@trustless.capital' ||
+            props.userData?.userType === 'ADMIN'
           ) && (
             <>
               <br></br>

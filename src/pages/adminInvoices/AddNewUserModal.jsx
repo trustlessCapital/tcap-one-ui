@@ -134,6 +134,7 @@ export default function AddNewUserModal(props) {
                     <option value="Arranger">Arranger</option>
                     <option value="Vendor">Vendor</option>
                     <option value="Anchor">Anchor</option>
+                    <option value="Admin">Admin</option>
                     </select>
                 </div>
               </Col>

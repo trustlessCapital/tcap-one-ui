@@ -3,7 +3,7 @@
 //import AiWidgets from '../components/aiWidgets/AiWidgets'
 import './newEntity.css';
 //import Select from 'react-select';
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component, useEffect, useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Publish } from '@material-ui/icons';
 import { useHistory } from "react-router-dom";
@@ -40,6 +40,12 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import { dialogDemoData } from 'stub/stub' ;
 import { companyRelationshipDemoData } from 'stub/stub';
+import {
+  MDBInputGroup,
+  MDBInputGroupText,
+  MDBInputGroupElement,
+  MDBBtn
+} from 'mdb-react-ui-kit'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,12 +74,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
 export default function OnboardNewEntity(props) {
   // userData;
   const history = useHistory();
   const classes = useStyles();
   const [entity, setEntity] = useState('');
   const [stepCount,setStepCount] = useState(1);
+  const [documentDetails,setDocumentDetails] = useState(null);
   const [openDialog,setDialogOpen] = useState(false);
   const [createRelationshipOpen,setCreateRelationshipOpen] = useState(false);
   const [companyRelationship,setCompanyRelationship] = useState(companyRelationshipDemoData);
@@ -95,6 +104,7 @@ export default function OnboardNewEntity(props) {
   let initObj = {
     email:userData?.email,
     // approvalInvoice: [],
+    KYCstat: '',
     vid: Math.floor(Math.random() * (999 - 100 + 1) + 100),
     organisationName: '',
     companyId:'',
@@ -118,6 +128,7 @@ export default function OnboardNewEntity(props) {
     phoneNumber: userData?.phoneNumber,
     grnsrnDate: '',
     availablelimit: '',
+    uploadfile: '',
     gstid: '',
     ewaybilldt: '',
     ewayapproved: '',
@@ -200,6 +211,12 @@ export default function OnboardNewEntity(props) {
   };
   const onChangeWebsite = (e) => {
     setState({ ...state, website: e.target.value });
+  };
+  const onChangeUploadFile = (e) => {
+    setState({ ...state, uploadfile: e.target.value });
+  };
+  const onChangeKYCstat = (e) => {
+    setState({ ...state, KYCstat: e.target.value });
   };
   const onChangeAdminName = (e) => {
     setState({ ...state, adminName: e.target.value });
@@ -344,6 +361,7 @@ export default function OnboardNewEntity(props) {
     } else {
       var joined = state.approvalInvoice.concat({
         vid: state.vid,
+        KYC: state.KYCstat,
         organisationName: state.organisationName,
         companyId:state.companyId,
         // status: state.status,
@@ -354,6 +372,7 @@ export default function OnboardNewEntity(props) {
         country: state.country,
         website: state.website,
         adminName:state.adminName,
+        uploadfile: state.uploadfile,
         ptype: state.ptype,
         invct: state.invct,
         duedt: state.duedt,
@@ -365,6 +384,7 @@ export default function OnboardNewEntity(props) {
       });
       setState({
         approvalInvoice: joined,
+        KYC : '',
         vid: Math.floor(Math.random() * (999 - 100 + 1) + 100),
         organisationName: '',
         companyId:'',
@@ -388,6 +408,35 @@ export default function OnboardNewEntity(props) {
       });
     }
   };
+
+  const uploadInvoice = async () => {
+    
+    const documentFormData = new FormData();
+    // Update the formData object
+    documentFormData.append(
+      'document',
+      state.uploadfile,
+      state.uploadfile.name
+    );
+     const uploadSuccess = await documentApiProvider.submitDocuments(documentFormData);
+     let userData = JSON.parse(localStorage.getItem('userData'));
+     const serverUpload = await documentApiProvider.updateDocumentsToServer({
+      //"companyId":companyCreateSuccessResponse.id, // this comes from?
+      "companyId":userData.id,
+      "userEmail":userData.email,
+      "contentId":uploadSuccess.contenId,
+      "version":"1",// this comes from?
+      "type":'INV',// what are the other fields 
+      "description":`invoice`, // static or getting from some other data?
+      "comments":`its a ${state.uploadfile.name}`, // this comes from?
+      "fileName": state.uploadfile.name,
+      "fileKey" : uploadSuccess.fileKey
+    })
+    if(serverUpload.fileKey){
+      alert('document uploaded successfully!')
+      setDocumentDetails(serverUpload);
+    }
+  }
 
   // componentWillUpdate(nextProps, nextState) {
   //   // localStorage.setItem("user", JSON.stringify(nextState));
@@ -1060,6 +1109,33 @@ required
                             onChange={onChangeGstId}
                             required
                             value={state.gstid}
+                          />
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <div className="addInvItem">
+                          <label>Upload Attachments</label>
+                          <label htmlFor="file" className="labelFile">
+                            <Publish />
+                            <span>Select File</span>
+                          </label>
+                          <input
+                            type="file"
+                            id="file"
+                            name="uploadfile"
+                            style={{ display: 'none' }}
+                            onChange={onChangeUploadFile}
+                          />
+                         <label style={{float:'right'}}>{state.uploadfile}</label>
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <div className="addInvItem">
+                          <input
+                            className="saveInvBtn"
+                            type="submit"
+                            value="Submit"
+                            onClick={uploadInvoice}
                           />
                         </div>
                       </Grid>
