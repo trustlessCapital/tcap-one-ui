@@ -92,7 +92,7 @@ console.log(digestData)
   const privKey = localStorage.getItem("privKey");
     return (
       <div className="mp">
-      {props.userData?.user == "abhijit.panda1319@gmail.com" && privKey && 
+      {props.userData?.userType == "ADMIN" && privKey && 
       <div> 
         <Dialog open={addToMarketPlaceOpen} onClose={()=>setAddToMarketPlaceOpen(false)}>
         <DialogTitle>

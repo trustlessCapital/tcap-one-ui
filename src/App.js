@@ -126,9 +126,7 @@ const App = () => {
   const [OpenloginUserInfo, setOpenloginUserInfo] = useState();
   const [webAuth, setwebAuth] = useState(false);
   const [userDataDetails, setUserDetails] = useState([]);
-  // const [userData, setUserData] = useState(null);
-  // const {data} = useFetch("https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/abhijit.panda1319@gmail.com")
-  // const userData = data;
+
 
   localStorage.setItem('privKey', privKey);
   
@@ -166,7 +164,8 @@ const App = () => {
         setToken({
           user: userData.email,
           type: userData?.userType=='investor' ? 'investor': userDataDetails.tcapRelation,
-          privKey: userData.privKey,
+          userType: userData?.userType,
+          privKey: privKey,
           userId:userData.id,
           walletAddress:userData?.walletAddress || null
         });

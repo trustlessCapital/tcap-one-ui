@@ -28,7 +28,7 @@ export default function AdminManageUsers(props) {
 
     return (
       <div className="mp"> 
-      {props.userData?.user == "abhijit.panda1319@gmail.com" && privKey && 
+      {props.userData?.userType == "ADMIN" && privKey && 
       <div> 
       <Button style={{backgroundColor: "#FFAFAF", color: "#FFFFFF", border:"none"}} variant="secondary" className="addnewuser" onClick={() => {setModalShow(true)}}>Add New User</Button>
         <AddNewUserModal
