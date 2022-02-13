@@ -3,7 +3,7 @@
 //import AiWidgets from '../components/aiWidgets/AiWidgets'
 // import "./newEntity.css";
 //import Select from 'react-select';
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Publish } from '@material-ui/icons';
 // import { Component, useState } from "react";
@@ -12,6 +12,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { companyApiProvider } from 'services/api/company/companyService';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -66,6 +67,7 @@ export default function AdminManageRelationships(props) {
   // userData;
   const classes = useStyles();
   const [entity, setEntity] = useState('');
+  const [listUsers, setListUsers] = useState(null);
 
   const handleChange = (event) => {
     setEntity(event.target.value);
@@ -236,8 +238,13 @@ export default function AdminManageRelationships(props) {
       });
     }
   };
-  
-
+  useEffect(async ()=>{
+      const Data = await companyApiProvider.getCompanyList();
+      const jData = JSON.stringify(Data);
+      const companyData = JSON.parse(jData);
+      setListUsers(companyData);
+      console.log("company Data", companyData);
+  },[]);
   // componentWillUpdate(nextProps, nextState) {
   //   // localStorage.setItem("user", JSON.stringify(nextState));
   // }
@@ -321,27 +328,39 @@ export default function AdminManageRelationships(props) {
                       <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Buyer Name</label>
-                          <input
-                            type="text"
-                            name="vname"
+                          <select
                             className="addInvInput"
+                            name="vname"
                             onChange={onChangeVname}
                             required
                             value={state.vname}
-                          />
+                          >
+                            <option value="">--Select--</option>
+                            {listUsers && listUsers.filter(user => user.tcapRelation === "anchor").map((user)=>{
+                              return(
+                                <option value={user.organisationName}>{user.organisationName}</option>
+                              )
+                            })}
+                          </select>
                         </div>
                       </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Seller Name</label>
-                          <input
-                            type="text"
-                            name="aname"
+                          <select
                             className="addInvInput"
-                            onChange={onChangeAname}
+                            name="aname"
+                            onChange={onChangeVname}
                             required
                             value={state.aname}
-                          />
+                          >
+                            <option value="">--Select--</option>
+                            {listUsers && listUsers.filter(user => user.tcapRelation === "vendor").map((user)=>{
+                              return(
+                                <option value={user.organisationName}>{user.organisationName}</option>
+                              )
+                            })}
+                          </select>
                         </div>
                       </Grid>
                       <Grid item xs={6}>
