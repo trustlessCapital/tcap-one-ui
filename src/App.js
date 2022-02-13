@@ -30,6 +30,7 @@ import AdminManageUsers from "pages/adminInvoices/AdminManageUsers";
 import AdminManageEntity from "pages/adminInvoices/AdminManageEntity";
 import CompletedDealsVendor from "pages/home/CompletedDealsVendor";
 import AdminPendingApprovals from "pages/adminInvoices/AdminPendingApprovals";
+import AdminManageRelationships from "pages/adminInvoices/AdminManageRelationships";
 import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
 import validator from 'validator';
 import OpenLogin from "@toruslabs/openlogin";
@@ -368,6 +369,9 @@ const App = () => {
                 </Route>
                 <Route path="/AdminPendingApprovals">
                   <AdminPendingApprovals verified={emailVerify} userData={token}/>
+                </Route>
+                <Route path="/AdminManageRelationships">
+                  <AdminManageRelationships verified={emailVerify} userData={token}/>
                 </Route>
                 </motion.div>
                 <Route path="/signup">
