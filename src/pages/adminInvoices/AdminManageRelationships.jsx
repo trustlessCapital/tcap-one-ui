@@ -52,12 +52,14 @@ export default function AdminManageRelationships(props) {
                                 <table class="table">
                                         <thead class="table-dark" style={{position: "sticky", top: "0"}}>
                                             <tr>
-                                            <th className="heads currencyRight" scope="col">User Name</th>
-                                            <th className="heads currencyRight" scope="col" align="right">User Type</th>
-                                            <th className="heads currencyRight" scope="col" align="right">Company</th>
-                                            <th className="heads currencyRight" scope="col" align="right">Email Address</th>
-                                            <th className="heads currencyRight" scope="col" align="right">Mobile No.</th>
-                                            <th className="heads currencyRight" scope="col" align="right">Active/Inactive</th>
+                                            <th className="heads currencyRight" scope="col">Relationship ID</th>
+                                            <th className="heads currencyRight" scope="col" align="right">Vendor Name</th>
+                                            <th className="heads currencyRight" scope="col" align="right">Anchor Name</th>
+                                            <th className="heads currencyRight" scope="col" align="right">Status</th>
+                                            <th className="heads currencyRight" scope="col" align="right">Credit Risk Score</th>
+                                            <th className="heads currencyRight" scope="col" align="right">Arranger</th>
+                                            <th className="heads currencyRight" scope="col" align="right">Vendor POC</th>
+                                            <th className="heads currencyRight" scope="col" align="right">Anchor POC</th>
                                             
                                             </tr>
                                         </thead>

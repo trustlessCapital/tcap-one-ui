@@ -15,7 +15,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { companyApiProvider } from 'services/api/company/companyService';
 import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
+import Button from 'react-bootstrap/Button';
 import Typography from '@material-ui/core/Typography';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -77,74 +77,43 @@ export default function AddNewRelationshipModal(props) {
   let initObj = {
     approvalInvoice: [],
     tid: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    vname: '',
+    vnameEmail: '',
+    anameEmail: '',
     status: '',
     relationshiptype: '',
-    arranger: '',
-    website: '',
-    ptype: '',
-    apprejby: '',
-    duedt: '',
-    limitexp: '',
-    relstartdt: '',
-    approvallimit: '',
-    arrname: '',
-    invurl: '',
-    approvaldt: '',
-    firstpublished: '',
     yrsofrel: '',
-    availablelimit: '',
-    gstnum: '',
-    aapprover: '',
-    vpoc: '',
-    aname: '',
     apoc: '',
+    vpoc: '',
+    arranger: '',
+    aapprover: '',
     open: false,
     viewOnly: false,
-    riskmanager: '',
-    apprejcomments: '',
-    riskscore: '',
   };
   const [state, setState] = useState(initObj);
   // Form Events
   // onChangeTid(e) {
   //   this.setState({ tid: e.target.value });
   // }
-  const onChangeVname = (e) => {
-    setState({ ...state, vname: e.target.value });
-  };
-  const onChangeRiskManager = (e) => {
-    setState({ ...state, riskmanager: e.target.value });
-  };
-  const onChangeRiskscore = (e) => {
-    setState({ ...state, riskscore: e.target.value });
+  const onChangeVnameEmail = (e) => {
+    setState({ ...state, vnameEmail: e.target.value });
   };
   const onChangeStatus = (e) => {
     setState({ ...state, status: e.target.value });
   };
-  const onChangeApprejcomments = (e) => {
-    setState({ ...state, apprejcomments: e.target.value });
+  const onChangeApoc = (e) => {
+    setState({ ...state, apoc: e.target.value });
+  };
+  const onChangeyrsofrel = (e) => {
+    setState({ ...state, yrsofrel: e.target.value });
   };
   const onChangeAapprover = (e) => {
     setState({ ...state, aapprover: e.target.value });
   };
-  const onChangeAvailablelimit = (e) => {
-    setState({ ...state, availablelimit: e.target.value });
-  };
-  const onChangeApoc = (e) => {
-    setState({ ...state, apoc: e.target.value });
-  };
-  const onChangeAname = (e) => {
-    setState({ ...state, aname: e.target.value });
-  };
   const onChangeVpoc = (e) => {
     setState({ ...state, vpoc: e.target.value });
   };
-  const onChangeGstnum = (e) => {
-    setState({ ...state, gstnum: e.target.value });
-  };
-  const onChangeApprovalDt = (e) => {
-    setState({ ...state, approvaldt: e.target.value });
+  const onChangeAnameEmail = (e) => {
+    setState({ ...state, anameEmail: e.target.value });
   };
   const onChangeRelationshiptype = (e) => {
     setState({ ...state, relationshiptype: e.target.value });
@@ -152,41 +121,8 @@ export default function AddNewRelationshipModal(props) {
   const onChangeArranger = (e) => {
     setState({ ...state, arranger: e.target.value });
   };
-  const onChangeWebsite = (e) => {
-    setState({ ...state, website: e.target.value });
-  };
-  const onChangePtype = (e) => {
-    setState({ ...state, ptype: e.target.value });
-  };
-  const onChangeAppRejBy = (e) => {
-    setState({ ...state, apprejby: e.target.value });
-  };
-  const onChangeDueDt = (e) => {
-    setState({ ...state, duedt: e.target.value });
-  };
-  const onChangeLimitexp = (e) => {
-    setState({ ...state, limitexp: e.target.value });
-  };
-  const onChangeRelStartDt = (e) => {
-    setState({ ...state, relstartdt: e.target.value });
-  };
-  const onChangeApprovallimit = (e) => {
-    setState({ ...state, approvallimit: e.target.value });
-  };
-  const onChangeArrName = (e) => {
-    setState({ ...state, arrname: e.target.value });
-  };
-  const onChangeCibilFile = (e) => {
-    setState({ ...state, invurl: e.target.value });
-  };
-  const onChangePancardFile = (e) => {
-    setState({ ...state, invurl: e.target.value });
-  };
-  const onChangeLoandecFile = (e) => {
-    setState({ ...state, invurl: e.target.value });
-  };
-  const onChangeStatementFile = (e) => {
-    setState({ ...state, invurl: e.target.value });
+  const onChangeRiskscore = (e) => {
+    setState({ ...state, riskscore: e.target.value });
   };
 
   const handleViewOnly = () => {
@@ -204,36 +140,30 @@ export default function AddNewRelationshipModal(props) {
     } else {
       var joined = state.approvalInvoice.concat({
         tid: state.tid,
-        vname: state.vname,
+        vnameEmail: state.vnameEmail,
+        anameEmail: state.anameEmail,
         status: state.status,
         relationshiptype: state.relationshiptype,
+        vpoc: state.vpoc,
+        apoc: state.apoc,
+        aapprover: state.aapprover,
+        yrsofrel: state.yrsofrel,
         arranger: state.arranger,
-        website: state.website,
-        ptype: state.ptype,
-        apprejby: state.apprejby,
-        duedt: state.duedt,
-        limitexp: state.limitexp,
-        relstartdt: state.relstartdt,
-        approvallimit: state.approvallimit,
-        arrname: 'Arranger1',
-        invurl: state.invurl,
+        riskscore: state.riskscore
       });
       setState({
         approvalInvoice: joined,
         tid: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-        vname: '',
+        vnameEmail: '',
+        anameEmail: '',
+        riskscore: '',
         status: '',
         relationshiptype: '',
+        vpoc: '',
+        apoc: '',
+        aapprover: '',
         arranger: '',
-        website: '',
-        ptype: '',
-        apprejby: '',
-        duedt: '',
-        limitexp: '',
-        relstartdt: '',
-        approvallimit: '',
-        arrname: '',
-        invurl: '',
+        yrsofrel: '',
         open: false,
         viewOnly: false,
       });
@@ -266,21 +196,6 @@ export default function AddNewRelationshipModal(props) {
     <div className="mp"> 
     <div className="addInvPage">
       <h3 className="addInvPageTitle">Seller Buyer Relationship</h3>
-      <Grid container spacing={2}>
-        <Grid item md={10}></Grid>
-        <Grid item md={2}>
-          <Button variant="contained" className={classes.buttonMargin}>
-            SAVE
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.buttonMargin}
-          >
-            SAVE AND CLOSE
-          </Button>
-        </Grid>
-      </Grid>
       <div className="addInvPageWrapper">
         <Dialog
           open={state.open}
@@ -317,11 +232,11 @@ export default function AddNewRelationshipModal(props) {
             <AccordionDetails>
               <Grid container spacing={3}>
                 <Grid item md={12}>
-                  <form className="addInvForm" onSubmit={handleSubmit} disabled>
+                  <form className="addInvForm" >
                     <Grid container spacing={3}>
-                      <Grid item md={6}>
+                      <Grid item xs={6}>
                         <div className="addInvItem">
-                          <label>Tracking ID</label>
+                          <label>Relationship ID</label>
                           <input
                             type="text"
                             name="tid"
@@ -333,18 +248,18 @@ export default function AddNewRelationshipModal(props) {
                       </Grid>
                       <Grid item md={6}>
                         <div className="addInvItem">
-                          <label>Buyer Name</label>
+                          <label>Vendor Name</label>
                           <select
                             className="addInvInput"
-                            name="vname"
-                            onChange={onChangeVname}
+                            name="vnameEmail"
+                            onChange={onChangeVnameEmail}
                             required
-                            value={state.vname}
+                            value={state.vnameEmail}
                           >
                             <option value="">--Select--</option>
-                            {listUsers && listUsers.filter(user => user.tcapRelation === "anchor").map((user)=>{
+                            {listUsers && listUsers.filter(user => user.tcapRelation === "vendor").map((user)=>{
                               return(
-                                <option value={user.organisationName}>{user.organisationName}</option>
+                                <option value={user.email}>{user.organisationName}</option>
                               )
                             })}
                           </select>
@@ -352,18 +267,18 @@ export default function AddNewRelationshipModal(props) {
                       </Grid>
                       <Grid item md={6}>
                         <div className="addInvItem">
-                          <label>Seller Name</label>
+                          <label>Anchor Name</label>
                           <select
                             className="addInvInput"
-                            name="aname"
-                            onChange={onChangeVname}
+                            name="anameEmail"
+                            onChange={onChangeAnameEmail}
                             required
-                            value={state.aname}
+                            value={state.anameEmail}
                           >
                             <option value="">--Select--</option>
-                            {listUsers && listUsers.filter(user => user.tcapRelation === "vendor").map((user)=>{
+                            {listUsers && listUsers.filter(user => user.tcapRelation === "anchor").map((user)=>{
                               return(
-                                <option value={user.organisationName}>{user.organisationName}</option>
+                                <option value={user.email}>{user.organisationName}</option>
                               )
                             })}
                           </select>
@@ -387,7 +302,7 @@ export default function AddNewRelationshipModal(props) {
                           </select>
                         </div>
                       </Grid>
-                      <Grid item md={6}>
+                      <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Relationship Type</label>
                           <select
@@ -398,38 +313,10 @@ export default function AddNewRelationshipModal(props) {
                             value={state.relationshiptype}
                           >
                             <option value="">--Select--</option>
-                            <option value="Buyer1">Seller</option>
-                            <option value="Buyer2">Buyer</option>
-                            <option value="Buyer3">Seller/Buyer</option>
+                            <option value="Vendor">Vendor</option>
+                            <option value="Anchor">Anchor</option>
+                            <option value="Vendor/Anchor">Vendor/Anchor</option>
                           </select>
-                        </div>
-                      </Grid>
-
-                      <Grid item md={6}>
-                        <div className="addInvItem">
-                          <label>Relationship start date</label>
-                          <input
-                            type="date"
-                            className="addInvInput"
-                            name="relstartdt"
-                            onChange={onChangeRelStartDt}
-                            required
-                            value={state.relstartdt}
-                          />
-                        </div>
-                      </Grid>
-                      <Grid item md={6}>
-                        <div className="addInvItem">
-                          <label>First Published</label>
-                          <input
-                            type="text"
-                            name="firstpublished"
-                            className="addInvInput"
-                            // onChange={onChangeAname}
-                            required
-                            disabled
-                            value={state.firstpublished}
-                          />
                         </div>
                       </Grid>
                       <Grid item md={6}>
@@ -439,10 +326,22 @@ export default function AddNewRelationshipModal(props) {
                             type="number"
                             name="firstpublished"
                             className="addInvInput"
-                            // onChange={onChangeAname}
+                            onChange={onChangeyrsofrel}
                             required
-                            disabled
                             value={state.yrsofrel}
+                          />
+                        </div>
+                      </Grid>
+                      <Grid item md={6}>
+                        <div className="addInvItem">
+                          <label>Credit Risk Score</label>
+                          <input
+                            type="text"
+                            name="riskscore"
+                            className="addInvInput"
+                            onChange={onChangeRiskscore}
+                            required
+                            value={state.riskscore}
                           />
                         </div>
                       </Grid>
@@ -466,7 +365,7 @@ export default function AddNewRelationshipModal(props) {
               <Grid container spacing={3}>
                 <Grid item md={6}>
                   <div className="addInvItem">
-                    <label>Buyer POC</label>
+                    <label>Vendor POC</label>
                     <input
                       type="text"
                       name="vpoc"
@@ -479,7 +378,7 @@ export default function AddNewRelationshipModal(props) {
                 </Grid>
                 <Grid item md={6}>
                   <div className="addInvItem">
-                    <label>Seller POC</label>
+                    <label>Anchor POC</label>
                     <input
                       type="text"
                       name="vpoc"
@@ -492,7 +391,7 @@ export default function AddNewRelationshipModal(props) {
                 </Grid>
                 <Grid item md={6}>
                   <div className="addInvItem">
-                    <label>Seller Approver</label>
+                    <label>Anchor Approver</label>
                     <input
                       type="text"
                       name="aapprover"
@@ -519,48 +418,10 @@ export default function AddNewRelationshipModal(props) {
               </Grid>
             </AccordionDetails>
           </Accordion>
-          <Accordion color="primary">
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="Buyer-details"
-              id="Buyer-details"
-            >
-              <Grid container md={12}>
-                <Grid item md={11}>
-                  <Typography mt={4} className={classes.heading}>
-                    Buyer DETAILS
-                  </Typography>
-                </Grid>
-                <Grid item md={1}>
-                  <Button variant="text">
-                    <Link to="/onboardentity">ADD NEW</Link>
-                  </Button>
-                </Grid>
-              </Grid>
-
-              {/* <Button variant="contained"> LOOKUP</Button> */}
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className={classes.root}>
+          <div className={classes.root}>
                 <Grid container spacing={3}>
-                  <Grid item md={12}>
-                    <FormControl className={classes.formControl}>
-                      <InputLabel id="demo-simple-select-label">
-                        Select Buyer
-                      </InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={state.vname}
-                        onChange={handleChange}
-                      >
-                        <MenuItem value={'Buyer1'}>Buyer 1</MenuItem>
-                        <MenuItem value={'Buyer2'}>Buyer 2</MenuItem>
-                        <MenuItem value={'Buyer3'}>Buyer 3</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  <Grid item md={12}>
+                  <Grid item xs={12}></Grid>
+                  <Grid item xs={12}>
                     <Paper className={classes.paper}>
                       <div>
                         {state.approvalInvoice.length > 0 ? (
@@ -568,25 +429,28 @@ export default function AddNewRelationshipModal(props) {
                             <tbody>
                               <tr>
                                 <td>
-                                  <thead>Tracking ID:</thead>
+                                  <thead>Relationship ID</thead>
                                 </td>
                                 <td>
-                                  <thead>Buyer Name:</thead>
+                                  <thead>Vendor Name</thead>
                                 </td>
                                 <td>
-                                  <thead>Product Type:</thead>
+                                  <thead>Anchor Name</thead>
                                 </td>
                                 <td>
-                                  <thead>Inv Date:</thead>
+                                  <thead>Status</thead>
                                 </td>
                                 <td>
-                                  <thead>Invoice Amt:</thead>
+                                  <thead>Credit Risk Score</thead>
                                 </td>
                                 <td>
-                                  <thead>Interest Rate:</thead>
+                                  <thead>Arranger</thead>
                                 </td>
                                 <td>
-                                  <thead>Action</thead>
+                                  <thead>Vendor POC</thead>
+                                </td>
+                                <td>
+                                  <thead>Anchor POC</thead>
                                 </td>
                               </tr>
 
@@ -594,14 +458,24 @@ export default function AddNewRelationshipModal(props) {
                                 state.approvalInvoice.map((invoice, index) => {
                                   return (
                                     <tr key={index}>
-                                      <td>{invoice.tid}</td>
-                                      <td>{invoice.vname}</td>
-                                      <td>{invoice.ptype}</td>
-                                      <td>{invoice.invdt}</td>
-                                      <td>{invoice.invamt}</td>
-                                      <td>{invoice.irate}</td>
+                                      <td align="center">{invoice.tid}</td>
+                                      {listUsers && listUsers.filter(user => user.email === invoice.vnameEmail).map((user)=>{
+                                        return(
+                                          <td>{user.organisationName}</td>
+                                        )
+                                      })}
+                                      {listUsers && listUsers.filter(user => user.email === invoice.anameEmail).map((user)=>{
+                                        return(
+                                          <td>{user.organisationName}</td>
+                                        )
+                                      })}
+                                      <td>{invoice.status}</td>
+                                      <td>{invoice.riskscore}</td>
+                                      <td>{invoice.arranger}</td>
+                                      <td>{invoice.vpoc}</td>
+                                      <td>{invoice.apoc}</td>
                                       <td>
-                                        <Button>Approve</Button>
+                                        <Button variant="danger">Approve</Button>
                                       </td>
                                     </tr>
                                   );
@@ -616,171 +490,6 @@ export default function AddNewRelationshipModal(props) {
                   </Grid>
                 </Grid>
               </div>
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="risknapproval"
-              id="risknapproval"
-            >
-              <Typography className={classes.heading}>
-                RISK SCORING & APPROVAL
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container spacing={3}>
-                <Grid item md={6}>
-                  <div className="addInvItem">
-                    <label>Credit Risk Score</label>
-                    <input
-                      type="number"
-                      name="riskscore"
-                      className="addInvInput"
-                      onChange={onChangeRiskscore}
-                      required
-                      value={state.riskscore}
-                    />
-                  </div>
-                </Grid>
-                <Grid item md={6}>
-                  <div className="addInvItem">
-                    <label>Credit Risk Manager</label>
-                    <input
-                      type="text"
-                      name="riskmanager"
-                      className="addInvInput"
-                      onChange={onChangeRiskManager}
-                      required
-                      value={state.riskmanager}
-                    />
-                  </div>
-                </Grid>
-
-                <Grid item md={6}>
-                  <div className="addInvItem">
-                    <label>Approval date</label>
-                    <input
-                      type="date"
-                      className="addInvInput"
-                      name="approvaldt"
-                      onChange={onChangeApprovalDt}
-                      required
-                      value={state.approvaldt}
-                    />
-                  </div>
-                </Grid>
-                <Grid item md={6}>
-                  <div className="addInvItem">
-                    <label>Approved/Rejected By</label>
-                    <select
-                      className="addInvInput"
-                      name="apprejby"
-                      onChange={onChangeAppRejBy}
-                      required
-                      value={state.apprejby}
-                    >
-                      <option value="">--Select--</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                    </select>
-                  </div>
-                </Grid>
-
-                <Grid item md={6}>
-                  <div className="addInvItem">
-                    <label>Approval/Rejection Comments</label>
-                    <input
-                      type="text"
-                      name="apprejcomments"
-                      className="addInvInput"
-                      onChange={onChangeApprejcomments}
-                      required
-                      value={state.apprejcomments}
-                    />
-                  </div>
-                </Grid>
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion color="primary">
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="uploaded-invoices"
-              id="uploaded-invoices"
-            >
-              <Typography className={classes.heading}>
-                UPLOADED INVOICES
-              </Typography>
-              <Button variant="text">
-                <Link to="/onboardentity"></Link>
-              </Button>
-              {/* <Button variant="contained"> LOOKUP</Button> */}
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className={classes.root}>
-                <Grid container spacing={3}>
-                  <Grid item md={12}></Grid>
-                  <Grid item md={12}>
-                    <Paper className={classes.paper}>
-                      <div>
-                        {state.approvalInvoice.length > 0 ? (
-                          <table>
-                            <tbody>
-                              <tr>
-                                <td>
-                                  <thead>Tracking ID:</thead>
-                                </td>
-                                <td>
-                                  <thead>Buyer Name:</thead>
-                                </td>
-                                <td>
-                                  <thead>Product Type:</thead>
-                                </td>
-                                <td>
-                                  <thead>Inv Date:</thead>
-                                </td>
-                                <td>
-                                  <thead>Invoice Amt:</thead>
-                                </td>
-                                <td>
-                                  <thead>Interest Rate:</thead>
-                                </td>
-                                <td>
-                                  <thead>Action</thead>
-                                </td>
-                              </tr>
-
-                              {state.approvalInvoice.length > 0 &&
-                                state.approvalInvoice.map((invoice, index) => {
-                                  return (
-                                    <tr key={index}>
-                                      <td>{invoice.tid}</td>
-                                      <td>{invoice.vname}</td>
-                                      <td>{invoice.ptype}</td>
-                                      <td>{invoice.invdt}</td>
-                                      <td>{invoice.invamt}</td>
-                                      <td>{invoice.irate}</td>
-                                      <td>
-                                        <Button>Approve</Button>
-                                      </td>
-                                    </tr>
-                                  );
-                                })}
-                            </tbody>
-                          </table>
-                        ) : (
-                          <div>No Records Found</div>
-                        )}
-                      </div>
-                    </Paper>
-                  </Grid>
-                </Grid>
-              </div>
-            </AccordionDetails>
-          </Accordion>
         </div>
 
         {/* <h3 className="addInvSectionTitle">Approval Section</h3>
@@ -838,7 +547,7 @@ export default function AddNewRelationshipModal(props) {
       </div>
       </Modal.Body>
         <Modal.Footer>
-          <Button className="Add" type='submit'>Add</Button>
+          <Button className="Add" onClick={handleSubmit} type='submit'>Add</Button>
       </Modal.Footer>
     </Modal>
   );
