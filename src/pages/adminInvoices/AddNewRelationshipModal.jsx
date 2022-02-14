@@ -16,6 +16,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { companyApiProvider } from 'services/api/company/companyService';
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
+import { useHistory } from "react-router-dom";
 import Typography from '@material-ui/core/Typography';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -69,6 +70,8 @@ export default function AddNewRelationshipModal(props) {
   const classes = useStyles();
   const [entity, setEntity] = useState('');
   const [listUsers, setListUsers] = useState(null);
+  const history = useHistory();
+  const [view, setView] = useState(history.location.pathname);
 
   const handleChange = (event) => {
     setEntity(event.target.value);
@@ -77,15 +80,15 @@ export default function AddNewRelationshipModal(props) {
   let initObj = {
     approvalInvoice: [],
     tid: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-    vnameEmail: '',
-    anameEmail: '',
+    vendorEmail: '',
+    anchorEmail: '',
     status: '',
-    relationshiptype: '',
-    yrsofrel: '',
-    apoc: '',
-    vpoc: '',
-    arranger: '',
-    aapprover: '',
+    relationship: '',
+    relationshipYears: '',
+    anchorContact: '',
+    vendorContact: '',
+    arrangerEmail: '',
+    anchorApproverEmail: '',
     open: false,
     viewOnly: false,
   };
@@ -94,32 +97,32 @@ export default function AddNewRelationshipModal(props) {
   // onChangeTid(e) {
   //   this.setState({ tid: e.target.value });
   // }
-  const onChangeVnameEmail = (e) => {
-    setState({ ...state, vnameEmail: e.target.value });
+  const onChangeVendorEmail = (e) => {
+    setState({ ...state, vendorEmail: e.target.value });
   };
   const onChangeStatus = (e) => {
     setState({ ...state, status: e.target.value });
   };
-  const onChangeApoc = (e) => {
-    setState({ ...state, apoc: e.target.value });
+  const onChangeAnchorContact = (e) => {
+    setState({ ...state, anchorContact: e.target.value });
   };
-  const onChangeyrsofrel = (e) => {
-    setState({ ...state, yrsofrel: e.target.value });
+  const onChangeRelationshipYears = (e) => {
+    setState({ ...state, relationshipYears: e.target.value });
   };
-  const onChangeAapprover = (e) => {
-    setState({ ...state, aapprover: e.target.value });
+  const onChangeAnchorApproverEmail = (e) => {
+    setState({ ...state, anchorApproverEmail: e.target.value });
   };
-  const onChangeVpoc = (e) => {
-    setState({ ...state, vpoc: e.target.value });
+  const onChangeVendorContact = (e) => {
+    setState({ ...state, vendorContact: e.target.value });
   };
-  const onChangeAnameEmail = (e) => {
-    setState({ ...state, anameEmail: e.target.value });
+  const onChangeAnchorEmail = (e) => {
+    setState({ ...state, anchorEmail: e.target.value });
   };
-  const onChangeRelationshiptype = (e) => {
-    setState({ ...state, relationshiptype: e.target.value });
+  const onChangeRelationship = (e) => {
+    setState({ ...state, relationship: e.target.value });
   };
-  const onChangeArranger = (e) => {
-    setState({ ...state, arranger: e.target.value });
+  const onChangeArrangerEmail = (e) => {
+    setState({ ...state, arrangerEmail: e.target.value });
   };
   const onChangeRiskscore = (e) => {
     setState({ ...state, riskscore: e.target.value });
@@ -130,45 +133,67 @@ export default function AddNewRelationshipModal(props) {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert('are you sure you want to send for approval?');
     setState({ ...state, open: true });
     console.log(e.target.value);
   };
+  const tid = Math.floor(Math.random() * (999 - 100 + 1) + 100);
   const onHandleClose = (e) => {
     if (e.target.firstChild.data == 'No') {
       setState({ ...state, open: false });
     } else {
       var joined = state.approvalInvoice.concat({
-        tid: state.tid,
-        vnameEmail: state.vnameEmail,
-        anameEmail: state.anameEmail,
+        vendorEmail: state.vendorEmail,
+        anchorEmail: state.anchorEmail,
+        relationship: state.relationship,
         status: state.status,
-        relationshiptype: state.relationshiptype,
-        vpoc: state.vpoc,
-        apoc: state.apoc,
-        aapprover: state.aapprover,
-        yrsofrel: state.yrsofrel,
-        arranger: state.arranger,
-        riskscore: state.riskscore
+        relationshipYears: state.relationshipYears,
+        vendorContact: state.vendorContact,
+        anchorContact: state.anchorContact,
+        anchorApproverEmail: state.anchorApproverEmail,
+        arrangerEmail: state.arrangerEmail,
+        // riskscore: state.riskscore
       });
       setState({
         approvalInvoice: joined,
-        tid: Math.floor(Math.random() * (999 - 100 + 1) + 100),
-        vnameEmail: '',
-        anameEmail: '',
-        riskscore: '',
+        vendorEmail: '',
+        anchorEmail: '',
+        // riskscore: '',
         status: '',
-        relationshiptype: '',
-        vpoc: '',
-        apoc: '',
-        aapprover: '',
-        arranger: '',
-        yrsofrel: '',
+        relationship: '',
+        vendorContact: '',
+        anchorContact: '',
+        anchorApproverEmail: '',
+        arrangerEmail: '',
+        relationshipYears: '',
         open: false,
         viewOnly: false,
       });
     }
   };
+  const onClickDone = () => {
+    history.push('/');
+  }
+  const createRelationship = async (event) =>{
+    const id = event.target.id;
+    const anchoreEmailVerify = await companyApiProvider.verifyEmail(state.approvalInvoice[id].anchorEmail);
+    const vendoreEmailVerify = await companyApiProvider.verifyEmail(state.approvalInvoice[id].vendorEmail);
+  console.log(anchoreEmailVerify,vendoreEmailVerify);
+    console.log(JSON.stringify(state.approvalInvoice[id]));
+  await companyApiProvider.createCompanyRelationship(state.approvalInvoice[id]).then((response) => {
+    if(response.id){
+     alert("Relationship Created!!!");
+    }
+    else
+    {
+      alert('something went wrong. please retry');
+     }
+  })
+ };
+  useEffect(() => {
+    return history.listen((location) => {
+      setView(location.pathname);
+    });
+  }, [history]);
   useEffect(async ()=>{
       const Data = await companyApiProvider.getCompanyList();
       const jData = JSON.stringify(Data);
@@ -181,6 +206,7 @@ export default function AddNewRelationshipModal(props) {
   // }
     const privKey = localStorage.getItem("privKey");
   return (
+
     <Modal
         {...props}
         size="xl"
@@ -242,7 +268,7 @@ export default function AddNewRelationshipModal(props) {
                             name="tid"
                             className="addInvInput"
                             readOnly
-                            value={state.tid}
+                            value={tid}
                           />
                         </div>
                       </Grid>
@@ -252,9 +278,9 @@ export default function AddNewRelationshipModal(props) {
                           <select
                             className="addInvInput"
                             name="vnameEmail"
-                            onChange={onChangeVnameEmail}
+                            onChange={onChangeVendorEmail}
                             required
-                            value={state.vnameEmail}
+                            value={state.vendorEmail}
                           >
                             <option value="">--Select--</option>
                             {listUsers && listUsers.filter(user => user.tcapRelation === "vendor").map((user)=>{
@@ -270,10 +296,10 @@ export default function AddNewRelationshipModal(props) {
                           <label>Anchor Name</label>
                           <select
                             className="addInvInput"
-                            name="anameEmail"
-                            onChange={onChangeAnameEmail}
+                            name="anchorEmail"
+                            onChange={onChangeAnchorEmail}
                             required
-                            value={state.anameEmail}
+                            value={state.anchorEmail}
                           >
                             <option value="">--Select--</option>
                             {listUsers && listUsers.filter(user => user.tcapRelation === "anchor").map((user)=>{
@@ -308,9 +334,9 @@ export default function AddNewRelationshipModal(props) {
                           <select
                             className="addInvInput"
                             name="relationshiptype"
-                            onChange={onChangeRelationshiptype}
+                            onChange={onChangeRelationship}
                             required
-                            value={state.relationshiptype}
+                            value={state.relationship}
                           >
                             <option value="">--Select--</option>
                             <option value="Vendor">Vendor</option>
@@ -326,13 +352,13 @@ export default function AddNewRelationshipModal(props) {
                             type="number"
                             name="firstpublished"
                             className="addInvInput"
-                            onChange={onChangeyrsofrel}
+                            onChange={onChangeRelationshipYears}
                             required
-                            value={state.yrsofrel}
+                            value={state.relationshipYears}
                           />
                         </div>
                       </Grid>
-                      <Grid item md={6}>
+                      {/* <Grid item md={6}>
                         <div className="addInvItem">
                           <label>Credit Risk Score</label>
                           <input
@@ -344,7 +370,7 @@ export default function AddNewRelationshipModal(props) {
                             value={state.riskscore}
                           />
                         </div>
-                      </Grid>
+                      </Grid> */}
                     </Grid>
                   </form>
                 </Grid>
@@ -368,11 +394,11 @@ export default function AddNewRelationshipModal(props) {
                     <label>Vendor POC</label>
                     <input
                       type="text"
-                      name="vpoc"
+                      name="vendorContact"
                       className="addInvInput"
-                      onChange={onChangeVpoc}
+                      onChange={onChangeVendorContact}
                       required
-                      value={state.vpoc}
+                      value={state.vendorContact}
                     />
                   </div>
                 </Grid>
@@ -381,39 +407,47 @@ export default function AddNewRelationshipModal(props) {
                     <label>Anchor POC</label>
                     <input
                       type="text"
-                      name="vpoc"
+                      name="anchorContact"
                       className="addInvInput"
-                      onChange={onChangeApoc}
+                      onChange={onChangeAnchorContact}
                       required
-                      value={state.apoc}
+                      value={state.anchorContact}
                     />
                   </div>
                 </Grid>
                 <Grid item md={6}>
                   <div className="addInvItem">
-                    <label>Anchor Approver</label>
+                    <label>Anchor Approver Email</label>
                     <input
                       type="text"
                       name="aapprover"
                       className="addInvInput"
-                      onChange={onChangeAapprover}
+                      onChange={onChangeAnchorApproverEmail}
                       required
-                      value={state.aapprover}
+                      value={state.anchorApproverEmail}
                     />
                   </div>
                 </Grid>
                 <Grid item md={6}>
-                  <div className="addInvItem">
-                    <label>Arranger</label>
-                    <input
-                      type="text"
-                      name="arranger"
-                      className="addInvInput"
-                      onChange={onChangeArranger}
-                      required
-                      value={state.arranger}
-                    />
-                  </div>
+                  <Grid item md={6}>
+                    <div className="addInvItem">
+                      <label>Arranger Email</label>
+                          <select
+                            className="addInvInput"
+                            name="arrangerEmial"
+                            onChange={onChangeArrangerEmail}
+                            required
+                            value={state.arrangerEmail}
+                          >
+                            <option value="">--Select--</option>
+                            {listUsers && listUsers.filter(user => user.tcapRelation === "arranger").map((user)=>{
+                              return(
+                                <option value={user.email}>{user.email}</option>
+                              )
+                            })}
+                          </select>
+                        </div>
+                      </Grid>
                 </Grid>
               </Grid>
             </AccordionDetails>
@@ -440,9 +474,9 @@ export default function AddNewRelationshipModal(props) {
                                 <td>
                                   <thead>Status</thead>
                                 </td>
-                                <td>
+                                {/* <td>
                                   <thead>Credit Risk Score</thead>
-                                </td>
+                                </td> */}
                                 <td>
                                   <thead>Arranger</thead>
                                 </td>
@@ -458,24 +492,24 @@ export default function AddNewRelationshipModal(props) {
                                 state.approvalInvoice.map((invoice, index) => {
                                   return (
                                     <tr key={index}>
-                                      <td align="center">{invoice.tid}</td>
-                                      {listUsers && listUsers.filter(user => user.email === invoice.vnameEmail).map((user)=>{
+                                      <td align="center">{tid}</td>
+                                      {listUsers && listUsers.filter(user => user.email === invoice.vendorEmail).map((user)=>{
                                         return(
                                           <td>{user.organisationName}</td>
                                         )
                                       })}
-                                      {listUsers && listUsers.filter(user => user.email === invoice.anameEmail).map((user)=>{
+                                      {listUsers && listUsers.filter(user => user.email === invoice.anchorEmail).map((user)=>{
                                         return(
                                           <td>{user.organisationName}</td>
                                         )
                                       })}
                                       <td>{invoice.status}</td>
-                                      <td>{invoice.riskscore}</td>
-                                      <td>{invoice.arranger}</td>
-                                      <td>{invoice.vpoc}</td>
-                                      <td>{invoice.apoc}</td>
+                                      {/* <td>{invoice.riskscore}</td> */}
+                                      <td>{invoice.arrangerEmail}</td>
+                                      <td>{invoice.vendorContact}</td>
+                                      <td>{invoice.anchorContact}</td>
                                       <td>
-                                        <Button variant="danger">Approve</Button>
+                                        <Button id={index} onClick={createRelationship} variant="danger">Approve</Button>
                                       </td>
                                     </tr>
                                   );
@@ -548,6 +582,7 @@ export default function AddNewRelationshipModal(props) {
       </Modal.Body>
         <Modal.Footer>
           <Button className="Add" onClick={handleSubmit} type='submit'>Add</Button>
+          <Button className="Done" onClick={onClickDone} type='submit'>Done</Button>
       </Modal.Footer>
     </Modal>
   );
