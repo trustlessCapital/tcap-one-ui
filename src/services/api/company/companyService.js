@@ -74,8 +74,6 @@ const submitCompany = (companyData) => {
 
 const createCompanyRelationship = (companyData) => {
   console.log("headers", headers);
-  companyData.vendorContact = `+${companyData.vendorContact}`;
-  companyData.anchorContact = `+${companyData.anchorContact}`;
   return fetch(`${BASE_URL}/v1/cr`, {
     ...requestOptions,
     headers: {
