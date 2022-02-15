@@ -14,7 +14,6 @@ const clientToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMwMTUwYzNmLT
 
 const headers = {
   'Content-Type': 'application/json',
-  Authorization: 'Bearer ' + clientToken,
 };
 
 var requestOptions = {
@@ -74,6 +73,7 @@ const submitCompany = (companyData) => {
 };
 
 const createCompanyRelationship = (companyData) => {
+  console.log("headers", headers);
   companyData.vendorContact = `+${companyData.vendorContact}`;
   companyData.anchorContact = `+${companyData.anchorContact}`;
   return fetch(`${BASE_URL}/v1/cr`, {
@@ -99,8 +99,6 @@ const uploadInvoiceDetails = (invoiceDetails) => {
 };
 
 const verifyEmail = (email) => {
-  console.log('Headers', headers);
-  console.log('Email', email);
   
   return fetch(`${BASE_URL}/v1/company/email/${email}`, {
     ...requestOptions,

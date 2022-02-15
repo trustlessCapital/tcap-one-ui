@@ -85,8 +85,8 @@ export default function AddNewRelationshipModal(props) {
     status: '',
     relationship: '',
     relationshipYears: '',
-    anchorContact: '',
-    vendorContact: '',
+    anchorContact: '+91',
+    vendorContact: '+91',
     arrangerEmail: '',
     anchorApproverEmail: '',
     open: false,
@@ -160,8 +160,8 @@ export default function AddNewRelationshipModal(props) {
         // riskscore: '',
         status: '',
         relationship: '',
-        vendorContact: '',
-        anchorContact: '',
+        vendorContact: '+91',
+        anchorContact: '+91',
         anchorApproverEmail: '',
         arrangerEmail: '',
         relationshipYears: '',
@@ -177,9 +177,10 @@ export default function AddNewRelationshipModal(props) {
     const id = event.target.id;
     const anchoreEmailVerify = await companyApiProvider.verifyEmail(state.approvalInvoice[id].anchorEmail);
     const vendoreEmailVerify = await companyApiProvider.verifyEmail(state.approvalInvoice[id].vendorEmail);
-  console.log(anchoreEmailVerify,vendoreEmailVerify);
-    console.log(JSON.stringify(state.approvalInvoice[id]));
+
+    console.log('Request', JSON.stringify(state.approvalInvoice[id]));
   await companyApiProvider.createCompanyRelationship(state.approvalInvoice[id]).then((response) => {
+    console.log('Response', JSON.stringify(response));
     if(response.id){
      alert("Relationship Created!!!");
     }
@@ -325,6 +326,7 @@ export default function AddNewRelationshipModal(props) {
                             <option value="draft">Draft</option>
                             <option value="notactive">Not Active</option>
                             <option value="uapproval">Under approval</option>
+                            <option value="pending">Pending</option>
                           </select>
                         </div>
                       </Grid>
@@ -339,9 +341,9 @@ export default function AddNewRelationshipModal(props) {
                             value={state.relationship}
                           >
                             <option value="">--Select--</option>
-                            <option value="Vendor">Vendor</option>
-                            <option value="Anchor">Anchor</option>
-                            <option value="Vendor/Anchor">Vendor/Anchor</option>
+                            <option value="vendor">Vendor</option>
+                            <option value="anchor">Anchor</option>
+                            <option value="arranger">Arranger</option>
                           </select>
                         </div>
                       </Grid>
