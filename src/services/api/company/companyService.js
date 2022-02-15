@@ -14,8 +14,9 @@ const clientToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMwMTUwYzNmLTQ1MWMtNDUzMC1hMjQ4LWUxNGQwNTdkMzBjOCIsImVtYWlsIjoicGFydGhkYWxhbDA2QGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiKzkxNzAzMDIwNzg5NyIsInN0YXR1cyI6ImFjdGl2ZSIsImlzUGhvbmVWZXJpZmllZCI6ZmFsc2UsImlzRW1haWxWZXJpZmllZCI6dHJ1ZSwiaXNNbmVtb25pY0NyZWF0ZWQiOmZhbHNlLCJpc0FjY291bnRVbmxvY2tlZCI6ZmFsc2UsImxhc3RMb2dpbkF0IjoiMjAyMS0xMC0xNVQxNTo1NDozNy4wMDBaIiwid2FsbGV0QWRkcmVzcyI6bnVsbCwicHJpdmF0ZUtleUFkZHJlc3MiOm51bGwsImZ1dHVyZUFkZHJlc3MiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMTVUMTU6NTQ6MzYuODQxWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMTVUMTY6Mzc6NTEuMDAwWiIsInVzZXJUeXBlIjoiaW52ZXN0b3IiLCJpYXQiOjE2MzQ4ODYyMjl9.A-6AdTd6IgZcZom0i2PuoBxIjBBVt5_eNsq8Zc4CNcE";
 
 const headers = {
-  "Content-Type": "application/json",
-  Authorization: "Bearer " + clientToken,
+
+  'Content-Type': 'application/json',
+
 };
 
 var requestOptions = {
@@ -89,8 +90,7 @@ const addNewUser = (userData) => {
 };
 
 const createCompanyRelationship = (companyData) => {
-  companyData.vendorContact = `+${companyData.vendorContact}`;
-  companyData.anchorContact = `+${companyData.anchorContact}`;
+  console.log("headers", headers);
   return fetch(`${BASE_URL}/v1/cr`, {
     ...requestOptions,
     headers: {
@@ -114,9 +114,7 @@ const uploadInvoiceDetails = (invoiceDetails) => {
 };
 
 const verifyEmail = (email) => {
-  console.log("Headers", headers);
-  console.log("Email", email);
-
+  
   return fetch(`${BASE_URL}/v1/company/email/${email}`, {
     ...requestOptions,
     method: "GET",

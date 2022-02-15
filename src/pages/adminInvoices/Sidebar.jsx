@@ -21,25 +21,28 @@ const Sidebar = () => {
 
         <CDBSidebarContent className="sidebar-content">
           <CDBSidebarMenu>
-            <NavLink exact to="/" activeClassName="activeClicked">
+            <NavLink style={{textDecoration : "none"}} exact to="/" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="columns">Dashboard</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/AdminManageUsers" activeClassName="activeClicked">
+            <NavLink style={{textDecoration : "none"}} exact to="/AdminManageUsers" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="columns">Manage Users</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/AdminManageEntity" activeClassName="activeClicked">
+            <NavLink style={{textDecoration : "none"}} exact to="/AdminManageEntity" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="table">Manage Entity</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/AdminPendingApprovals" activeClassName="activeClicked">
+            <NavLink style={{textDecoration : "none"}} exact to="/AdminManageRelationships" activeClassName="activeClicked">
+              <CDBSidebarMenuItem className="items" icon="user">Manage Relationships</CDBSidebarMenuItem>
+            </NavLink>
+            <NavLink style={{textDecoration : "none"}} exact to="/AdminPendingApprovals" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="user">Pending Approvals</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/AdminAllDeals" activeClassName="activeClicked">
+            <NavLink style={{textDecoration : "none"}} exact to="/AdminAllDeals" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="chart-line">All Deals</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/AdminActiveDeals" activeClassName="activeClicked">
+            <NavLink style={{textDecoration : "none"}} exact to="/AdminActiveDeals" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="chart-line">Active Deals</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/AdminCompletedDeals" activeClassName="activeClicked">
+            <NavLink style={{textDecoration : "none"}} exact to="/AdminCompletedDeals" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="chart-line">Completed Deals</CDBSidebarMenuItem>
             </NavLink>
             

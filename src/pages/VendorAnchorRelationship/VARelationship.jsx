@@ -683,65 +683,7 @@ export default function VARelationship() {
               {/* <Button variant="contained"> LOOKUP</Button> */}
             </AccordionSummary>
             <AccordionDetails>
-              <div className={classes.root}>
-                <Grid container spacing={3}>
-                  <Grid item xs={12}></Grid>
-                  <Grid item xs={12}>
-                    <Paper className={classes.paper}>
-                      <div>
-                        {state.approvalInvoice.length > 0 ? (
-                          <table>
-                            <tbody>
-                              <tr>
-                                <td>
-                                  <thead>Tracking ID:</thead>
-                                </td>
-                                <td>
-                                  <thead>Buyer Name:</thead>
-                                </td>
-                                <td>
-                                  <thead>Product Type:</thead>
-                                </td>
-                                <td>
-                                  <thead>Inv Date:</thead>
-                                </td>
-                                <td>
-                                  <thead>Invoice Amt:</thead>
-                                </td>
-                                <td>
-                                  <thead>Interest Rate:</thead>
-                                </td>
-                                <td>
-                                  <thead>Action</thead>
-                                </td>
-                              </tr>
-
-                              {state.approvalInvoice.length > 0 &&
-                                state.approvalInvoice.map((invoice, index) => {
-                                  return (
-                                    <tr key={index}>
-                                      <td>{invoice.tid}</td>
-                                      <td>{invoice.vname}</td>
-                                      <td>{invoice.ptype}</td>
-                                      <td>{invoice.invdt}</td>
-                                      <td>{invoice.invamt}</td>
-                                      <td>{invoice.irate}</td>
-                                      <td>
-                                        <Button>Approve</Button>
-                                      </td>
-                                    </tr>
-                                  );
-                                })}
-                            </tbody>
-                          </table>
-                        ) : (
-                          <div>No Records Found</div>
-                        )}
-                      </div>
-                    </Paper>
-                  </Grid>
-                </Grid>
-              </div>
+              
             </AccordionDetails>
           </Accordion>
         </div>
