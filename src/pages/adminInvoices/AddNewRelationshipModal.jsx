@@ -11,10 +11,13 @@ import Dialog from '@material-ui/core/Dialog';
 import Modal from "react-bootstrap/Modal";
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import 'react-phone-number-input/style.css'
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { companyApiProvider } from 'services/api/company/companyService';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types'
+import { getCountries, getCountryCallingCode } from 'react-phone-number-input'
 import Button from 'react-bootstrap/Button';
 import { useHistory } from "react-router-dom";
 import Typography from '@material-ui/core/Typography';
@@ -35,6 +38,8 @@ import Grid from '@material-ui/core/Grid';
 import Sidebar from './Sidebar';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import PhoneInput from 'react-phone-number-input/input'
+import en from 'react-phone-number-input/locale/en.json'
 import Container from "react-bootstrap/Container"
 
 const useStyles = makeStyles((theme) => ({
@@ -65,6 +70,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const CountrySelect = ({ value, onChange, labels, ...rest }) => (
+  <select
+    {...rest}
+    value={value}
+    onChange={event => onChange(event.target.value || undefined)}>
+    <option value="">
+      {labels['ZZ']}
+    </option>
+    {getCountries().map((country) => (
+      <option key={country} value={country}>
+        {labels[country]} +{getCountryCallingCode(country)}
+      </option>
+    ))}
+  </select>
+)
+
+CountrySelect.propTypes = {
+  value: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+  labels: PropTypes.objectOf(PropTypes.string).isRequired
+}
+
 export default function AddNewRelationshipModal(props) {
   // userData;
   const classes = useStyles();
@@ -72,6 +99,10 @@ export default function AddNewRelationshipModal(props) {
   const [listUsers, setListUsers] = useState(null);
   const history = useHistory();
   const [view, setView] = useState(history.location.pathname);
+  const [anchorCountry, setAnchorCountry] = useState('IN')
+  const [vendorCountry, setVendorCountry] = useState('IN')
+  const [valueVendor, setValueVendor] = useState();
+  const [valueAnchor, setValueAnchor] = useState();
 
   const handleChange = (event) => {
     setEntity(event.target.value);
@@ -79,14 +110,14 @@ export default function AddNewRelationshipModal(props) {
 
   let initObj = {
     approvalInvoice: [],
-    tid: Math.floor(Math.random() * (999 - 100 + 1) + 100),
+    tid : '',
     vendorEmail: '',
     anchorEmail: '',
     status: '',
     relationship: '',
     relationshipYears: '',
-    anchorContact: '+91',
-    vendorContact: '+91',
+    anchorContact: '',
+    vendorContact: '',
     arrangerEmail: '',
     anchorApproverEmail: '',
     open: false,
@@ -136,7 +167,7 @@ export default function AddNewRelationshipModal(props) {
     setState({ ...state, open: true });
     console.log(e.target.value);
   };
-  const tid = Math.floor(Math.random() * (999 - 100 + 1) + 100);
+ 
   const onHandleClose = (e) => {
     if (e.target.firstChild.data == 'No') {
       setState({ ...state, open: false });
@@ -147,21 +178,24 @@ export default function AddNewRelationshipModal(props) {
         relationship: state.relationship,
         status: state.status,
         relationshipYears: state.relationshipYears,
-        vendorContact: state.vendorContact,
-        anchorContact: state.anchorContact,
+        vendorContact: valueVendor,
+        anchorContact: valueAnchor,
         anchorApproverEmail: state.anchorApproverEmail,
         arrangerEmail: state.arrangerEmail,
         // riskscore: state.riskscore
       });
+      setValueAnchor('');
+      setValueVendor('');
       setState({
         approvalInvoice: joined,
+        tid :  Math.floor(Math.random() * (999 - 100 + 1) + 100),
         vendorEmail: '',
         anchorEmail: '',
         // riskscore: '',
         status: '',
         relationship: '',
-        vendorContact: '+91',
-        anchorContact: '+91',
+        vendorContact: '',
+        anchorContact: '',
         anchorApproverEmail: '',
         arrangerEmail: '',
         relationshipYears: '',
@@ -269,7 +303,7 @@ export default function AddNewRelationshipModal(props) {
                             name="tid"
                             className="addInvInput"
                             readOnly
-                            value={tid}
+                            value={state.tid}
                           />
                         </div>
                       </Grid>
@@ -323,9 +357,11 @@ export default function AddNewRelationshipModal(props) {
                           >
                             <option value="">--Select--</option>
                             <option value="active">Active</option>
-                            <option value="draft">Draft</option>
-                            <option value="notactive">Not Active</option>
-                            <option value="uapproval">Under approval</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="open">Open</option>
+                            <option value="close">Close</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
                             <option value="pending">Pending</option>
                           </select>
                         </div>
@@ -394,27 +430,29 @@ export default function AddNewRelationshipModal(props) {
                 <Grid item md={6}>
                   <div className="addInvItem">
                     <label>Vendor POC</label>
-                    <input
-                      type="text"
+                    <CountrySelect
+                      labels={en}
+                      value={vendorCountry}
+                      onChange={setVendorCountry}/>
+                    <PhoneInput
+                      country={vendorCountry}
                       name="vendorContact"
-                      className="addInvInput"
-                      onChange={onChangeVendorContact}
-                      required
-                      value={state.vendorContact}
-                    />
+                      value={valueVendor}
+                      onChange={setValueVendor}/>
                   </div>
                 </Grid>
                 <Grid item md={6}>
                   <div className="addInvItem">
                     <label>Anchor POC</label>
-                    <input
-                      type="text"
+                    <CountrySelect
+                      labels={en}
+                      value={anchorCountry}
+                      onChange={setAnchorCountry}/>
+                    <PhoneInput
+                      country={anchorCountry}
                       name="anchorContact"
-                      className="addInvInput"
-                      onChange={onChangeAnchorContact}
-                      required
-                      value={state.anchorContact}
-                    />
+                      value={valueAnchor}
+                      onChange={setValueAnchor}/>
                   </div>
                 </Grid>
                 <Grid item md={6}>
@@ -494,7 +532,7 @@ export default function AddNewRelationshipModal(props) {
                                 state.approvalInvoice.map((invoice, index) => {
                                   return (
                                     <tr key={index}>
-                                      <td align="center">{tid}</td>
+                                      <td align="center">{state.tid}</td>
                                       {listUsers && listUsers.filter(user => user.email === invoice.vendorEmail).map((user)=>{
                                         return(
                                           <td>{user.organisationName}</td>
@@ -519,7 +557,7 @@ export default function AddNewRelationshipModal(props) {
                             </tbody>
                           </table>
                         ) : (
-                          <div>No Records Found</div>
+                          <div>No Records Added</div>
                         )}
                       </div>
                     </Paper>
