@@ -1,6 +1,6 @@
 //company api's
 // import axios from 'axios'; // may be used in future
-import { handleResponse, handleError } from 'services/api/utlities/response';
+import { handleResponse, handleError } from "services/api/utlities/response";
 
 // Define your api url from any source.
 // Pulling from your .env file when on the server or from localhost when locally
@@ -10,15 +10,18 @@ console.log(BASE_URL);
 //   window.localStorage.getItem('utoken') ||
 //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMwMTUwYzNmLTQ1MWMtNDUzMC1hMjQ4LWUxNGQwNTdkMzBjOCIsImVtYWlsIjoicGFydGhkYWxhbDA2QGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiKzkxNzAzMDIwNzg5NyIsInN0YXR1cyI6ImFjdGl2ZSIsImlzUGhvbmVWZXJpZmllZCI6ZmFsc2UsImlzRW1haWxWZXJpZmllZCI6dHJ1ZSwiaXNNbmVtb25pY0NyZWF0ZWQiOmZhbHNlLCJpc0FjY291bnRVbmxvY2tlZCI6ZmFsc2UsImxhc3RMb2dpbkF0IjoiMjAyMS0xMC0xNVQxNTo1NDozNy4wMDBaIiwid2FsbGV0QWRkcmVzcyI6bnVsbCwicHJpdmF0ZUtleUFkZHJlc3MiOm51bGwsImZ1dHVyZUFkZHJlc3MiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMTVUMTU6NTQ6MzYuODQxWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMTVUMTY6Mzc6NTEuMDAwWiIsInVzZXJUeXBlIjoiaW52ZXN0b3IiLCJpYXQiOjE2MzQ4ODYyMjl9.A-6AdTd6IgZcZom0i2PuoBxIjBBVt5_eNsq8Zc4CNcE';
 
-const clientToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMwMTUwYzNmLTQ1MWMtNDUzMC1hMjQ4LWUxNGQwNTdkMzBjOCIsImVtYWlsIjoicGFydGhkYWxhbDA2QGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiKzkxNzAzMDIwNzg5NyIsInN0YXR1cyI6ImFjdGl2ZSIsImlzUGhvbmVWZXJpZmllZCI6ZmFsc2UsImlzRW1haWxWZXJpZmllZCI6dHJ1ZSwiaXNNbmVtb25pY0NyZWF0ZWQiOmZhbHNlLCJpc0FjY291bnRVbmxvY2tlZCI6ZmFsc2UsImxhc3RMb2dpbkF0IjoiMjAyMS0xMC0xNVQxNTo1NDozNy4wMDBaIiwid2FsbGV0QWRkcmVzcyI6bnVsbCwicHJpdmF0ZUtleUFkZHJlc3MiOm51bGwsImZ1dHVyZUFkZHJlc3MiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMTVUMTU6NTQ6MzYuODQxWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMTVUMTY6Mzc6NTEuMDAwWiIsInVzZXJUeXBlIjoiaW52ZXN0b3IiLCJpYXQiOjE2MzQ4ODYyMjl9.A-6AdTd6IgZcZom0i2PuoBxIjBBVt5_eNsq8Zc4CNcE';
+const clientToken =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMwMTUwYzNmLTQ1MWMtNDUzMC1hMjQ4LWUxNGQwNTdkMzBjOCIsImVtYWlsIjoicGFydGhkYWxhbDA2QGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiKzkxNzAzMDIwNzg5NyIsInN0YXR1cyI6ImFjdGl2ZSIsImlzUGhvbmVWZXJpZmllZCI6ZmFsc2UsImlzRW1haWxWZXJpZmllZCI6dHJ1ZSwiaXNNbmVtb25pY0NyZWF0ZWQiOmZhbHNlLCJpc0FjY291bnRVbmxvY2tlZCI6ZmFsc2UsImxhc3RMb2dpbkF0IjoiMjAyMS0xMC0xNVQxNTo1NDozNy4wMDBaIiwid2FsbGV0QWRkcmVzcyI6bnVsbCwicHJpdmF0ZUtleUFkZHJlc3MiOm51bGwsImZ1dHVyZUFkZHJlc3MiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjEtMTAtMTVUMTU6NTQ6MzYuODQxWiIsInVwZGF0ZWRBdCI6IjIwMjEtMTAtMTVUMTY6Mzc6NTEuMDAwWiIsInVzZXJUeXBlIjoiaW52ZXN0b3IiLCJpYXQiOjE2MzQ4ODYyMjl9.A-6AdTd6IgZcZom0i2PuoBxIjBBVt5_eNsq8Zc4CNcE";
 
 const headers = {
+
   'Content-Type': 'application/json',
+
 };
 
 var requestOptions = {
-  method: 'POST',
-  redirect: 'follow',
+  method: "POST",
+  redirect: "follow",
 };
 
 /** @param {object} signupData */
@@ -59,6 +62,7 @@ const verifyOTP = (signupData) => {
     .then(handleResponse)
     .catch(handleError);
 };
+
 const submitCompany = (companyData) => {
   companyData.phoneNumber = `+${companyData.phoneNumber}`;
   return fetch(`${BASE_URL}/v1/company`, {
@@ -67,6 +71,19 @@ const submitCompany = (companyData) => {
       ...headers,
     },
     body: JSON.stringify(companyData),
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+const addNewUser = (userData) => {
+  userData.phoneNumber = `+${userData.phoneNumber}`;
+  return fetch(`${BASE_URL}/api/user/add`, {
+    ...requestOptions,
+    headers: {
+      ...headers,
+    },
+    body: JSON.stringify(userData),
   })
     .then(handleResponse)
     .catch(handleError);
@@ -100,7 +117,7 @@ const verifyEmail = (email) => {
   
   return fetch(`${BASE_URL}/v1/company/email/${email}`, {
     ...requestOptions,
-    method: 'GET',
+    method: "GET",
     headers: {
       ...headers,
     },
@@ -109,12 +126,10 @@ const verifyEmail = (email) => {
     .catch(handleError);
 };
 
-
-
 const getCompanyList = (email) => {
   return fetch(`${BASE_URL}/v1/company/all`, {
     ...requestOptions, ////v1/cr/vendor/:email
-    method: 'GET',
+    method: "GET",
     headers: {
       ...headers,
     },
@@ -125,7 +140,7 @@ const getCompanyList = (email) => {
 const getVendorRelationships = (email) => {
   return fetch(`${BASE_URL}/v1/cr/vendor/${email}`, {
     ...requestOptions,
-    method: 'GET',
+    method: "GET",
     headers: {
       ...headers,
     },
@@ -136,7 +151,7 @@ const getVendorRelationships = (email) => {
 const getAnchorRelationships = (email) => {
   return fetch(`${BASE_URL}/v1/cr/anchor/${email}`, {
     ...requestOptions,
-    method: 'GET',
+    method: "GET",
     headers: {
       ...headers,
     },
@@ -147,7 +162,7 @@ const getAnchorRelationships = (email) => {
 const getVendorInvoices = (vendorId) => {
   return fetch(`${BASE_URL}/v1/invoice/vendor/${vendorId}`, {
     ...requestOptions,
-    method: 'GET',
+    method: "GET",
     headers: {
       ...headers,
     },
@@ -159,7 +174,7 @@ const getVendorInvoices = (vendorId) => {
 const getInvoiceEvidence = (invoiceEvidenceId) => {
   return fetch(`${BASE_URL}/document/evidence/${invoiceEvidenceId}`, {
     ...requestOptions,
-    method: 'GET',
+    method: "GET",
     headers: {
       ...headers,
     },
@@ -171,7 +186,7 @@ const getInvoiceEvidence = (invoiceEvidenceId) => {
 const getAllInvoices = () => {
   return fetch(`${BASE_URL}/v1/invoice/all`, {
     ...requestOptions,
-    method: 'GET',
+    method: "GET",
     headers: {
       ...headers,
     },
@@ -194,7 +209,7 @@ const addToMarketplace = (invoiceData) => {
 const verifyInvoice = (invoiceData) => {
   return fetch(`${BASE_URL}/v1/invoice/verify`, {
     ...requestOptions,
-    method: 'PUT',
+    method: "PUT",
     headers: {
       ...headers,
     },
@@ -204,11 +219,11 @@ const verifyInvoice = (invoiceData) => {
     .catch(handleError);
 };
 const getInvestorBalance = (
-  walletAddress = '0xfE0839635FF2e05F99Fd6b0938120dA22Da1FA0C'
+  walletAddress = "0xfE0839635FF2e05F99Fd6b0938120dA22Da1FA0C"
 ) => {
   return fetch(`${BASE_URL}/v1/mp/balances/${walletAddress}`, {
     ...requestOptions,
-    method: 'GET',
+    method: "GET",
     headers: {
       ...headers,
     },
@@ -217,11 +232,11 @@ const getInvestorBalance = (
     .catch(handleError);
 };
 const getInvestmentHistory = (
-  walletAddress = '0xfE0839635FF2e05F99Fd6b0938120dA22Da1FA0C'
+  walletAddress = "0xfE0839635FF2e05F99Fd6b0938120dA22Da1FA0C"
 ) => {
   return fetch(`${BASE_URL}/v1/mp/investments/${walletAddress}`, {
     ...requestOptions,
-    method: 'GET',
+    method: "GET",
     headers: {
       ...headers,
     },
@@ -243,7 +258,7 @@ const investMoney = (investData) => {
 const getAllDeals = () => {
   return fetch(`${BASE_URL}/v1/mp/open/deals`, {
     ...requestOptions,
-    method: 'GET',
+    method: "GET",
     headers: {
       ...headers,
     },
@@ -271,5 +286,6 @@ export const companyApiProvider = {
   getAllDeals,
   getInvoiceEvidence,
   verifyInvoice,
-  getInvestmentHistory
+  getInvestmentHistory,
+  addNewUser,
 };

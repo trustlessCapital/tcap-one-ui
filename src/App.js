@@ -34,25 +34,25 @@ import AdminManageRelationships from "pages/adminInvoices/AdminManageRelationshi
 import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
 import validator from 'validator';
 import OpenLogin from "@toruslabs/openlogin";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
-import Link from '@material-ui/core/Link';
-import { MDBInput } from 'mdb-react-ui-kit';
-import { makeStyles } from '@material-ui/core/styles';
+import Link from "@material-ui/core/Link";
+import { MDBInput } from "mdb-react-ui-kit";
+import { makeStyles } from "@material-ui/core/styles";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Avatar from '@material-ui/core/Avatar';
+import Avatar from "@material-ui/core/Avatar";
 // import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import CssBaseline from "@material-ui/core/CssBaseline";
 // import TextField from '@material-ui/core/TextField';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import PropTypes from 'prop-types';
-import 'react-phone-input-2/lib/bootstrap.css'
-import { userApiProvider } from 'services/api/user/userService';
-import useFetch from "react-fetch-hook"
-import axios from "axios"
+import Box from "@material-ui/core/Box";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import PropTypes from "prop-types";
+import "react-phone-input-2/lib/bootstrap.css";
+import { userApiProvider } from "services/api/user/userService";
+import useFetch from "react-fetch-hook";
+import axios from "axios";
 
 //import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 //import { Home } from "@material-ui/icons";
@@ -71,56 +71,53 @@ const theme = createTheme({
 const VERIFIER = [
   {
     loginProvider: "google",
-    id : "0"
+    id: "0",
   },
   {
     loginProvider: "facebook",
-    id : "1"
-  }
-]
+    id: "1",
+  },
+];
 
 function Copyright() {
-    return (
-      <Typography variant="body2" color="textSecondary" align="center">
-        {'Copyright © '}
-        <Link color="inherit" href="https://www.trustless.capital/">
-          TCAP
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-    );
-  }
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {"Copyright © "}
+      <Link color="inherit" href="https://www.trustless.capital/">
+        TCAP
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
 
 const useStyles = makeStyles((theme) => ({
-    paper: {
-      marginTop: theme.spacing(8),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-      width: '100%', // Fix IE 11 issue.
-      marginTop: theme.spacing(1),
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-  }));
-
-
-
+  paper: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
 
 const App = () => {
   const [token, setToken] = useState(null);
-  const [emailVerify,setEmailVerify] = useState(null);
+  const [emailVerify, setEmailVerify] = useState(null);
   const classes = useStyles();
   const [isLoading, setLoading] = useState(true);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [formIsValid, setFormIsValid] = useState(false);
   const [openlogin, setOpenLogin] = useState();
   const [privKey, setPrivKey] = useState(null);
@@ -128,32 +125,34 @@ const App = () => {
   const [webAuth, setwebAuth] = useState(false);
   const [userDataDetails, setUserDetails] = useState([]);
 
+  localStorage.setItem("privKey", privKey);
 
-  localStorage.setItem('privKey', privKey);
-  
-  var loginObject ={
+  var loginObject = {
     loginProvider: "google",
-    clientId: "BDEZMlXEtCPU0_sfOO22To8ZnFS8ppSJs_yBNBxiMWhdAmPJSUk4jlCI3ykKBHO2cl1iDEu_M6UDVFAqALmZPto",
-    redirectUrl: "http://localhost:7005/"
-  }
+    clientId:
+      "BDEZMlXEtCPU0_sfOO22To8ZnFS8ppSJs_yBNBxiMWhdAmPJSUk4jlCI3ykKBHO2cl1iDEu_M6UDVFAqALmZPto",
+    redirectUrl: "http://localhost:7005/",
+  };
 
   useEffect(() => {
-    setFormIsValid(validator.isEmail(email))
+    setFormIsValid(validator.isEmail(email));
   }, [email]);
-  console.log('token', token);
+  console.log("token", token);
 
-  const tokenset = async () =>{
+  const tokenset = async () => {
     const Email = localStorage.getItem("email");
     const url = `https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/${Email}`;
     const response = await fetch(url);
     const userData = await response.json();
-    localStorage.setItem('userData', userData);
+    localStorage.setItem("userData", userData);
     console.log(userData);
     if (userData && userData.email.trim().length) {
-      if(userData?.userType!='investor'){
-        const userDataDetails= await companyApiProvider.verifyEmail(userData?.email);
+      if (userData?.userType != "investor") {
+        const userDataDetails = await companyApiProvider.verifyEmail(
+          userData?.email
+        );
       }
-    await setUserDetails(userDataDetails);
+      await setUserDetails(userDataDetails);
       if (userData.hasOwnProperty("email")) {
         // setToken({
         //   user: userData.email,
@@ -164,34 +163,41 @@ const App = () => {
         // });
         setToken({
           user: userData.email,
-          type: userData?.userType=='investor' ? 'investor': userDataDetails.tcapRelation,
+          type:
+            userData?.userType == "investor"
+              ? "investor"
+              : userDataDetails.tcapRelation,
           userType: userData?.userType,
           privKey: privKey,
-          userId:userData.id,
-          walletAddress:userData?.walletAddress || null
+          userId: userData.id,
+          walletAddress: userData?.walletAddress || null,
         });
       }
       // if(userData.userType!='investor'){var verifiedEmail = await companyApiProvider.verifyEmail(userData.email)
       //  setEmailVerify(verifiedEmail);
       //  console.log(emailVerify)}
-      if(userData.userType!='investor'){var verifiedEmail = await companyApiProvider.verifyEmail(userData.email)
-       setEmailVerify(verifiedEmail);
-       console.log(emailVerify)}
-  }}
+      if (userData.userType != "investor") {
+        var verifiedEmail = await companyApiProvider.verifyEmail(
+          userData.email
+        );
+        setEmailVerify(verifiedEmail);
+        console.log(emailVerify);
+      }
+    }
+  };
 
-  if(privKey && !token){
-    tokenset(); 
+  if (privKey && !token) {
+    tokenset();
   }
 
   const onMount = async () => {
-
     setLoading(true);
     try {
       const openlogin = new OpenLogin({
         clientId: loginObject.clientId,
         network: "mainnet", // valid values (testnet or mainnet)
       });
-      
+
       setOpenLogin(openlogin);
 
       await openlogin.init();
@@ -202,7 +208,6 @@ const App = () => {
   };
 
   const onLoginEmail = async (event) => {
-
     localStorage.setItem("email", email);
     if (isLoading || privKey || !openlogin) return;
 
@@ -214,42 +219,33 @@ const App = () => {
         },
         loginProvider: "email_passwordless",
         redirectUrl: "http://localhost:7005/",
-    });
+      });
 
-    setPrivKey(openlogin.privKey);
-
+      setPrivKey(openlogin.privKey);
     } finally {
       setLoading(false);
     }
   };
 
-  const onLogout = async () =>{
-
+  const onLogout = async () => {
     if (isLoading || !openlogin) return;
-    
+
     setLoading(true);
-      try {
-        await openlogin.logout();
-        setPrivKey(null);
-      } finally {
-        setLoading(false);
-      }
-    };
+    try {
+      await openlogin.logout();
+      setPrivKey(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    
-
- 
   useEffect(() => {
-    
     onMount();
-    
-  
   }, []);
-
 
   const history = useHistory();
   console.log("history", history);
-  
+
   // useEffect(async() => {
   //   let userData = localStorage.getItem("userData") || null;
   //   if(!userData){
@@ -286,142 +282,165 @@ const App = () => {
   //      console.log(emailVerify)}
   //   }
   // }, []);
-  
 
   const logout = () => {
     setToken(null);
     onLogout();
     // history.push('/signup');
-  };  
+  };
 
-  if(isLoading) return <div className="central">Loading...</div>;
-  
+  if (isLoading) return <div className="central">Loading...</div>;
 
-  return (token ?
+  return token ? (
     <Router>
       <ThemeProvider theme={theme}>
-        {token && <Topbar token={token} logout = {logout} verified={emailVerify} userData={token}/>}
+        {token && (
+          <Topbar
+            token={token}
+            logout={logout}
+            verified={emailVerify}
+            userData={token}
+          />
+        )}
         <Container fluid>
           {/* <Sidebar token={token}/> */}
           <div className="pageContents">
             <div className="pagesWrapper">
               {/* <Quicklinks/> */}
               <AnimatePresence>
-              <Switch>
-               
-                <Route exact path="/">
-                  <Dashboard verified={emailVerify} userData={token}/>
-                </Route>
-                <Route exact path="/admin">
-                  <Admin />
-                </Route>
-                <Route path="/addinvoices">
-                  <AddInvoice verified={emailVerify} userData={token}/>
-                </Route>
-                 <Route path="/onboardentity">
-                  <OnboardNewEntity verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/adminonboardentity">
-                  <OnboardNewEntity verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/varelationship">
-                  <VARelationship verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/entitylist">
-                  <EntityList verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/myinvestments">
-                  <MyInvestments verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/marketplace">
-                  <Marketplace verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/msmeapprove">
-                  <MsmeApprove verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/anchorapprove">
-                  <AnchorApprove verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/buyer">
-                  <Buyer verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/seller">
-                  <Seller verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/arranger">
-                  <Arranger verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/investor">
-                  <Investor verified={emailVerify} userData={token}/>
-                </Route>
-                <motion.div exit={{ opacity: 0.1 }}>
-                <Route path="/MyDraftInvoicesVendor">
-                  <MyDraftInvoicesVendor verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/CompletedDealsVendor">
-                  <CompletedDealsVendor verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/AdminManageUsers">
-                  <AdminManageUsers verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/AdminManageEntity">
-                  <AdminManageEntity verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/AdminPendingApprovals">
-                  <AdminPendingApprovals verified={emailVerify} userData={token}/>
-                </Route>
-                <Route path="/AdminManageRelationships">
-                  <AdminManageRelationships verified={emailVerify} userData={token}/>
-                </Route>
-                </motion.div>
-                <Route path="/signup">
-                  <Signup setToken={setToken} />
-                </Route>
-              </Switch>
+                <Switch>
+                  <Route exact path="/">
+                    <Dashboard verified={emailVerify} userData={token} />
+                  </Route>
+                  <Route exact path="/admin">
+                    <Admin />
+                  </Route>
+                  <Route path="/addinvoices">
+                    <AddInvoice verified={emailVerify} userData={token} />
+                  </Route>
+                  <Route path="/onboardentity">
+                    <OnboardNewEntity verified={emailVerify} userData={token} />
+                  </Route>
+                  <Route path="/adminonboardentity">
+                    <OnboardNewEntity verified={emailVerify} userData={token} />
+                  </Route>
+                  <Route path="/varelationship">
+                    <VARelationship verified={emailVerify} userData={token} />
+                  </Route>
+                  <Route path="/entitylist">
+                    <EntityList verified={emailVerify} userData={token} />
+                  </Route>
+                  <Route path="/myinvestments">
+                    <MyInvestments verified={emailVerify} userData={token} />
+                  </Route>
+                  <Route path="/marketplace">
+                    <Marketplace verified={emailVerify} userData={token} />
+                  </Route>
+                  <Route path="/msmeapprove">
+                    <MsmeApprove verified={emailVerify} userData={token} />
+                  </Route>
+                  <Route path="/anchorapprove">
+                    <AnchorApprove verified={emailVerify} userData={token} />
+                  </Route>
+                  <Route path="/buyer">
+                    <Buyer verified={emailVerify} userData={token} />
+                  </Route>
+                  <Route path="/seller">
+                    <Seller verified={emailVerify} userData={token} />
+                  </Route>
+                  <Route path="/arranger">
+                    <Arranger verified={emailVerify} userData={token} />
+                  </Route>
+                  <Route path="/investor">
+                    <Investor verified={emailVerify} userData={token} />
+                  </Route>
+                  <motion.div exit={{ opacity: 0.1 }}>
+                    <Route path="/MyDraftInvoicesVendor">
+                      <MyDraftInvoicesVendor
+                        verified={emailVerify}
+                        userData={token}
+                      />
+                    </Route>
+                    <Route path="/CompletedDealsVendor">
+                      <CompletedDealsVendor
+                        verified={emailVerify}
+                        userData={token}
+                      />
+                    </Route>
+                    <Route path="/AdminManageUsers">
+                      <AdminManageUsers
+                        verified={emailVerify}
+                        userData={token}
+                      />
+                    </Route>
+                    <Route path="/AdminManageEntity">
+                      <AdminManageEntity
+                        verified={emailVerify}
+                        userData={token}
+                      />
+                    </Route>
+                    <Route path="/AdminPendingApprovals">
+                      <AdminPendingApprovals
+                        verified={emailVerify}
+                        userData={token}
+                      />
+                    </Route>
+                    <Route path="/AdminManageRelationships">
+                      <AdminManageRelationships
+                        verified={emailVerify} 
+                        userData={token}
+                      />
+                    </Route>
+                  </motion.div>
+                  <Route path="/signup">
+                    <Signup setToken={setToken} />
+                  </Route>
+                </Switch>
               </AnimatePresence>
             </div>
           </div>
         </Container>
       </ThemeProvider>
     </Router>
-      : <div className="central">
-      <Container fluid >
-      <Row>
-      <Col sm={4}></Col>
-      <Col sm = {4}>
-      <CssBaseline />
-      <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-          TCAP ONE
-          </Typography>
-      <form className={classes.form} noValidate>
-      <MDBInput 
-          label='Email Address'
-          id='typeEmail'
-          type='email'
-          size='lg'
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-      />
-      <Button className="loginbutton"
-          disabled={!formIsValid}
-          variant="dark"
-          onClick={onLoginEmail}
-      >
-          Login
-      </Button>
-      </form>
-      </div>
-      <Box mt={8}>
-      <Copyright />
-    </Box>
-    </Col>
-    </Row>
-    </Container>
-    </div> 
+  ) : (
+    <div className="central">
+      <Container fluid>
+        <Row>
+          <Col sm={4}></Col>
+          <Col sm={4}>
+            <CssBaseline />
+            <div className={classes.paper}>
+              <Avatar className={classes.avatar}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                TCAP ONE
+              </Typography>
+              <form className={classes.form} noValidate>
+                <MDBInput
+                  label="Email Address"
+                  id="typeEmail"
+                  type="email"
+                  size="lg"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                />
+                <Button
+                  className="loginbutton"
+                  disabled={!formIsValid}
+                  variant="dark"
+                  onClick={onLoginEmail}>
+                  Login
+                </Button>
+              </form>
+            </div>
+            <Box mt={8}>
+              <Copyright />
+            </Box>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 
