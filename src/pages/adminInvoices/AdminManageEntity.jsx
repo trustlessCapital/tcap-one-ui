@@ -25,12 +25,13 @@ import AddNewEntityModal from './AddNewEntityModal';
 export default function AdminManageUsers(props) {
   const [modalShow, setModalShow] = useState(false);
   const [companyList, setCompanyList] = useState([]);
+  const [rowData, setRowData] = useState(null);
   const privKey = localStorage.getItem("privKey");
     
   const handleRowClick= async (event)=>{
       const id = event.target.id;
       console.log(event.target);
-      setRowData(companyRelationship[id]);
+      setRowData(companyList[id]);
       setModalShow(true);
   }
   const handleHide = async (event)=>{
@@ -80,13 +81,13 @@ export default function AdminManageUsers(props) {
                                         <tbody>
                                         {companyList.length>0 && companyList.map((item, index) => {
                                                 return(
-                                            <tr>
-                                                <td className="mpTd currencyRight">{item.companyId.charCodeAt(0)}</td>
-                                                <td className="mpTd currencyRight">{item.organisationName}</td>
-                                                <td className="mpTd currencyRight">{item.tcapRelation}</td>
-                                                <td className="mpTd currencyRight">{item.email}</td>
-                                                <td className="mpTd currencyRight">{item.adminName}</td>
-                                                <td className="mpTd currencyRight">{item.type}</td>
+                                            <tr onClick={handleRowClick}>
+                                                <td id={index} className="mpTd currencyRight">{item.companyId.charCodeAt(0)}</td>
+                                                <td id={index} className="mpTd currencyRight">{item.organisationName}</td>
+                                                <td id={index} className="mpTd currencyRight">{item.tcapRelation}</td>
+                                                <td id={index} className="mpTd currencyRight">{item.email}</td>
+                                                <td id={index} className="mpTd currencyRight">{item.adminName}</td>
+                                                <td id={index} className="mpTd currencyRight">{item.type}</td>
                                                 
                                                 
                                             </tr>
