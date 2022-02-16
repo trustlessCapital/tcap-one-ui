@@ -88,7 +88,7 @@ export default function AdminManageRelationships(props) {
                                             {companyRelationship.length>0 && companyRelationship.map((item, index) => {
                                                 return(
                                                     <tr onClick={handleRowClick}>
-                                                        <td id={index} className="mpTd currencyRight">{}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.id.charCodeAt(10)}</td>
                                                         <td id={index} className="mpTd currencyRight">{item.vendorEmail}</td>
                                                         <td id={index} className="mpTd currencyRight">{item.anchorEmail}</td>
                                                         <td id={index} className="mpTd currencyRight">{item.relationship}</td>
