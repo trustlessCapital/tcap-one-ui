@@ -29,12 +29,13 @@ export default function AdminManageRelationships(props) {
   const [rowData, setRowData] = useState(null);
   const privKey = localStorage.getItem("privKey");
 
-  const handleRowClick= (event)=>{
+  const handleRowClick= async (event)=>{
       const id = event.target.id;
+      console.log(event.target);
       setRowData(companyRelationship[id]);
       setModalShow(true);
   }
-  const handleHide = (event)=>{
+  const handleHide = async (event)=>{
       setRowData(null);
       setModalShow(false);
   }
@@ -50,11 +51,11 @@ export default function AdminManageRelationships(props) {
       {props.userData?.userType == "ADMIN" && privKey && 
       <div> 
       <Button style={{backgroundColor: "#FFAFAF", color: "#FFFFFF", border:"none"}} variant="secondary" className="addnewuser" onClick={() => {setModalShow(true)}}>Add New Relationship</Button>
-        <AddNewRelationshipModal
+        {modalShow ? <AddNewRelationshipModal
           rowData={rowData}
           show={modalShow}
           onHide={handleHide}
-        />
+        /> : null}
     
 
       
@@ -86,17 +87,16 @@ export default function AdminManageRelationships(props) {
                                         <tbody>
                                             {companyRelationship.length>0 && companyRelationship.map((item, index) => {
                                                 return(
-                                                    <tr id={index} onClick={handleRowClick}>
-                                                        <td className="mpTd currencyRight">{}</td>
-                                                        <td className="mpTd currencyRight">{item.vendorEmail}</td>
-                                                        <td className="mpTd currencyRight">{item.anchorEmail}</td>
-                                                        <td className="mpTd currencyRight">{item.relationship}</td>
-                                                        <td className="mpTd currencyRight">{item.status}</td>
-                                                        <td className="mpTd currencyRight">{item.relationshipYears}</td>
-                                                        <td className="mpTd currencyRight">{item.arrangerEmail}</td>
-                                                        <td className="mpTd currencyRight">{item.vendorContact}</td>
-                                                        <td className="mpTd currencyRight">{item.anchorContact}</td>
-                                                        
+                                                    <tr onClick={handleRowClick}>
+                                                        <td id={index} className="mpTd currencyRight">{}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.vendorEmail}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.anchorEmail}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.relationship}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.status}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.relationshipYears}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.arrangerEmail}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.vendorContact}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.anchorContact}</td>
                                                         
                                                         
                                                     </tr>
