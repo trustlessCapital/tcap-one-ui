@@ -101,6 +101,21 @@ const createCompanyRelationship = (companyData) => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+
+const getCompanyRelationship = () => {
+  
+  return fetch(`${BASE_URL}/v1/cr`, {
+    ...requestOptions,
+    method: "GET",
+    headers: {
+      ...headers,
+    },
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 const uploadInvoiceDetails = (invoiceDetails) => {
   return fetch(`${BASE_URL}/v1/invoice`, {
     ...requestOptions,
@@ -274,6 +289,7 @@ export const companyApiProvider = {
   submitCompany,
   verifyEmail,
   createCompanyRelationship,
+  getCompanyRelationship,
   getCompanyList,
   uploadInvoiceDetails,
   getVendorRelationships,
