@@ -45,7 +45,9 @@ export default function AdminPendingApprovals(props) {
       setCompanyList(companyMap);      
       await setCompanyList(companyMap);
       const invoicesData = await companyApiProvider.getAllInvoices();
+      if(!invoicesData.error){
           setInvoices(invoicesData);
+      }
           console.log(invoicesData)
     },[])
     useEffect(async ()=>{
@@ -89,6 +91,7 @@ console.log(digestData)
       alert("invoice approved successfully,ready to be added to marketplace ");
     }
   }
+  console.log(" invoice",invoices);
   const privKey = localStorage.getItem("privKey");
     return (
       <div className="mp">

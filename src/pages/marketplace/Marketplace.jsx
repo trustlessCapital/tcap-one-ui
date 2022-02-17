@@ -27,10 +27,11 @@ export default function Marketplace(props) {
       // setCompanyList(companyMap);      
       // await setCompanyList(companyMap);
       const invoicesData = await companyApiProvider.getAllDeals();
+      if(!invoicesData.error)
             setInvoices(invoicesData);
           console.log(invoicesData)
     },[])
-    
+    console.log(invoices);
     return (
       <div className="mp">
         <h3 className='Head'>Welcome to Real World Asset Marketplace</h3>

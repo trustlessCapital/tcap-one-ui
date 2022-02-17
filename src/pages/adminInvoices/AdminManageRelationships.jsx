@@ -25,7 +25,7 @@ import AddNewRelationshipModal from "./AddNewRelationshipModal"
 
 export default function AdminManageRelationships(props) {
   const [modalShow, setModalShow] = useState(false);
-  const [companyRelationship, setCompanyRelationship] = useState([]);
+  const [companyRelationship, setCompanyRelationship] = useState(null);
   const [rowData, setRowData] = useState(null);
   const privKey = localStorage.getItem("privKey");
 
@@ -39,12 +39,16 @@ export default function AdminManageRelationships(props) {
       setRowData(null);
       setModalShow(false);
   }
+  console.log("Modal", companyRelationship);
   useEffect(async () => {
+      if(!companyRelationship){
       const data = await companyApiProvider.getCompanyRelationship();
       const jData = JSON.stringify(data);
       const companyData = JSON.parse(jData);
+
       setCompanyRelationship(companyData);
-  })
+      }
+  }, [companyRelationship]);
 
     return (
       <div className="mp"> 
@@ -85,7 +89,7 @@ export default function AdminManageRelationships(props) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {companyRelationship.length>0 && companyRelationship.map((item, index) => {
+                                            {companyRelationship && companyRelationship.length>0 && companyRelationship.map((item, index) => {
                                                 return(
                                                     <tr onClick={handleRowClick}>
                                                         <td id={index} className="mpTd currencyRight">{item.id.charCodeAt(10)}</td>

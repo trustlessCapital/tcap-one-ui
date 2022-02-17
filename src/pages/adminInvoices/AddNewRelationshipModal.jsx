@@ -234,12 +234,14 @@ export default function AddNewRelationshipModal(props) {
     });
   }, [history]);
   useEffect(async ()=>{
+      if(!listUsers){
       const Data = await companyApiProvider.getCompanyList();
       const jData = JSON.stringify(Data);
       const companyData = JSON.parse(jData);
       setListUsers(companyData);
       console.log("company Data", companyData);
-  },[]);
+      }
+  },[listUsers]);
   // componentWillUpdate(nextProps, nextState) {
   //   // localStorage.setItem("user", JSON.stringify(nextState));
   // }

@@ -104,7 +104,7 @@ const createCompanyRelationship = (companyData) => {
 
 
 const getCompanyRelationship = () => {
-  
+  console.log("hi");
   return fetch(`${BASE_URL}/v1/cr`, {
     ...requestOptions,
     method: "GET",
@@ -142,6 +142,7 @@ const verifyEmail = (email) => {
 };
 
 const getCompanyList = (email) => {
+  console.log(email);
   return fetch(`${BASE_URL}/v1/company/all`, {
     ...requestOptions, ////v1/cr/vendor/:email
     method: "GET",

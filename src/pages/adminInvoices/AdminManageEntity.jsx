@@ -24,7 +24,7 @@ import AddNewEntityModal from './AddNewEntityModal';
 
 export default function AdminManageUsers(props) {
   const [modalShow, setModalShow] = useState(false);
-  const [companyList, setCompanyList] = useState([]);
+  const [companyList, setCompanyList] = useState(null);
   const [rowData, setRowData] = useState(null);
   const privKey = localStorage.getItem("privKey");
     
@@ -39,11 +39,13 @@ export default function AdminManageUsers(props) {
       setModalShow(false);
   }
   useEffect(async () => {
+      if(!companyList){
       const data = await companyApiProvider.getCompanyList();
       const jData = JSON.stringify(data);
       const companyData = JSON.parse(jData);
       setCompanyList(companyData);
-  })
+      }
+  }, [companyList]);
     return (
       <div className="mp">
       {props.userData?.userType == "ADMIN" && privKey && 
@@ -79,7 +81,7 @@ export default function AdminManageUsers(props) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        {companyList.length>0 && companyList.map((item, index) => {
+                                        {companyList && companyList.length>0 && companyList.map((item, index) => {
                                                 return(
                                             <tr onClick={handleRowClick}>
                                                 <td id={index} className="mpTd currencyRight">{item.companyId.charCodeAt(0)}</td>
