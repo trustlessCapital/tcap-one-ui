@@ -24,19 +24,39 @@ import AddNewEntityModal from './AddNewEntityModal';
 
 export default function AdminManageUsers(props) {
   const [modalShow, setModalShow] = useState(false);
+  const [companyList, setCompanyList] = useState(null);
+  const [rowData, setRowData] = useState(null);
   const privKey = localStorage.getItem("privKey");
     
+  const handleRowClick= async (event)=>{
+      const id = event.target.id;
+      console.log(event.target);
+      setRowData(companyList[id]);
+      setModalShow(true);
+  }
+  const handleHide = async (event)=>{
+      setRowData(null);
+      setModalShow(false);
+  }
+  useEffect(async () => {
+      if(!companyList){
+      const data = await companyApiProvider.getCompanyList();
+      const jData = JSON.stringify(data);
+      const companyData = JSON.parse(jData);
+      setCompanyList(companyData);
+      }
+  }, [companyList]);
     return (
       <div className="mp">
       {props.userData?.userType == "ADMIN" && privKey && 
       <div>
         
       <Button style={{backgroundColor: "#FFAFAF", color: "#FFFFFF", border:"none"}} variant="secondary" className="addnewuser" onClick={() => {setModalShow(true)}}>Add New Entity</Button>
-        <AddNewEntityModal
+        {modalShow ? <AddNewEntityModal
+          rowData={rowData}
           show={modalShow}
-          onHide={() => setModalShow(false)}
-        />
-    
+          onHide={handleHide}
+        /> : null}
 
       
       <Container fluid>
@@ -56,57 +76,24 @@ export default function AdminManageUsers(props) {
                                             <th className="heads currencyRight" scope="col" align="right">Organization Name</th>
                                             <th className="heads currencyRight" scope="col" align="right">Relationship with TCAP</th>
                                             <th className="heads currencyRight" scope="col" align="right">Email Address</th>
-                                            <th className="heads currencyRight" scope="col" align="right">Email ID</th>
                                             <th className="heads currencyRight" scope="col" align="right">Admin Name</th>
                                             <th className="heads currencyRight" scope="col" align="right">Type of Company</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td className="mpTd currencyRight">12</td>
-                                                <td className="mpTd currencyRight">TCAP</td>
-                                                <td className="mpTd currencyRight">Anchor</td>
-                                                <td className="mpTd currencyRight">test1@test.com</td>
-                                                <td className="mpTd currencyRight">Edit</td>
-                                                <td className="mpTd currencyRight">Active</td>
-                                                <td className="mpTd currencyRight">xyz</td>
+                                        {companyList && companyList.length>0 && companyList.map((item, index) => {
+                                                return(
+                                            <tr onClick={handleRowClick}>
+                                                <td id={index} className="mpTd currencyRight">{item.companyId.charCodeAt(0)}</td>
+                                                <td id={index} className="mpTd currencyRight">{item.organisationName}</td>
+                                                <td id={index} className="mpTd currencyRight">{item.tcapRelation}</td>
+                                                <td id={index} className="mpTd currencyRight">{item.email}</td>
+                                                <td id={index} className="mpTd currencyRight">{item.adminName}</td>
+                                                <td id={index} className="mpTd currencyRight">{item.type}</td>
                                                 
                                                 
                                             </tr>
-
-                                            <tr>
-                                                <td className="mpTd currencyRight">18</td>
-                                                <td className="mpTd currencyRight">Console Freight</td>
-                                                <td className="mpTd currencyRight">Arranger</td>
-                                                <td className="mpTd currencyRight">test2@test.com</td>
-                                                <td className="mpTd currencyRight">Edit</td>
-                                                <td className="mpTd currencyRight">Locked</td>
-                                                <td className="mpTd currencyRight">abc</td>
-                                                
-                                            </tr>
-
-
-                                            <tr>
-                                                <td className="mpTd currencyRight">15</td>
-                                                <td className="mpTd currencyRight">Swiggy</td>
-                                                <td className="mpTd currencyRight">Vendor</td>
-                                                <td className="mpTd currencyRight">test3@test.com</td>
-                                                <td className="mpTd currencyRight">Edit</td>
-                                                <td className="mpTd currencyRight">Inactive</td>
-                                                <td className="mpTd currencyRight">ity</td>
-                                                
-                                            </tr>
-
-                                            <tr>
-                                                <td className="mpTd currencyRight">13</td>
-                                                <td className="mpTd currencyRight">Infosys</td>
-                                                <td className="mpTd currencyRight">Anchor</td>
-                                                <td className="mpTd currencyRight">test3@test.com</td>
-                                                <td className="mpTd currencyRight">Edit</td>
-                                                <td className="mpTd currencyRight">Active</td>
-                                                <td className="mpTd currencyRight">zxc</td>
-                                                
-                                            </tr>
+                                        )})}
                                             
                                         </tbody>
                                         </table>

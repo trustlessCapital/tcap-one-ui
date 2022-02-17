@@ -101,29 +101,33 @@ export default function AddNewRelationshipModal(props) {
   const [view, setView] = useState(history.location.pathname);
   const [anchorCountry, setAnchorCountry] = useState('IN')
   const [vendorCountry, setVendorCountry] = useState('IN')
-  const [valueVendor, setValueVendor] = useState();
-  const [valueAnchor, setValueAnchor] = useState();
+  
 
   const handleChange = (event) => {
     setEntity(event.target.value);
   };
-
-  let initObj = {
+  
+  const data = props.rowData;
+  const initObj = {
     approvalInvoice: [],
     tid : '',
-    vendorEmail: '',
-    anchorEmail: '',
-    status: '',
-    relationship: '',
-    relationshipYears: '',
-    anchorContact: '',
-    vendorContact: '',
-    arrangerEmail: '',
-    anchorApproverEmail: '',
+    vendorEmail: data?.vendorEmail,
+    anchorEmail: data?.anchorEmail,
+    status: data?.status,
+    relationship: data?.relationship,
+    relationshipYears: data?.relationshipYears,
+    anchorContact: data?.anchorContact,
+    vendorContact: data?.vendorContact,
+    arrangerEmail: data?.arrangerEmail,
+    anchorApproverEmail: data?.anchorApproverEmail,
     open: false,
     viewOnly: false,
   };
+  
   const [state, setState] = useState(initObj);
+  const [valueVendor, setValueVendor] = useState(data?.vendorContact);
+  const [valueAnchor, setValueAnchor] = useState(data?.anchorContact);
+
   // Form Events
   // onChangeTid(e) {
   //   this.setState({ tid: e.target.value });
@@ -230,12 +234,14 @@ export default function AddNewRelationshipModal(props) {
     });
   }, [history]);
   useEffect(async ()=>{
+      if(!listUsers){
       const Data = await companyApiProvider.getCompanyList();
       const jData = JSON.stringify(Data);
       const companyData = JSON.parse(jData);
       setListUsers(companyData);
       console.log("company Data", companyData);
-  },[]);
+      }
+  },[listUsers]);
   // componentWillUpdate(nextProps, nextState) {
   //   // localStorage.setItem("user", JSON.stringify(nextState));
   // }

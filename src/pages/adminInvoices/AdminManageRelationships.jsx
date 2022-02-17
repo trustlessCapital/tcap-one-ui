@@ -25,17 +25,41 @@ import AddNewRelationshipModal from "./AddNewRelationshipModal"
 
 export default function AdminManageRelationships(props) {
   const [modalShow, setModalShow] = useState(false);
+  const [companyRelationship, setCompanyRelationship] = useState(null);
+  const [rowData, setRowData] = useState(null);
   const privKey = localStorage.getItem("privKey");
+
+  const handleRowClick= async (event)=>{
+      const id = event.target.id;
+      console.log(event.target);
+      setRowData(companyRelationship[id]);
+      setModalShow(true);
+  }
+  const handleHide = async (event)=>{
+      setRowData(null);
+      setModalShow(false);
+  }
+  console.log("Modal", companyRelationship);
+  useEffect(async () => {
+      if(!companyRelationship){
+      const data = await companyApiProvider.getCompanyRelationship();
+      const jData = JSON.stringify(data);
+      const companyData = JSON.parse(jData);
+
+      setCompanyRelationship(companyData);
+      }
+  }, [companyRelationship]);
 
     return (
       <div className="mp"> 
       {props.userData?.userType == "ADMIN" && privKey && 
       <div> 
       <Button style={{backgroundColor: "#FFAFAF", color: "#FFFFFF", border:"none"}} variant="secondary" className="addnewuser" onClick={() => {setModalShow(true)}}>Add New Relationship</Button>
-        <AddNewRelationshipModal
+        {modalShow ? <AddNewRelationshipModal
+          rowData={rowData}
           show={modalShow}
-          onHide={() => setModalShow(false)}
-        />
+          onHide={handleHide}
+        /> : null}
     
 
       
@@ -55,8 +79,9 @@ export default function AdminManageRelationships(props) {
                                             <th className="heads currencyRight" scope="col">Relationship ID</th>
                                             <th className="heads currencyRight" scope="col" align="right">Vendor Name</th>
                                             <th className="heads currencyRight" scope="col" align="right">Anchor Name</th>
+                                            <th className="heads currencyRight" scope="col" align="right">Relationship</th>
                                             <th className="heads currencyRight" scope="col" align="right">Status</th>
-                                            <th className="heads currencyRight" scope="col" align="right">Credit Risk Score</th>
+                                            <th className="heads currencyRight" scope="col" align="right">Relationship Years</th>
                                             <th className="heads currencyRight" scope="col" align="right">Arranger</th>
                                             <th className="heads currencyRight" scope="col" align="right">Vendor POC</th>
                                             <th className="heads currencyRight" scope="col" align="right">Anchor POC</th>
@@ -64,50 +89,25 @@ export default function AdminManageRelationships(props) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td className="mpTd currencyRight">Kapil</td>
-                                                <td className="mpTd currencyRight">Vendor</td>
-                                                <td className="mpTd currencyRight">Trustless</td>
-                                                <td className="mpTd currencyRight"></td>
-                                                <td className="mpTd currencyRight">9999999999</td>
-                                                <td className="mpTd currencyRight">Active</td>
-                                                
-                                                
-                                            </tr>
+                                            {companyRelationship && companyRelationship.length>0 && companyRelationship.map((item, index) => {
+                                                return(
+                                                    <tr onClick={handleRowClick}>
+                                                        <td id={index} className="mpTd currencyRight">{item.id.charCodeAt(10)}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.vendorEmail}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.anchorEmail}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.relationship}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.status}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.relationshipYears}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.arrangerEmail}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.vendorContact}</td>
+                                                        <td id={index} className="mpTd currencyRight">{item.anchorContact}</td>
+                                                        
+                                                        
+                                                    </tr>
+                                                );
+                                            })}
+                                            
 
-                                            <tr>
-                                                <td className="mpTd currencyRight">Abhijit</td>
-                                                <td className="mpTd currencyRight">Anchor</td>
-                                                <td className="mpTd currencyRight">Company 4</td>
-                                                <td className="mpTd currencyRight"></td>
-                                                <td className="mpTd currencyRight">9888888888</td>
-                                                <td className="mpTd currencyRight">Locked</td>
-                                                
-                                                
-                                            </tr>
-
-
-                                            <tr>
-                                                <td className="mpTd currencyRight">Jakir</td>
-                                                <td className="mpTd currencyRight">Admin</td>
-                                                <td className="mpTd currencyRight">Trustless</td>
-                                                <td className="mpTd currencyRight"></td>
-                                                <td className="mpTd currencyRight">9777777777</td>
-                                                <td className="mpTd currencyRight">Inactive</td>
-                                                
-                                                
-                                            </tr>
-
-                                            <tr>
-                                                <td className="mpTd currencyRight">Nagarjun</td>
-                                                <td className="mpTd currencyRight">Arranger</td>
-                                                <td className="mpTd currencyRight">Company 3</td>
-                                                <td className="mpTd currencyRight"></td>
-                                                <td className="mpTd currencyRight">9666666666</td>
-                                                <td className="mpTd currencyRight">Active</td>
-
-                                                
-                                            </tr>
                                             
                                         </tbody>
                                         </table>
