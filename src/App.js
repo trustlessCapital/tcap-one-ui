@@ -144,7 +144,7 @@ const App = () => {
     const url = `https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/${Email}`;
     const response = await fetch(url);
     const userData = await response.json();
-    localStorage.setItem("userData", userData);
+    localStorage.setItem("userData", JSON.stringify(userData));
     console.log(userData);
     if (userData && userData.email.trim().length) {
       if (userData?.userType != "investor") {
