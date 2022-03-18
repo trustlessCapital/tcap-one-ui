@@ -263,7 +263,7 @@ export default function AddInvoice(props) {
     const obj={
       //"companyId":companyCreateSuccessResponse.id, // this comes from?
       "companyId":state.vendorEmail,
-       "userEmail":"lingraj@trustless.capital",
+       "userEmail":userData.email,
        "contentId":uploadSuccess.fileKey,
        "version":"2",
        "type":"PAN",
@@ -293,33 +293,34 @@ export default function AddInvoice(props) {
 },[listUsers]);
   const uploadInvoiceDetails = async () => {
     let userData = JSON.parse(localStorage.getItem('userData'));
-     const invoiceUpload = await companyApiProvider.uploadInvoiceDetails({
-        "invoiceNumber":state.invno,
-        "commodityType":state.ctype,
-        "invoiceAmount":state.invamt,
-        "dueDate":state.duedt,
-        "transactionDate":state.invdt,
-        "poLineItemNo":state.polinenum,
-        "payoutDate":state.paydt,
-        "productType" : state.ptype,
-        "poPiNo":state.popinum,
-        "grnSrnNo":state.grnsrnnum,
-        "grnSrnDate":state.grnsrnDate,
-        "commodity":state.commodity,
-        "ewayBill":state.ewaynum,
-        "ewayBillDate":state.ewaybilldt,
-        "ewayApproved":state.ewayapproved,
-        "supplierGSTIN":state.supplierGSTIN,
-        "anchorGSTIN":state.anchorGSTIN,
-        "contentId":documentDetails.contentId,
-        "anchorId":state.aname,
-        "vendorId":(vendorList.filter((vendor)=> (vendor.email==userData.email)))[0].id,
-        "status":"pending",
-        "anchorApprover":state.anchorApprover,
-        "tcapApprover":"hello@trustless.capital",
-        "comments":state.comment
-        
-    })
+    const inv={
+      "invoiceNumber":state.invno,
+      "commodityType":state.ctype,
+      "invoiceAmount":state.invamt,
+      "dueDate":state.duedt,
+      "transactionDate":state.invdt,
+      "poLineItemNo":state.polinenum,
+      "payoutDate":state.paydt,
+      "productType" : state.ptype,
+      "poPiNo":state.popinum,
+      "grnSrnNo":state.grnsrnnum,
+      "grnSrnDate":state.grnsrnDate,
+      "commodity":state.commodity,
+      "ewayBill":state.ewaynum,
+      "ewayBillDate":state.ewaybilldt,
+      "ewayApproved":state.ewayapproved,
+      "supplierGSTIN":state.supplierGSTIN,
+      "anchorGSTIN":state.anchorGSTIN,
+      "contentId":documentDetails.contentId,
+      "anchorId":state.aname,
+      "vendorId":state.vname,
+      "status":"pending",
+      "anchorApprover":state.anchorApprover,
+      "tcapApprover":"hello@trustless.capital",
+      "comments":state.comment
+  }
+  console.log("Invoice", inv);
+     const invoiceUpload = await companyApiProvider.uploadInvoiceDetails(inv);
     if(invoiceUpload.invoiceNumber){
       alert('Invoice uploaded successfully');
       setState({
@@ -570,7 +571,7 @@ export default function AddInvoice(props) {
                           />
                         </div>
                       </Grid>
-                      {/* <Grid item xs={6}>
+                      <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Vendor Name</label>
                           <select
@@ -586,7 +587,7 @@ export default function AddInvoice(props) {
                             })}
                           </select>
                         </div>
-                      </Grid> */}
+                      </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Anchor Name</label>
