@@ -74,7 +74,13 @@
 .colRight{ 
     width:50%;
 }
-
+.box{
+    padding-top: 5rem;
+    padding-left: 1rem;
+}
+.box1{
+    padding-top: 2rem;
+}
 .saveInvBtn{
     background-color: #e50914;
     color: #FFF;
