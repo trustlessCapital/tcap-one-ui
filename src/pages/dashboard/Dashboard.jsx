@@ -1,14 +1,16 @@
 
 import './dashboard.css'
 import Home from  "../home/Home";
+import ArrangerDashboard from './ArrangerDashboard/ArrangerDashboard';
 import Investor from 'pages/investor/investor';
 import AdminLanding from 'pages/adminInvoices/AdminLanding';
 
 export default function Dashboard(props) {
-    const userData = localStorage.getItem('userData');
+    const userData = JSON.parse(localStorage.getItem('userData'));
     return (
         <div className="home">
-            {userData.userType!='investor' && <Home verified = {props?.verified} userData = {props?.userData}/>}
+            {/* {userData.userType!='investor' && <Home verified = {props?.verified} userData = {props?.userData}/>} */}
+            {userData.userType === 'ARRANGER' && <ArrangerDashboard userData = {props?.userData}/>}
             <br></br>
            {(props?.verified?.tcapRelation=='admin' || props?.verified?.tcapRelation=='arranger' || props.userData?.userType=='ADMIN') && <AdminLanding verified = {props?.verified} userData = {props?.userData}/>}
            {userData.userType=='investor' && <Investor verified = {props?.verified} userData = {props?.userData}/>}

@@ -137,15 +137,16 @@ const App = () => {
   useEffect(() => {
     setFormIsValid(validator.isEmail(email));
   }, [email]);
-  console.log("token", token);
+  // console.log("token", token);
 
   const tokenset = async () => {
     const Email = localStorage.getItem("email");
     const url = `https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/${Email}`;
     const response = await fetch(url);
     const userData = await response.json();
-    localStorage.setItem("userData", userData);
-    console.log(userData);
+    localStorage.setItem('userData', JSON.stringify(userData));
+
+    // console.log(userData);
     if (userData && userData.email.trim().length) {
       if (userData?.userType != "investor") {
         const userDataDetails = await companyApiProvider.verifyEmail(
@@ -181,7 +182,7 @@ const App = () => {
           userData.email
         );
         setEmailVerify(verifiedEmail);
-        console.log(emailVerify);
+        // console.log(emailVerify);
       }
     }
   };
@@ -244,7 +245,7 @@ const App = () => {
   }, []);
 
   const history = useHistory();
-  console.log("history", history);
+  // console.log("history", history);
 
   // useEffect(async() => {
   //   let userData = localStorage.getItem("userData") || null;
