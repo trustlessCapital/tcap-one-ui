@@ -28,6 +28,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Sidebar from "../adminInvoices/Sidebar.jsx"
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
@@ -68,6 +72,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AddInvoice(props) {
   // userData;
+  const userData = props.userData;
   const history = useHistory();
   const classes = useStyles();
   const [entity, setEntity] = useState('');
@@ -115,9 +120,11 @@ export default function AddInvoice(props) {
   const [steps,setSteps] = useState(1);
   const [documentDetails,setDocumentDetails] = useState(null);
   const [anchorList,setAnchorList] = useState([]);
+  const [listUsers, setListUsers] = useState(null);
   const [vendorList,setVendorList] = useState([]);
   const [invoices,setInvoices] = useState([]);
   const [arrangerList,setArrangerList] = useState([]);
+  
   // Form Events
   // onChangeTid(e) {
   //   this.setState({ tid: e.target.value });
@@ -134,7 +141,7 @@ export default function AddInvoice(props) {
       useEffect(async ()=>{
        if(props){ 
          if((props.verified?.tcapRelation!='vendor' && props.verified?.tcapRelation!='arranger'))
-        history.push('/')
+        {}
         else
         {
           const invoicesData = await companyApiProvider.getVendorInvoices(props.verified?.id);
@@ -214,6 +221,9 @@ export default function AddInvoice(props) {
   const onChangeInvAmt = (e) => {
     setState({ ...state, invamt: e.target.value });
   };
+  const onChangeVendorEmail = (e) => {
+    setState({ ...state, vendorEmail: e.target.value });
+  };
   const onChangePayDt = (e) => {
     setState({ ...state, paydt: e.target.value });
   };
@@ -224,6 +234,7 @@ export default function AddInvoice(props) {
     setState({ ...state, anchorApprover: e.target.value });
   };
   const onChangeInvFile = (e) => {
+    console.log("Files", e.target.files[0]);
     setState({ ...state, invurl: e.target.files[0]});
   };
   const onChangeInvVerificationFile = (e) => {
@@ -232,60 +243,84 @@ export default function AddInvoice(props) {
   const uploadInvoice = async () => {
     const documentFormData = new FormData();
     // Update the formData object
+    console.log('state', state.invurl.name);
     documentFormData.append(
       'document',
       state.invurl,
       state.invurl.name
     );
+    // console.log('Document', documentFormData);
+    console.log(documentFormData);
      const uploadSuccess = await documentApiProvider.submitDocuments(documentFormData);
-     let userData = JSON.parse(localStorage.getItem('userData'));
-     const serverUpload = await documentApiProvider.updateDocumentsToServer({
+     console.log(JSON.stringify(uploadSuccess));
+     
+     console.log('Userdata ID', userData.userId);
+     console.log('Userdata Email', userData.user);
+   
+
+     
+    //  console.log("Check", isJSONString(obj));
+    const obj={
       //"companyId":companyCreateSuccessResponse.id, // this comes from?
-      "companyId":userData.id,
-      "userEmail":userData.email,
-      "contentId":uploadSuccess.contenId,
-      "version":"1",// this comes from?
-      "type":'INV',// what are the other fields 
-      "description":`invoice`, // static or getting from some other data?
-      "comments":`its a ${state.invurl.name}`, // this comes from?
-      "fileName": state.invurl.name,
-      "fileKey" : uploadSuccess.fileKey
-    })
+      "companyId":state.vendorEmail,
+       "userEmail":userData.email,
+       "contentId":uploadSuccess.fileKey,
+       "version":"2",
+       "type":"PAN",
+       "description": "PAN card",
+       "comments":"its a pan card",
+       "fileKey" : uploadSuccess.fileKey
+     };
+
+   
+     console.log("Object", obj);
+     const serverUpload = await documentApiProvider.updateDocumentsToServer(obj);
+    console.log("Error", JSON.stringify(serverUpload));
     if(serverUpload.fileKey){
       alert('document uploaded successfully!')
       setDocumentDetails(serverUpload);
       setSteps(2);
     }
   }
+  useEffect(async ()=>{
+    if(!listUsers){
+    const Data = await companyApiProvider.getCompanyList();
+    const jData = JSON.stringify(Data);
+    const companyData = JSON.parse(jData);
+    setListUsers(companyData);
+    console.log("company Data", companyData);
+    }
+},[listUsers]);
   const uploadInvoiceDetails = async () => {
     let userData = JSON.parse(localStorage.getItem('userData'));
-     const invoiceUpload = await companyApiProvider.uploadInvoiceDetails({
-        "invoiceNumber":state.invno,
-        "commodityType":state.ctype,
-        "invoiceAmount":state.invamt,
-        "dueDate":state.duedt,
-        "transactionDate":state.invdt,
-        "poLineItemNo":state.polinenum,
-        "payoutDate":state.paydt,
-        "productType" : state.ptype,
-        "poPiNo":state.popinum,
-        "grnSrnNo":state.grnsrnnum,
-        "grnSrnDate":state.grnsrnDate,
-        "commodity":state.commodity,
-        "ewayBill":state.ewaynum,
-        "ewayBillDate":state.ewaybilldt,
-        "ewayApproved":state.ewayapproved,
-        "supplierGSTIN":state.supplierGSTIN,
-        "anchorGSTIN":state.anchorGSTIN,
-        "contentId":documentDetails.contentId,
-        "anchorId":state.aname,
-        "vendorId":(vendorList.filter((vendor)=> (vendor.email==userData.email)))[0].id,
-        "status":"pending",
-        "anchorApprover":state.anchorApprover,
-        "tcapApprover":"hello@trustless.capital",
-        "comments":state.comment
-        
-    })
+    const inv={
+      "invoiceNumber":state.invno,
+      "commodityType":state.ctype,
+      "invoiceAmount":state.invamt,
+      "dueDate":state.duedt,
+      "transactionDate":state.invdt,
+      "poLineItemNo":state.polinenum,
+      "payoutDate":state.paydt,
+      "productType" : state.ptype,
+      "poPiNo":state.popinum,
+      "grnSrnNo":state.grnsrnnum,
+      "grnSrnDate":state.grnsrnDate,
+      "commodity":state.commodity,
+      "ewayBill":state.ewaynum,
+      "ewayBillDate":state.ewaybilldt,
+      "ewayApproved":state.ewayapproved,
+      "supplierGSTIN":state.supplierGSTIN,
+      "anchorGSTIN":state.anchorGSTIN,
+      "contentId":documentDetails.contentId,
+      "anchorId":state.aname,
+      "vendorId":state.vname,
+      "status":"pending",
+      "anchorApprover":state.anchorApprover,
+      "tcapApprover":"hello@trustless.capital",
+      "comments":state.comment
+  }
+  console.log("Invoice", inv);
+     const invoiceUpload = await companyApiProvider.uploadInvoiceDetails(inv);
     if(invoiceUpload.invoiceNumber){
       alert('Invoice uploaded successfully');
       setState({
@@ -366,7 +401,14 @@ export default function AddInvoice(props) {
   // }
 
   return (
+  <Container fluid>
+  <Row>
+  <Col  className="box" sm={3}><Sidebar /></Col>
+    <Col className="box1" sm={9}>
     <div className="addInvPage">
+    
+    
+    
       <h3 className="addInvPageTitle">Upload New Invoice</h3>
       {/* <Button>
           <Link to="/marketplace">Market Place</Link>
@@ -446,11 +488,30 @@ export default function AddInvoice(props) {
                           <input
                             type="file"
                             id="file"
-                            name="invfile"
+                            name="invurl"
                             style={{ display: 'none' }}
                             onChange={onChangeInvFile}
                           />
                          <label style={{float:'right'}}>{state.invurl.name}</label>
+                        </div>
+                      </Grid>
+                      <Grid item md={6}>
+                        <div className="addInvItem">
+                          <label>Vendor Name</label>
+                          <select
+                            className="addInvInput"
+                            name="vnameEmail"
+                            onChange={onChangeVendorEmail}
+                            required
+                            value={state.vendorEmail}
+                          >
+                            <option value="">--Select--</option>
+                            {listUsers && listUsers.map((user)=>{
+                              return(
+                                <option value={user.id}>{user.organisationName}</option>
+                              )
+                            })}
+                          </select>
                         </div>
                       </Grid>
                       <Grid item xs={6}>
@@ -510,7 +571,7 @@ export default function AddInvoice(props) {
                           />
                         </div>
                       </Grid>
-                      {/* <Grid item xs={6}>
+                      <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Vendor Name</label>
                           <select
@@ -526,7 +587,7 @@ export default function AddInvoice(props) {
                             })}
                           </select>
                         </div>
-                      </Grid> */}
+                      </Grid>
                       <Grid item xs={6}>
                         <div className="addInvItem">
                           <label>Anchor Name</label>
@@ -1001,6 +1062,10 @@ export default function AddInvoice(props) {
             <div>No Invoices for approval</div> 
           )}*/}
       </div>
+      
     </div>
+    </Col>
+    </Row>
+    </Container>
   );
 }
