@@ -34,8 +34,9 @@ function ArrangerDashboard({userData}) {
     .NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
-      notation: "compact",
-      compactDisplay: "short"
+      currencyDisplay: 'code',
+      maximumFractionDigits: 2, 
+      minimumFractionDigits: 0,
     }).format(amount)
 
   const fetchDetails = (walletAddress) => {

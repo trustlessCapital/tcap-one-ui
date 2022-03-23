@@ -1,14 +1,14 @@
 import React from 'react'
-import {ResponsiveContainer, BarChart, CartesianGrid, XAxis, Tooltip, YAxis, Legend, Bar} from 'recharts'
+import {ResponsiveContainer, BarChart, XAxis, Tooltip, YAxis, Legend, Bar} from 'recharts'
 
 const createChartData = (data) => {
   const name = (date) => {
     return new Intl.DateTimeFormat('en-IN', {
-      month: 'short', day: 'numeric',
+      year: 'numeric', month: 'short', day: 'numeric',
     }).format(date)
   }
   return data.map((item) => ({
-    name: name(item.dueDate * 1000),
+    name: name(item.issueDate * 1000),
     invoiceAmount: (item.debtAmount/80) * 100,
     financedAmount: item.debtAmount
   }))
