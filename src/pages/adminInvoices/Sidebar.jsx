@@ -36,8 +36,8 @@ const Sidebar = () => {
             <NavLink style={{textDecoration : "none"}} exact to="/AdminPendingApprovals" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="user">Pending Approvals</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink style={{textDecoration : "none"}} exact to="/AdminAllDeals" activeClassName="activeClicked">
-              <CDBSidebarMenuItem className="items" icon="chart-line">All Deals</CDBSidebarMenuItem>
+            <NavLink style={{textDecoration : "none"}} exact to="/addinvoices" activeClassName="activeClicked">
+              <CDBSidebarMenuItem className="items" icon="chart-line">Upload Invoice</CDBSidebarMenuItem>
             </NavLink>
             <NavLink style={{textDecoration : "none"}} exact to="/AdminActiveDeals" activeClassName="activeClicked">
               <CDBSidebarMenuItem className="items" icon="chart-line">Active Deals</CDBSidebarMenuItem>

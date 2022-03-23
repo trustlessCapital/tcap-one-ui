@@ -16,6 +16,7 @@ export function handleResponse(response) {
 
   
   export function handleError(error) {
+    console.log('Error', JSON.stringify(error));
     if (error.data) {
       return error.data;
     }
