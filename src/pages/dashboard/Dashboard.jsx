@@ -10,7 +10,7 @@ export default function Dashboard(props) {
     return (
         <div className="home">
             {/* {userData.userType!='investor' && <Home verified = {props?.verified} userData = {props?.userData}/>} */}
-            {userData.userType === 'ARRANGER' && <ArrangerDashboard userData = {props?.userData}/>}
+            {userData.userType === 'ARRANGER' && <ArrangerDashboard userData = {userData}/>}
             <br></br>
            {(props?.verified?.tcapRelation=='admin' || props?.verified?.tcapRelation=='arranger' || props.userData?.userType=='ADMIN') && <AdminLanding verified = {props?.verified} userData = {props?.userData}/>}
            {userData.userType=='investor' && <Investor verified = {props?.verified} userData = {props?.userData}/>}
