@@ -111,7 +111,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-
+var tok=0;
 const App = () => {
   const [token, setToken] = useState(null);
   const [emailVerify, setEmailVerify] = useState(null);
@@ -126,7 +126,8 @@ const App = () => {
   const [userDataDetails, setUserDetails] = useState([]);
 
   localStorage.setItem("privKey", privKey);
-
+  var Load = false;
+  
   var loginObject = {
     loginProvider: "google",
     clientId:
@@ -140,6 +141,8 @@ const App = () => {
   console.log("token", token);
 
   const tokenset = async () => {
+    Load = true;
+    tok=1
     const Email = localStorage.getItem("email");
     const url = `https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/${Email}`;
     const response = await fetch(url);
@@ -172,6 +175,7 @@ const App = () => {
           userId: userData.id,
           walletAddress: userData?.walletAddress || null,
         });
+        Load = false;
       }
       // if(userData.userType!='investor'){var verifiedEmail = await companyApiProvider.verifyEmail(userData.email)
       //  setEmailVerify(verifiedEmail);
@@ -186,8 +190,10 @@ const App = () => {
     }
   };
 
-  if (privKey && !token) {
+  if (privKey && !token && tok==0) {
+    
     tokenset();
+    
   }
 
   const onMount = async () => {
@@ -289,7 +295,7 @@ const App = () => {
     // history.push('/signup');
   };
 
-  if (isLoading) return <div className="central">Loading...</div>;
+  if (isLoading || Load) return <div className="central">Loading...</div>;
 
   return token ? (
     <Router>

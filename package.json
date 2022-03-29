@@ -33,6 +33,7 @@
     "react-fetch-hook": "^1.8.5",
     "react-fusioncharts": "^3.1.2",
     "react-icons": "^4.3.1",
+    "react-pdf": "^5.7.1",
     "react-phone-input-2": "^2.14.0",
     "react-phone-input-material-ui": "^2.16.1",
     "react-phone-number-input": "^3.1.46",
