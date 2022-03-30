@@ -129,8 +129,7 @@ const App = () => {
 
   var loginObject = {
     loginProvider: "google",
-    clientId:
-      "BDEZMlXEtCPU0_sfOO22To8ZnFS8ppSJs_yBNBxiMWhdAmPJSUk4jlCI3ykKBHO2cl1iDEu_M6UDVFAqALmZPto",
+    clientId: process.env.REACT_APP_WEB3_AUTH_CLIENT_ID,
     redirectUrl: process.env.REACT_APP_DOMAIN,
   };
 

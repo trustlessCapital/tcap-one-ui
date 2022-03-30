@@ -80,8 +80,8 @@ export default function Web3signin(props) {
   const userData = data;
   var loginObject ={
     loginProvider: "google",
-    clientId: "BDEZMlXEtCPU0_sfOO22To8ZnFS8ppSJs_yBNBxiMWhdAmPJSUk4jlCI3ykKBHO2cl1iDEu_M6UDVFAqALmZPto",
-    redirectUrl: "http://tcap-dev-ui-x78rerm.s3-website.us-east-2.amazonaws.com/"
+    clientId: process.env.REACT_APP_WEB3_AUTH_CLIENT_ID,
+    redirectUrl: process.env.REACT_APP_DOMAIN,
   }
   console.log('hi', props.logout);
   console.log('data', userData);
