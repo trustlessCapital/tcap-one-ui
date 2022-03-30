@@ -81,7 +81,7 @@ export default function Web3signin(props) {
   var loginObject ={
     loginProvider: "google",
     clientId: "BDEZMlXEtCPU0_sfOO22To8ZnFS8ppSJs_yBNBxiMWhdAmPJSUk4jlCI3ykKBHO2cl1iDEu_M6UDVFAqALmZPto",
-    redirectUrl: "http://localhost:7005/"
+    redirectUrl: "http://tcap-dev-ui-x78rerm.s3-website.us-east-2.amazonaws.com/"
   }
   console.log('hi', props.logout);
   console.log('data', userData);
@@ -157,7 +157,7 @@ export default function Web3signin(props) {
           login_hint: email,
         },
         loginProvider: "email_passwordless",
-        redirectUrl: "http://localhost:7005/",
+        redirectUrl: process.env.REACT_APP_DOMAIN,
     });
     
     
