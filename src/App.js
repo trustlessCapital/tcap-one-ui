@@ -291,7 +291,6 @@ const App = () => {
   };
 
   if (isLoading) return <div className="central">Loading...</div>;
-  console.log(process.env.REACT_APP_DOMAIN)
   return token ? (
     <Router>
       <ThemeProvider theme={theme}>
