@@ -283,6 +283,19 @@ const getAllDeals = () => {
     .catch(handleError);
 };
 
+const postUserProfile = (profileData) => {
+  return fetch(`${BASE_URL}/api/user/update`, {
+    ...requestOptions,
+    method: "POST",
+    headers: {
+      ...headers,
+    },
+    body: JSON.stringify(profileData),
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
 export const companyApiProvider = {
   signUp,
   resendOTP,
@@ -305,4 +318,5 @@ export const companyApiProvider = {
   verifyInvoice,
   getInvestmentHistory,
   addNewUser,
+  postUserProfile
 };

@@ -28,6 +28,7 @@ import { companyApiProvider } from "services/api/company/companyService";
 import MyDraftInvoicesVendor from "pages/home/MyDraftInvoicesVendor";
 import AdminManageUsers from "pages/adminInvoices/AdminManageUsers";
 import AdminManageEntity from "pages/adminInvoices/AdminManageEntity";
+import Profile from "./pages/userProfile/Profile";
 import CompletedDealsVendor from "pages/home/CompletedDealsVendor";
 import AdminPendingApprovals from "pages/adminInvoices/AdminPendingApprovals";
 import AdminManageRelationships from "pages/adminInvoices/AdminManageRelationships";
@@ -165,7 +166,11 @@ const App = () => {
         //   walletAddress:userData?.walletAddress || null
         // });
         setToken({
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          phone: userData.phoneNumber,
           user: userData.email,
+          Address: userData.futureAddress,
           type:
             userData?.userType == "investor"
               ? "investor"
@@ -320,6 +325,9 @@ const App = () => {
                   </Route>
                   <Route exact path="/admin">
                     <Admin />
+                  </Route>
+                  <Route exact path="/profile">
+                    <Profile verified={emailVerify} userData={token} />
                   </Route>
                   <Route path="/addinvoices">
                     <AddInvoice verified={emailVerify} userData={token} />
