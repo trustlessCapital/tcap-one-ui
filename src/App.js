@@ -129,9 +129,8 @@ const App = () => {
 
   var loginObject = {
     loginProvider: "google",
-    clientId:
-      "BDEZMlXEtCPU0_sfOO22To8ZnFS8ppSJs_yBNBxiMWhdAmPJSUk4jlCI3ykKBHO2cl1iDEu_M6UDVFAqALmZPto",
-    redirectUrl: "http://localhost:7005/",
+    clientId: process.env.REACT_APP_WEB3_AUTH_CLIENT_ID,
+    redirectUrl: process.env.REACT_APP_DOMAIN,
   };
 
   useEffect(() => {
@@ -219,7 +218,7 @@ const App = () => {
           login_hint: email,
         },
         loginProvider: "email_passwordless",
-        redirectUrl: "http://localhost:7005/",
+        redirectUrl: process.env.REACT_APP_DOMAIN,
       });
 
       setPrivKey(openlogin.privKey);
@@ -291,7 +290,6 @@ const App = () => {
   };
 
   if (isLoading) return <div className="central">Loading...</div>;
-
   return token ? (
     <Router>
       <ThemeProvider theme={theme}>
