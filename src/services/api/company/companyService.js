@@ -284,6 +284,7 @@ const getAllDeals = () => {
 };
 
 const postUserProfile = (profileData) => {
+  console.log("Hi");
   return fetch(`${BASE_URL}/api/user/update`, {
     ...requestOptions,
     method: "POST",

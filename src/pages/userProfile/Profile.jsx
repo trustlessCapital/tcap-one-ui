@@ -11,6 +11,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Sidebar from "../adminInvoices/Sidebar"
 import Button from "react-bootstrap/Button"
+import ProfileModal from "./ProfileModal"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,16 +42,28 @@ const useStyles = makeStyles((theme) => ({
 export default function Profile(props) {
   // userData;
   const classes = useStyles();
+  const [modalShow, setModalShow] = useState(false);
   const [userProfile, setUserProfile] = useState();
-
+  
   const userData = props.userData;
     // useEffect(async ()=>{
     //     const data = companyApiProvider.postUserProfile;
     //     setUserProfile(data);
     // },[])
+    const handleRowClick= async (event)=>{
+      const id = event.target.id;
+      console.log(event.target);
+      
+      setModalShow(true);
+  }
+  const handleHide = async (event)=>{
+     window.location.reload();
+      setModalShow(false);
+  }
     console.log("users", userData);
   return (
     <div className="mp">
+    
     <div className="addInvPage">
       {/* <h1 className="addInvPageTitle">Investor</h1> */}
       <Container fluid>
@@ -118,21 +131,18 @@ export default function Profile(props) {
                                 <p class="text-muted mb-0">{userData.walletAddress}</p>
                             </div>
                         </div>
-                        <hr />
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Address</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0">PLOT NO 12, ICC Village, Sundargarh</p>
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-sm-10">
                                 
                             </div>
                             <div class="col-sm-2">
-                                <Button>EDIT</Button>
+                            <Button style={{backgroundColor: "#FFAFAF", color: "#FFFFFF"}} variant="secondary" className="addnewuser" onClick={() => {setModalShow(true)}}>Edit</Button>
+                              {modalShow ? <ProfileModal 
+                                userdata={userData}
+                                setModalShow={handleHide}
+                                show={modalShow}
+                                onHide={handleHide}
+                              /> : null}
                             </div>
                         </div>
                     </div>
