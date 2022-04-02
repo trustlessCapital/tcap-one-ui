@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Topbar(props) {
-  console.log(props.verified);
+  // console.log(props.verified);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const classes = useStyles();
   const { type, userName } = props.token;
@@ -77,7 +77,7 @@ export default function Topbar(props) {
     window.localStorage.removeItem("email");
     props.logout();
   };
-  console.log(props.userData);
+  // console.log(props.userData);
 
   useEffect(() => {
     return history.listen((location) => {

@@ -131,15 +131,14 @@ const App = () => {
   
   var loginObject = {
     loginProvider: "google",
-    clientId:
-      "BDEZMlXEtCPU0_sfOO22To8ZnFS8ppSJs_yBNBxiMWhdAmPJSUk4jlCI3ykKBHO2cl1iDEu_M6UDVFAqALmZPto",
-    redirectUrl: "http://localhost:7005/",
+    clientId: process.env.REACT_APP_WEB3_AUTH_CLIENT_ID,
+    redirectUrl: process.env.REACT_APP_DOMAIN,
   };
 
   useEffect(() => {
     setFormIsValid(validator.isEmail(email));
   }, [email]);
-  console.log("token", token);
+  // console.log("token", token);
 
   const tokenset = async () => {
     Load = true;
@@ -148,8 +147,9 @@ const App = () => {
     const url = `https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/${Email}`;
     const response = await fetch(url);
     const userData = await response.json();
-    localStorage.setItem("userData", JSON.stringify(userData));
-    console.log(userData);
+    localStorage.setItem('userData', JSON.stringify(userData));
+
+    // console.log(userData);
     if (userData && userData.email.trim().length) {
       if (userData?.userType != "investor") {
         const userDataDetails = await companyApiProvider.verifyEmail(
@@ -190,7 +190,7 @@ const App = () => {
           userData.email
         );
         setEmailVerify(verifiedEmail);
-        console.log(emailVerify);
+        // console.log(emailVerify);
       }
     }
   };
@@ -229,7 +229,7 @@ const App = () => {
           login_hint: email,
         },
         loginProvider: "email_passwordless",
-        redirectUrl: "http://localhost:7005/",
+        redirectUrl: process.env.REACT_APP_DOMAIN,
       });
 
       setPrivKey(openlogin.privKey);
@@ -255,7 +255,7 @@ const App = () => {
   }, []);
 
   const history = useHistory();
-  console.log("history", history);
+  // console.log("history", history);
 
   // useEffect(async() => {
   //   let userData = localStorage.getItem("userData") || null;
@@ -300,7 +300,9 @@ const App = () => {
     // history.push('/signup');
   };
 
+
   if (isLoading || Load) return <div className="central">Loading...</div>;
+
 
   return token ? (
     <Router>
