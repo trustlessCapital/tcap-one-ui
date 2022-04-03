@@ -38,7 +38,7 @@ import Button from "react-bootstrap/Button";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import Link from "@material-ui/core/Link";
 import { MDBInput } from "mdb-react-ui-kit";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Avatar from "@material-ui/core/Avatar";
@@ -47,12 +47,16 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 // import TextField from '@material-ui/core/TextField';
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import "react-phone-input-2/lib/bootstrap.css";
 import { userApiProvider } from "services/api/user/userService";
 import useFetch from "react-fetch-hook";
 import axios from "axios";
+import InputBase from '@material-ui/core/InputBase';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 //import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 //import { Home } from "@material-ui/icons";
@@ -112,6 +116,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const CustomInput = withStyles((theme) => ({
+  root: {
+    borderRadius: 4,
+    backgroundColor: theme.palette.common.white,
+    border: '1px solid #ced4da',
+    fontSize: 16,
+    padding: '10px 12px',
+  },
+  input: {
+    '&:focus': {
+      borderColor: theme.palette.primary.main,
+    },
+    '&:invalid': {
+      borderColor: theme.palette.error.main,
+    }
+  },
+}))(InputBase);
+
 const App = () => {
   const [token, setToken] = useState(null);
   const [emailVerify, setEmailVerify] = useState(null);
@@ -121,9 +143,9 @@ const App = () => {
   const [formIsValid, setFormIsValid] = useState(false);
   const [openlogin, setOpenLogin] = useState();
   const [privKey, setPrivKey] = useState(null);
-  const [OpenloginUserInfo, setOpenloginUserInfo] = useState();
-  const [webAuth, setwebAuth] = useState(false);
   const [userDataDetails, setUserDetails] = useState([]);
+  const [emailError, setEmailError] = useState(false)
+  const [emailLoader, setEmailLoader] = useState(false)
 
   localStorage.setItem("privKey", privKey);
 
@@ -132,11 +154,6 @@ const App = () => {
     clientId: process.env.REACT_APP_WEB3_AUTH_CLIENT_ID,
     redirectUrl: process.env.REACT_APP_DOMAIN,
   };
-
-  useEffect(() => {
-    setFormIsValid(validator.isEmail(email));
-  }, [email]);
-  // console.log("token", token);
 
   const tokenset = async () => {
     const Email = localStorage.getItem("email");
@@ -289,6 +306,30 @@ const App = () => {
     // history.push('/signup');
   };
 
+  const checkEmail = (e) => {
+    const { value } = e.target
+    setEmail(value)
+    if(validator.isEmail(value)) {
+      setEmailLoader(true)
+      fetch(`${process.env.REACT_APP_BASE_URL}/api/user/detail/${value}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setFormIsValid(true)
+          setEmailLoader(false)
+          setEmailError(null)
+        })
+        .catch(() => {
+          setFormIsValid(false)
+          setEmailLoader(false)
+          setEmailError('Please enter correct email')
+        })
+    } else {
+      setEmailLoader(false)
+      setEmailError('Please enter correct email')
+      setFormIsValid(false)
+    }
+  }
+
   if (isLoading) return <div className="central">Loading...</div>;
   return token ? (
     <Router>
@@ -416,14 +457,19 @@ const App = () => {
                 TCAP ONE
               </Typography>
               <form className={classes.form} noValidate>
-                <MDBInput
-                  label="Email Address"
-                  id="typeEmail"
-                  type="email"
-                  size="lg"
+                <CustomInput
                   value={email}
-                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="Email Address"
+                  endAdornment={emailLoader && <CircularProgress size={30} />}
+                  onChange={checkEmail}
+                  error={!!emailError}
+                  id="typeEmail"
                 />
+                {emailError && (
+                  <FormHelperText error={!!emailError}>
+                    {emailError}
+                  </FormHelperText>
+                )}
                 <Button
                   className="loginbutton"
                   disabled={!formIsValid}
