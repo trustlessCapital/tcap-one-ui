@@ -9,6 +9,7 @@ import { Publish } from '@material-ui/icons';
 // import { Component, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Dialog from '@material-ui/core/Dialog';
+import { Document, Page, pdfjs } from 'react-pdf';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
@@ -44,6 +45,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { documentApiProvider } from 'services/api/document/documentService';
 import { companyApiProvider } from 'services/api/company/companyService';
 
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -124,6 +126,10 @@ export default function AddInvoice(props) {
   const [vendorList,setVendorList] = useState([]);
   const [invoices,setInvoices] = useState([]);
   const [arrangerList,setArrangerList] = useState([]);
+  const [url, setUrl] = useState('');
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
   
   // Form Events
   // onChangeTid(e) {
@@ -233,10 +239,19 @@ export default function AddInvoice(props) {
   const onChangeAnchorApprover = (e) => {
     setState({ ...state, anchorApprover: e.target.value });
   };
-  const onChangeInvFile = (e) => {
-    console.log("Files", e.target.files[0]);
+  const onChangeInvFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    files.length > 0 && setUrl(URL.createObjectURL(files[0]));
     setState({ ...state, invurl: e.target.files[0]});
+    
   };
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
+  // const onChangeInvFile = (e) => {
+  //   console.log("Files", e.target.files[0]);
+  //   setState({ ...state, invurl: e.target.files[0]});
+  // };
   const onChangeInvVerificationFile = (e) => {
     setState({ ...state, invverificationurl: e.target.files[0]});
   };
@@ -263,7 +278,7 @@ export default function AddInvoice(props) {
     const obj={
       //"companyId":companyCreateSuccessResponse.id, // this comes from?
       "companyId":state.vendorEmail,
-       "userEmail":userData.email,
+       "userEmail":userData.user,
        "contentId":uploadSuccess.fileKey,
        "version":"2",
        "type":"PAN",
@@ -414,19 +429,7 @@ export default function AddInvoice(props) {
           <Link to="/marketplace">Market Place</Link>
         </Button> */}
       <Grid container spacing={3} justifyContent="center">
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={state.viewOnly}
-                onChange={handleViewOnly}
-                name="viewOnly"
-                color="primary"
-              />
-            }
-            label="View Only"
-          />
-        </Grid>
+        
         {/* <Grid item xs={2}>
           <Button variant="contained" className={classes.buttonMargin}>
             SAVE
@@ -488,11 +491,12 @@ export default function AddInvoice(props) {
                           <input
                             type="file"
                             id="file"
+                            accept=".pdf"
                             name="invurl"
                             style={{ display: 'none' }}
                             onChange={onChangeInvFile}
                           />
-                         <label style={{float:'right'}}>{state.invurl.name}</label>
+                         <label className="LabelFile" style={{float:'right', marginLeft: "1rem"}}>{state.invurl.name}</label>
                         </div>
                       </Grid>
                       <Grid item md={6}>
@@ -514,7 +518,37 @@ export default function AddInvoice(props) {
                           </select>
                         </div>
                       </Grid>
-                      <Grid item xs={6}>
+                      <Grid item md={12}>
+                      <div style={{ height: '650px' }}>
+                        {url ? (
+                          <div style={{
+                        border: '1px solid rgba(0, 0, 0, 0.3)',
+                        height: '100%',
+                    }}>
+                          <Document file={url} onLoadSuccess={onDocumentLoadSuccess}>
+                            <Page pageNumber={pageNumber} />
+                          </Document>
+                          <br />
+                          <h2 className="Page">
+                            <strong>PREVIEW</strong>
+                          </h2>
+                          </div>
+                        ): <div
+                    style={{
+                        alignItems: 'center',
+                        border: '2px dashed rgba(0, 0, 0, .3)',
+                        display: 'flex',
+                        fontSize: '2rem',
+                        height: '100%',
+                        justifyContent: 'center',
+                        width: '100%',
+                    }}
+                >
+                    Preview Area
+                </div>}
+                        </div>
+                    </Grid>
+                      <Grid item xs={10}>
                         <div className="addInvItem">
                           <input
                             className="saveInvBtn"

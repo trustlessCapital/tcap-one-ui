@@ -28,6 +28,7 @@ import { companyApiProvider } from "services/api/company/companyService";
 import MyDraftInvoicesVendor from "pages/home/MyDraftInvoicesVendor";
 import AdminManageUsers from "pages/adminInvoices/AdminManageUsers";
 import AdminManageEntity from "pages/adminInvoices/AdminManageEntity";
+import Profile from "./pages/userProfile/Profile";
 import CompletedDealsVendor from "pages/home/CompletedDealsVendor";
 import AdminPendingApprovals from "pages/adminInvoices/AdminPendingApprovals";
 import AdminManageRelationships from "pages/adminInvoices/AdminManageRelationships";
@@ -111,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-
+var tok=0;
 const App = () => {
   const [token, setToken] = useState(null);
   const [emailVerify, setEmailVerify] = useState(null);
@@ -126,7 +127,8 @@ const App = () => {
   const [userDataDetails, setUserDetails] = useState([]);
 
   localStorage.setItem("privKey", privKey);
-
+  var Load = false;
+  
   var loginObject = {
     loginProvider: "google",
     clientId: process.env.REACT_APP_WEB3_AUTH_CLIENT_ID,
@@ -139,6 +141,8 @@ const App = () => {
   // console.log("token", token);
 
   const tokenset = async () => {
+    Load = true;
+    tok=1
     const Email = localStorage.getItem("email");
     const url = `https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/${Email}`;
     const response = await fetch(url);
@@ -162,7 +166,11 @@ const App = () => {
         //   walletAddress:userData?.walletAddress || null
         // });
         setToken({
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          phone: userData.phoneNumber,
           user: userData.email,
+          Address: userData.futureAddress,
           type:
             userData?.userType == "investor"
               ? "investor"
@@ -172,6 +180,7 @@ const App = () => {
           userId: userData.id,
           walletAddress: userData?.walletAddress || null,
         });
+        Load = false;
       }
       // if(userData.userType!='investor'){var verifiedEmail = await companyApiProvider.verifyEmail(userData.email)
       //  setEmailVerify(verifiedEmail);
@@ -186,8 +195,10 @@ const App = () => {
     }
   };
 
-  if (privKey && !token) {
+  if (privKey && !token && tok==0) {
+    
     tokenset();
+    
   }
 
   const onMount = async () => {
@@ -289,7 +300,10 @@ const App = () => {
     // history.push('/signup');
   };
 
-  if (isLoading) return <div className="central">Loading...</div>;
+
+  if (isLoading || Load) return <div className="central">Loading...</div>;
+
+
   return token ? (
     <Router>
       <ThemeProvider theme={theme}>
@@ -313,6 +327,9 @@ const App = () => {
                   </Route>
                   <Route exact path="/admin">
                     <Admin />
+                  </Route>
+                  <Route exact path="/profile">
+                    <Profile verified={emailVerify} userData={token} />
                   </Route>
                   <Route path="/addinvoices">
                     <AddInvoice verified={emailVerify} userData={token} />
