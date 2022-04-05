@@ -39,21 +39,25 @@ import Button from "react-bootstrap/Button";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import Link from "@material-ui/core/Link";
 import { MDBInput } from "mdb-react-ui-kit";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Avatar from "@material-ui/core/Avatar";
 // import Button from '@material-ui/core/Button';
 import CssBaseline from "@material-ui/core/CssBaseline";
-// import TextField from '@material-ui/core/TextField';
+import TextField from '@material-ui/core/TextField';
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import "react-phone-input-2/lib/bootstrap.css";
 import { userApiProvider } from "services/api/user/userService";
 import useFetch from "react-fetch-hook";
 import axios from "axios";
+import InputBase from '@material-ui/core/InputBase';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 //import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 //import { Home } from "@material-ui/icons";
@@ -112,8 +116,34 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
+
+const CustomInput = withStyles((theme) => ({
+  root: {
+    borderRadius: 4,
+    backgroundColor: theme.palette.common.white,
+    border: '1px solid #ced4da',
+    fontSize: 16,
+    padding: '5px 10px',
+    width: '100%',
+  },
+  input: {
+    '&:focus': {
+      borderColor: theme.palette.primary.main,
+    },
+    '&:invalid': {
+      borderColor: theme.palette.error.main,
+    }
+  },
+}))(InputBase);
+
 var tok=0;
 const App = () => {
+  const EmailStatuses = {
+    LOADING: 'LOADING',
+    VALID: 'VALID',
+    INVALID: 'INVALID',
+    NOT_REGISTERED: 'NOT_REGISTERED',
+  }
   const [token, setToken] = useState(null);
   const [emailVerify, setEmailVerify] = useState(null);
   const classes = useStyles();
@@ -122,9 +152,8 @@ const App = () => {
   const [formIsValid, setFormIsValid] = useState(false);
   const [openlogin, setOpenLogin] = useState();
   const [privKey, setPrivKey] = useState(null);
-  const [OpenloginUserInfo, setOpenloginUserInfo] = useState();
-  const [webAuth, setwebAuth] = useState(false);
   const [userDataDetails, setUserDetails] = useState([]);
+  const [emailStatus, setEmailStatus] = useState(null)
 
   localStorage.setItem("privKey", privKey);
   var Load = false;
@@ -134,11 +163,6 @@ const App = () => {
     clientId: process.env.REACT_APP_WEB3_AUTH_CLIENT_ID,
     redirectUrl: process.env.REACT_APP_DOMAIN,
   };
-
-  useEffect(() => {
-    setFormIsValid(validator.isEmail(email));
-  }, [email]);
-  // console.log("token", token);
 
   const tokenset = async () => {
     Load = true;
@@ -300,6 +324,29 @@ const App = () => {
     // history.push('/signup');
   };
 
+  const checkEmail = (e) => {
+    const { value } = e.target
+    setEmail(value)
+    if(validator.isEmail(value)) {
+      setEmailStatus(EmailStatuses.LOADING)
+      fetch(`${process.env.REACT_APP_BASE_URL}/api/user/detail/${value}`)
+        .then((res) => {
+          if (res.status === 404) throw Error(res)
+          return res.json()
+        })
+        .then(() => {
+          setFormIsValid(true)
+          setEmailStatus(EmailStatuses.VALID)
+        })
+        .catch(() => {
+          setFormIsValid(false)
+          setEmailStatus(EmailStatuses.NOT_REGISTERED)
+        })
+    } else {
+      setFormIsValid(false)
+      setEmailStatus(EmailStatuses.INVALID)
+    }
+  }
 
   if (isLoading || Load) return <div className="central">Loading...</div>;
 
@@ -433,14 +480,30 @@ const App = () => {
                 TCAP ONE
               </Typography>
               <form className={classes.form} noValidate>
-                <MDBInput
-                  label="Email Address"
-                  id="typeEmail"
-                  type="email"
-                  size="lg"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                />
+                <div>
+                  <CustomInput
+                    value={email}
+                    placeholder="Email Address"
+                    endAdornment={emailStatus === EmailStatuses.LOADING && <CircularProgress size={30} />}
+                    onChange={checkEmail}
+                    id="typeEmail"
+                  />
+                </div>
+                {emailStatus === EmailStatuses.INVALID && (
+                  <FormHelperText error>
+                    Please Enter Valid Email Address
+                  </FormHelperText>
+                )}
+                {emailStatus === EmailStatuses.NOT_REGISTERED && (
+                  <div>
+                    Please contact <b>hello@trustless.capital</b> to register your email id.
+                  </div>
+                )}
+                {emailStatus === EmailStatuses.VALID && (
+                  <FormHelperText>
+                    Email is Valid.
+                  </FormHelperText>
+                )}
                 <Button
                   className="loginbutton"
                   disabled={!formIsValid}
