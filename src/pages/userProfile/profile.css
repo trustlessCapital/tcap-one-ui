@@ -1,0 +1,136 @@
+.addInvPage{
+    flex:4;   
+}
+.sides{
+    padding-top: 3rem;
+}
+.addInvPageTitle{
+    color:#3c3c3c;
+    padding-bottom: 2rem;
+    font-size: 3rem;
+    text-align: center;
+}
+.Point{
+    padding: 1rem 0rem 0 6rem;
+    font-size: 5rem;
+}
+.Graph{
+    background-color: #fafafa !important;
+}
+.Component-root-16{
+    height: 352px !important;
+}
+.Balance{
+    height: 350px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 1);
+    background-color: #FFF;
+}
+.balhead{
+    padding-top: 3.5rem;
+    padding-bottom: 1.8rem;
+}
+.balheadval{
+    font-size: 2rem;
+}
+.addInvPageWrapper{
+    display: block;
+    padding-top: 3rem;
+}
+.addInvForm{
+    display: block;
+    width: 100%;
+}
+.addInvSectionTitle{
+    color:#FFF;
+    background-color: #e50914;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 600;
+}
+.formSection{
+    margin: 5px;
+    display: flex;
+}
+.formSectionTitle{width:100%;}
+.addInvItem{
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px;
+    align-items: center;
+    justify-content: end;
+}
+.addInvItem label{
+    min-width:25% !important;
+    color:#3c3c3c;
+    font-weight: 600;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+.labelFile{
+    border: 1px solid #CCC;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: #EEE;
+}
+.addInvItem span{
+    margin-top: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.addInvItem .addInvInput{
+    flex-grow: 1;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #CCC;
+    font-size: 14px;
+}
+
+.addInvItem select{
+    width:64% !important;
+    padding: 6px 10px !important;
+    border-radius: 5px !important;
+    border: 1px solid #CCC !important;
+}
+.inputCols{
+    display: flex;
+    margin-bottom: 5px;
+}
+.colLeft{
+    width:50%;
+}
+.colRight{ 
+    width:50%;
+}
+
+.saveInvBtn{
+    background-color: #e50914;
+    color: #FFF;
+    padding: 10px 20px;
+    border:1px solid #CCC;
+    border-radius: 5px;
+    font-size: 16px;
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+  .mp{
+    flex:5;
+    padding: 20px;
+    box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 15px -10px rgba(0,0,0,0.75);
+    color:#333;
+}
