@@ -179,7 +179,7 @@ export default function Topbar(props) {
                         </Nav.Link>
                       }
                       <NavDropdown title={props?.userData?.user} id="Menu" className="rightlinks">
-                        <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>
+                        <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
                         <NavDropdown.Item href="#action/3.2">My Account</NavDropdown.Item>
                         
                         <NavDropdown.Divider />

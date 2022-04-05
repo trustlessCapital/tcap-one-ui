@@ -225,7 +225,7 @@ export default function AddNewRelationshipModal(props) {
     else
     {
       alert('something went wrong. please retry');
-     }
+    }
   })
  };
   useEffect(() => {

@@ -28,6 +28,7 @@ import { companyApiProvider } from "services/api/company/companyService";
 import MyDraftInvoicesVendor from "pages/home/MyDraftInvoicesVendor";
 import AdminManageUsers from "pages/adminInvoices/AdminManageUsers";
 import AdminManageEntity from "pages/adminInvoices/AdminManageEntity";
+import Profile from "./pages/userProfile/Profile";
 import CompletedDealsVendor from "pages/home/CompletedDealsVendor";
 import AdminPendingApprovals from "pages/adminInvoices/AdminPendingApprovals";
 import AdminManageRelationships from "pages/adminInvoices/AdminManageRelationships";
@@ -44,7 +45,7 @@ import Col from "react-bootstrap/Col";
 import Avatar from "@material-ui/core/Avatar";
 // import Button from '@material-ui/core/Button';
 import CssBaseline from "@material-ui/core/CssBaseline";
-// import TextField from '@material-ui/core/TextField';
+import TextField from '@material-ui/core/TextField';
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -122,7 +123,8 @@ const CustomInput = withStyles((theme) => ({
     backgroundColor: theme.palette.common.white,
     border: '1px solid #ced4da',
     fontSize: 16,
-    padding: '10px 12px',
+    padding: '5px 10px',
+    width: '100%',
   },
   input: {
     '&:focus': {
@@ -134,7 +136,14 @@ const CustomInput = withStyles((theme) => ({
   },
 }))(InputBase);
 
+var tok=0;
 const App = () => {
+  const EmailStatuses = {
+    LOADING: 'LOADING',
+    VALID: 'VALID',
+    INVALID: 'INVALID',
+    NOT_REGISTERED: 'NOT_REGISTERED',
+  }
   const [token, setToken] = useState(null);
   const [emailVerify, setEmailVerify] = useState(null);
   const classes = useStyles();
@@ -144,11 +153,11 @@ const App = () => {
   const [openlogin, setOpenLogin] = useState();
   const [privKey, setPrivKey] = useState(null);
   const [userDataDetails, setUserDetails] = useState([]);
-  const [emailError, setEmailError] = useState(false)
-  const [emailLoader, setEmailLoader] = useState(false)
+  const [emailStatus, setEmailStatus] = useState(null)
 
   localStorage.setItem("privKey", privKey);
-
+  var Load = false;
+  
   var loginObject = {
     loginProvider: "google",
     clientId: process.env.REACT_APP_WEB3_AUTH_CLIENT_ID,
@@ -156,6 +165,8 @@ const App = () => {
   };
 
   const tokenset = async () => {
+    Load = true;
+    tok=1
     const Email = localStorage.getItem("email");
     const url = `https://eoql7b7hs2.execute-api.us-east-2.amazonaws.com/dev/api/user/detail/${Email}`;
     const response = await fetch(url);
@@ -179,7 +190,11 @@ const App = () => {
         //   walletAddress:userData?.walletAddress || null
         // });
         setToken({
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          phone: userData.phoneNumber,
           user: userData.email,
+          Address: userData.futureAddress,
           type:
             userData?.userType == "investor"
               ? "investor"
@@ -189,6 +204,7 @@ const App = () => {
           userId: userData.id,
           walletAddress: userData?.walletAddress || null,
         });
+        Load = false;
       }
       // if(userData.userType!='investor'){var verifiedEmail = await companyApiProvider.verifyEmail(userData.email)
       //  setEmailVerify(verifiedEmail);
@@ -203,8 +219,10 @@ const App = () => {
     }
   };
 
-  if (privKey && !token) {
+  if (privKey && !token && tok==0) {
+    
     tokenset();
+    
   }
 
   const onMount = async () => {
@@ -310,27 +328,29 @@ const App = () => {
     const { value } = e.target
     setEmail(value)
     if(validator.isEmail(value)) {
-      setEmailLoader(true)
+      setEmailStatus(EmailStatuses.LOADING)
       fetch(`${process.env.REACT_APP_BASE_URL}/api/user/detail/${value}`)
-        .then((res) => res.json())
-        .then((data) => {
+        .then((res) => {
+          if (res.status === 404) throw Error(res)
+          return res.json()
+        })
+        .then(() => {
           setFormIsValid(true)
-          setEmailLoader(false)
-          setEmailError(null)
+          setEmailStatus(EmailStatuses.VALID)
         })
         .catch(() => {
           setFormIsValid(false)
-          setEmailLoader(false)
-          setEmailError('Please enter correct email')
+          setEmailStatus(EmailStatuses.NOT_REGISTERED)
         })
     } else {
-      setEmailLoader(false)
-      setEmailError('Please enter correct email')
       setFormIsValid(false)
+      setEmailStatus(EmailStatuses.INVALID)
     }
   }
 
-  if (isLoading) return <div className="central">Loading...</div>;
+  if (isLoading || Load) return <div className="central">Loading...</div>;
+
+
   return token ? (
     <Router>
       <ThemeProvider theme={theme}>
@@ -354,6 +374,9 @@ const App = () => {
                   </Route>
                   <Route exact path="/admin">
                     <Admin />
+                  </Route>
+                  <Route exact path="/profile">
+                    <Profile verified={emailVerify} userData={token} />
                   </Route>
                   <Route path="/addinvoices">
                     <AddInvoice verified={emailVerify} userData={token} />
@@ -457,17 +480,28 @@ const App = () => {
                 TCAP ONE
               </Typography>
               <form className={classes.form} noValidate>
-                <CustomInput
-                  value={email}
-                  placeholder="Email Address"
-                  endAdornment={emailLoader && <CircularProgress size={30} />}
-                  onChange={checkEmail}
-                  error={!!emailError}
-                  id="typeEmail"
-                />
-                {emailError && (
-                  <FormHelperText error={!!emailError}>
-                    {emailError}
+                <div>
+                  <CustomInput
+                    value={email}
+                    placeholder="Email Address"
+                    endAdornment={emailStatus === EmailStatuses.LOADING && <CircularProgress size={30} />}
+                    onChange={checkEmail}
+                    id="typeEmail"
+                  />
+                </div>
+                {emailStatus === EmailStatuses.INVALID && (
+                  <FormHelperText error>
+                    Please Enter Valid Email Address
+                  </FormHelperText>
+                )}
+                {emailStatus === EmailStatuses.NOT_REGISTERED && (
+                  <div>
+                    Please contact <b>hello@trustless.capital</b> to register your email id.
+                  </div>
+                )}
+                {emailStatus === EmailStatuses.VALID && (
+                  <FormHelperText>
+                    Email is Valid.
                   </FormHelperText>
                 )}
                 <Button
