@@ -496,7 +496,7 @@ const App = () => {
                 )}
                 {emailStatus === EmailStatuses.NOT_REGISTERED && (
                   <div>
-                    Please contact <b>hello@trustless.capital</b> to register your email id.
+                    This Email id is not registered. Please contact <b>hello@trustless.capital</b>.
                   </div>
                 )}
                 {emailStatus === EmailStatuses.VALID && (
