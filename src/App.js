@@ -499,11 +499,6 @@ const App = () => {
                     This Email id is not registered. Please contact <b>hello@trustless.capital</b>.
                   </div>
                 )}
-                {emailStatus === EmailStatuses.VALID && (
-                  <FormHelperText>
-                    Email is Valid.
-                  </FormHelperText>
-                )}
                 <Button
                   className="loginbutton"
                   disabled={!formIsValid}
