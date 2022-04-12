@@ -18,14 +18,12 @@ import Col from "react-bootstrap/Col";
 export default function AddNewUserModal(props) {
   
   const userdata = props.userdata;
-  console.log("UserData", userdata);
-  const history = useHistory();
   const [formValue, setFormValue] = useState({
-    fname: userdata.firstName,
-    lname: userdata.lastName,
-    email: userdata.user,
-    phoneNumber: userdata.phone.slice(-10),
-    walletAddress: userdata.walletAddress,
+    fname: userdata.firstName || '',
+    lname: userdata.lastName || '',
+    email: userdata.user || '',
+    phoneNumber: userdata.phone ? userdata.phone.slice(-10) : '',
+    walletAddress: userdata.walletAddress || '',
   });
   const handleChange = (e) => {
     const newData = { ...formValue };

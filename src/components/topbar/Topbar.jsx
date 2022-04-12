@@ -180,7 +180,6 @@ export default function Topbar(props) {
                       }
                       <NavDropdown title={props?.userData?.user} id="Menu" className="rightlinks">
                         <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.2">My Account</NavDropdown.Item>
                         
                         <NavDropdown.Divider />
                         <NavDropdown.Item 
@@ -294,7 +293,6 @@ export default function Topbar(props) {
                 
                 {/* <DropdownButton id="Menu" title={props?.userData?.user}>
                   <Dropdown.Item href="#/action-1">Profile</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">My Account</Dropdown.Item>
                   <Dropdown.Item href="#/action-3">
                       <Link to="/" onClick={logout}>
                         Logout
