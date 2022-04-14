@@ -103,7 +103,7 @@ function ArrangerDashboard({userData}) {
         </Grid>
         <Grid item xs={4}>
           <Paper className={classes.paper}>
-            <EntityOnboarding />
+            <EntityOnboarding userData={userData}/>
           </Paper>
         </Grid>
 
