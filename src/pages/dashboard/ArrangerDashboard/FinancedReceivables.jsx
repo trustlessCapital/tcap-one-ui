@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Fragment } from 'react'
 import {Typography, CircularProgress}  from '@material-ui/core';
+import { Link } from 'react-router-dom'
 
 function FinancedReceivables({data, currencyFormat}) {
   const [response, setResponse] = useState({
@@ -24,8 +25,6 @@ function FinancedReceivables({data, currencyFormat}) {
     return await Promise.allSettled(requests)
   }
 
-
-
   useEffect(() => {
     const latestFinancedReceivables = data.filter((_, idx) => idx < 3)
     setResponse((prev) => ({
@@ -48,8 +47,8 @@ function FinancedReceivables({data, currencyFormat}) {
         return res.map((item, idx) => {
           if (item) {
             return ({
-              name: item.organisationName,
-              debtAmount: currencyFormat(latestFinancedReceivables[idx]?.debtAmount)
+              ...latestFinancedReceivables[idx],
+              name: item.organisationName
             })
           }
           return null
@@ -77,25 +76,27 @@ function FinancedReceivables({data, currencyFormat}) {
   return (
     <div>
       {response.loading && (<CircularProgress color="inherit" />)}
-      {response.data && response.data.map((item, index) => (
-        <>
+      {response.data && response.data.map((item) => (
+        <Fragment key={item.id}>
           { item &&
-            <div
+            <Link
+              to={{
+                pathname: "/financedreceivable/"+item.id
+              }}
               style={{
                 display: 'flex',
                 gap: 15,
               }}
-              key={index}
             >
               <Typography variant="body1" component="span"  style={{flex: 1}}>
                 {item.name}
               </Typography>
               <Typography variant="body1" component="span"  style={{flex: 1}}>
-                {item.debtAmount}
+                {currencyFormat(item?.debtAmount)}
               </Typography>
-            </div>
+            </Link>
           }
-        </>
+        </Fragment>
       ))}
     </div>
   )
