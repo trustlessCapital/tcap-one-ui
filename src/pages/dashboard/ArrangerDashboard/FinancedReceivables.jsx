@@ -81,7 +81,7 @@ function FinancedReceivables({data, currencyFormat}) {
           { item &&
             <Link
               to={{
-                pathname: "/financedreceivable/"+item.borrowerAddress
+                pathname: "/financedreceivable/"+item.id
               }}
               style={{
                 display: 'flex',

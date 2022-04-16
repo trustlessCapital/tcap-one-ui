@@ -28,6 +28,15 @@ const currencyFormat = (amount) => new Intl
     minimumFractionDigits: 0,
   }).format(amount)
 
+const numberFormatPercentage = (amount) => new Intl
+  .NumberFormat('en-US', {
+    style: '',
+    currency: 'USD',
+    currencyDisplay: 'code',
+    maximumFractionDigits: 2, 
+    minimumFractionDigits: 0,
+  }).format(amount)
+
 const formatDate = (date) => {
   return new Intl.DateTimeFormat('en-IN', {
     year: 'numeric', month: 'short', day: 'numeric',
@@ -43,8 +52,12 @@ const RenderValue = ({name, value}) => {
     return formatDate(value)
   }
 
-  if (name === "celoTxHash") {
-    return <Link to={`https://polygonscan.com/tx/${value}`}>{value}</Link>
+  if (name === "Blockchain Transaction") {
+    return <a href={`https://polygonscan.com/tx/${value}`}>{value}</a>
+  }
+
+  if (name === "Interest") {
+    return value+'%'
   }
 
   return value
@@ -72,25 +85,37 @@ function FinancedReceivableDetail() {
       let result = {};
       const request = await fetch(process.env.REACT_APP_BASE_URL + '/v1/mp/arranger/' + walletAddress)
       const response = await request.json()
-      const data = response.find((item) => item.borrowerAddress === address)
+      const data = response.find((item) => item.id === address)
       if (data) {
         result = { ...data }
+
         // Borrower Data
         const borrowerRequest = await fetch(process.env.REACT_APP_BASE_URL + '/api/user/accountbyaddress/' + data.borrowerAddress)
         const borrowerResponse = await borrowerRequest.json()
         const browserDetailRequest = await fetch(process.env.REACT_APP_BASE_URL + '/v1/company/email/' + borrowerResponse.email)
         const browserDetailResponse = await browserDetailRequest.json()
         result.borrower = browserDetailResponse
-        // Borrower Data
+
+        // Anchor Data
+        const anchorRequest = await fetch(process.env.REACT_APP_BASE_URL + '/v1/cr/vendor/' + borrowerResponse.email)
+        const anchorResponse = await anchorRequest.json()
+
+        //TODO: We need to change backend response data from the Array to object
+        const anchorDetailRequest = await fetch(process.env.REACT_APP_BASE_URL + '/v1/company/email/' + anchorResponse[0].anchorEmail)
+        const anchorDetailResponse = await anchorDetailRequest.json()
+        result.anchor = anchorDetailResponse
 
         const details = {
-          "NFT Token Id": data.nftTokenId,
-          "Borrower": data.borrower?.organisationName,
-          "Loan Amount": data.debtAmount,
-          "Status": data.status,
-          "Issue Date": data.issueDate,
-          "celoTxHash": data.celoTxHash
+          "NFT Token Id": result.nftTokenId,
+          "Borrower": result.borrower?.organisationName,
+          "Anchor": result.anchor?.organisationName,
+          "Loan Amount": result.debtAmount,
+          "Interest": result.rate,
+          "Issue Date": result.issueDate,
+          "Status": result.status,
+          "Blockchain Transaction": result.celoTxHash,
         }
+
         setResponse((prev) => ({
           ...prev,
           loading: false,
@@ -119,7 +144,7 @@ function FinancedReceivableDetail() {
   return (
     <div>
       <Typography variant='h3' align="center">
-        Total Investment YTD
+        Loan Deal Detail
       </Typography>
       {response.loading && (<CircularProgress color="inherit" />)}
       {response.data && response.data && (
