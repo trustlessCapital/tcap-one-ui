@@ -32,6 +32,7 @@ import Profile from "./pages/userProfile/Profile";
 import CompletedDealsVendor from "pages/home/CompletedDealsVendor";
 import AdminPendingApprovals from "pages/adminInvoices/AdminPendingApprovals";
 import AdminManageRelationships from "pages/adminInvoices/AdminManageRelationships";
+import FinancedReceivableDetail from "pages/FinancedReceivableDetail";
 import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
 import validator from 'validator';
 import OpenLogin from "@toruslabs/openlogin";
@@ -371,6 +372,9 @@ const App = () => {
                 <Switch>
                   <Route exact path="/">
                     <Dashboard verified={emailVerify} userData={token} />
+                  </Route>
+                  <Route exact path="/financedreceivable/:address">
+                    <FinancedReceivableDetail verified={emailVerify} userData={token} />
                   </Route>
                   <Route exact path="/admin">
                     <Admin />

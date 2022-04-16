@@ -2,8 +2,7 @@ import {useEffect, useState} from 'react'
 import {Typography, CircularProgress}  from '@material-ui/core';
 import {ResponsiveContainer, PieChart, Pie, Tooltip, Legend } from 'recharts'
 
-function EntityOnboarding() {
-  
+function EntityOnboarding({userData}) {
   const [response, setResponse] = useState({
     data: null,
     error: null,
@@ -40,10 +39,10 @@ function EntityOnboarding() {
   }
 
   useEffect(() => {
-    fetchDetails('sonunigam064@gmail.com')
+    fetchDetails(userData.email)
   }, [])
 
-  const data = response.data?.reduce((total, item) => {
+  const responseData = response.data?.reduce((total, item) => {
     if (item.status === 'active') {
       return {
         ...total,
@@ -81,8 +80,8 @@ function EntityOnboarding() {
         <PieChart width={300} height={300}>
           <Tooltip />
           <Legend />
-          <Pie data={[data.active]} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={50} fill="#8884d8" />
-          <Pie data={[data.pending]} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#82ca9d" />
+          <Pie data={[responseData.active]} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={50} fill="#8884d8" />
+          <Pie data={[responseData.pending]} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#82ca9d" />
         </PieChart>
       )}
     </div>
